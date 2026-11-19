@@ -1,5 +1,6 @@
 import { ArrowUpRight, Newspaper } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
+import SourceLogo from "@/components/news/SourceLogo";
 
 export default function NewsList({ news }: { news: MarketNewsArticle[] }) {
     const t = useTranslations('NewsList');
@@ -19,10 +20,11 @@ export default function NewsList({ news }: { news: MarketNewsArticle[] }) {
             {news.map((item) => (
                 <li key={`${item.id}-${item.url}`}>
                     <a href={item.url} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-3 px-3 py-3 transition-colors hover:bg-hover/50">
-                        <span className="pill mono mt-0.5 w-16 justify-center">{item.related || 'MKT'}</span>
+                        <SourceLogo source={item.source} url={item.url} />
                         <span className="min-w-0 flex-1">
                             <span className="line-clamp-2 font-semibold text-foreground group-hover:text-brand-ink transition-colors">{item.headline}</span>
                             <span className="mt-1 block truncate text-[12.5px] text-faint">
+                                {item.related && <span className="mono me-1.5 font-semibold text-muted-foreground">{item.related}</span>}
                                 {item.source}{item.datetime ? ` · ${format.relativeTime(item.datetime * 1000)}` : ''}
                             </span>
                         </span>
