@@ -1,10 +1,10 @@
 'use client';
 
+import Wordmark from "@/components/marketing/Wordmark";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { BookOpen, Code2, Heart, Info, LayoutDashboard, LifeBuoy, LogOut, Search, Star } from "lucide-react";
+import { BookOpen, Heart, LayoutDashboard, LifeBuoy, LogOut, Search, Star } from "lucide-react";
 import { openSearch } from "@/components/SearchCommand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { signOut } from "@/lib/actions/auth.actions";
@@ -19,8 +19,6 @@ type SidebarProps = {
 
 const RESOURCES = [
     { href: '/help', label: 'help', icon: LifeBuoy },
-    { href: '/api-docs', label: 'apiDocs', icon: Code2 },
-    { href: '/about', label: 'about', icon: Info },
     { href: '/terms', label: 'terms', icon: BookOpen },
 ] as const;
 
@@ -39,7 +37,7 @@ const Sidebar = ({ user, watchlist }: SidebarProps) => {
     return (
         <aside className="sidebar">
             <Link href="/dashboard" className="px-2 pt-1 pb-2" aria-label={t('homeAria')}>
-                <Image src="/assets/images/logo.png" alt="OpenStock" width={150} height={38} priority />
+                <Wordmark />
             </Link>
 
             <button type="button" onClick={openSearch} className="side-cta">

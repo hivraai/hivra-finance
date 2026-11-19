@@ -31,7 +31,6 @@ export default function StockDirectoryPage() {
                 sub={`${US_TICKERS.length} companies from the S&P 500 and the Nasdaq-100. Each page is a TradingView chart plus the latest annual and quarterly report on SEC EDGAR. The signed-in app is where watchlists and alerts live.`}
             >
                 <Link href="/sign-up" className="btn btn-primary h-11 px-5 text-[15px]">Track them free</Link>
-                <Link href="/compare" className="btn btn-ghost h-11 px-5 text-[15px]">Read the guides</Link>
             </PageHero>
 
             <nav aria-label="Sectors" className="mx-auto mt-10 flex max-w-[1200px] flex-wrap gap-2 px-5">

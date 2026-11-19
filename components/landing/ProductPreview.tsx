@@ -6,14 +6,15 @@ import TradingViewWidget from "@/components/TradingViewWidget";
 import { cn } from "@/lib/utils";
 
 const MINI_CHART = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
-const miniChart = (symbol: string) => ({
-    symbol, locale: 'en', dateRange: '1M', colorTheme: 'dark', isTransparent: true, autosize: true,
-    trendLineColor: '#47d9bb', underLineColor: 'rgba(71, 217, 187, 0.14)', underLineBottomColor: 'rgba(71, 217, 187, 0)',
+// HIVRA blue (#3A6FD8) for the line and its fill.
+const miniChart = (symbol: string, theme: 'dark' | 'light') => ({
+    symbol, locale: 'en', dateRange: '1M', colorTheme: theme, isTransparent: true, autosize: true,
+    trendLineColor: '#3A6FD8', underLineColor: 'rgba(58, 111, 216, 0.14)', underLineBottomColor: 'rgba(58, 111, 216, 0)',
 });
 
 // The real app chrome with the same live data a signed-in user sees. Used on the landing and auth pages,
 // so marketing never shows a stale screenshot.
-export default function ProductPreview() {
+export default function ProductPreview({ theme = 'dark' }: { theme?: 'dark' | 'light' }) {
     return (
         <div className="overflow-hidden rounded-[18px] bg-side p-[3px] shadow-[0_0_0_1px_oklch(1_0_0/0.05),0_30px_80px_oklch(0_0_0/0.55)]">
             <div className="flex items-end gap-1 px-3 pt-2" aria-hidden>
@@ -44,7 +45,7 @@ export default function ProductPreview() {
                     {['AMEX:SPY', 'NASDAQ:QQQ'].map((symbol) => (
                         <section key={symbol} className="hatch">
                             <div className="card overflow-hidden">
-                                <TradingViewWidget scriptUrl={MINI_CHART} config={miniChart(symbol)} height={220} />
+                                <TradingViewWidget scriptUrl={MINI_CHART} config={miniChart(symbol, theme)} height={220} />
                             </div>
                         </section>
                     ))}

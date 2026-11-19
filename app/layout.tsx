@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, IBM_Plex_Mono, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Inter, Poppins, IBM_Plex_Mono, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import {Toaster} from "@/components/ui/sonner";
-import OntoLaunchCard from "@/components/OntoLaunchCard";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+// hivra.ai's faces: Inter for text, Poppins for headlines.
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+});
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
 });
 
 // The Latin display face has no Arabic glyphs. Only Arabic pages use this one (see globals.css),
@@ -26,8 +32,8 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OpenStock",
-  description: "OpenStock is an open-source alternative to expensive market platforms. Track real-time prices, set personalized alerts, and explore detailed company insights — built openly, for everyone, forever free.",
+  title: "HIVRA Finance",
+  description: "Options research and backtesting with an AI analyst. Market analytics software, not investment advice.",
 };
 
 export default function RootLayout({
@@ -38,11 +44,10 @@ export default function RootLayout({
     return (
         <html lang="en" className="dark" suppressHydrationWarning>
             <body
-                className={`${jakarta.variable} ${arabic.variable} ${plexMono.variable} font-sans antialiased`}
+                className={`${inter.variable} ${poppins.variable} ${arabic.variable} ${plexMono.variable} font-sans antialiased`}
             >
                 {children}
                 <Toaster/>
-                <OntoLaunchCard />
                 <Analytics />
             </body>
         </html>

@@ -1,7 +1,8 @@
 import type { Locale } from '@/i18n/config';
 
 // Community links, used across the app, landing page and emails
-export const REPO_URL = 'https://github.com/Open-Dev-Society/OpenStock';
+// AGPL-3.0: the hosted app links its own source here. Upstream: github.com/Open-Dev-Society/OpenStock
+export const REPO_URL = 'https://github.com/hivraai/hivra-finance';
 // GitHub account that receives sponsorships. Switch to 'Open-Dev-Society' once the org's
 // GitHub Sponsors listing is live (github.com/sponsors/Open-Dev-Society); every link follows.
 export const SPONSOR_GITHUB_ACCOUNT = 'ravixalgorithm';

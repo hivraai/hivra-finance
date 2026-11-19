@@ -7,7 +7,6 @@ import SignUpCta from '@/components/seo/SignUpCta';
 import TradingViewEmbed from '@/components/seo/TradingViewEmbed';
 import { CANDLE_CHART_WIDGET_CONFIG, symbolInfoConfig } from '@/lib/constants';
 import { companyBrowseUrl, formatFilingDate, getEdgarCompany, type EdgarFiling } from '@/lib/seo/edgar';
-import { GUIDES } from '@/lib/seo/comparisons';
 import { siteUrl } from '@/lib/seo/site';
 import { adjacentTickers, findTicker, relatedTickers, sectorAnchor, tickerIntro, tickerPath, type UsTicker } from '@/lib/seo/tickers';
 import { formatSymbolForTradingView, tradingViewSymbolUrl } from '@/lib/utils';
@@ -222,11 +221,6 @@ export default async function PublicTickerPage({ params }: { params: Promise<Par
                 </div>
             </section>
 
-            <nav aria-label="Related guides" className="mt-10 flex flex-wrap gap-x-4 gap-y-2 text-[13px] font-semibold text-muted-foreground">
-                {GUIDES.slice(0, 4).map((guide) => (
-                    <Link key={guide.slug} href={`/compare/${guide.slug}`} className="hover:text-foreground">{guide.title}</Link>
-                ))}
-            </nav>
 
             <div className="mt-10">
                 <SignUpCta

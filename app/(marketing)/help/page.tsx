@@ -43,7 +43,7 @@ export default function HelpPage() {
             <PageHero kicker="Help" title="How can we help?" sub="Community-powered support for everyone." />
 
             <section className="mx-auto mt-14 grid max-w-[1200px] gap-3 px-5 md:grid-cols-3">
-                <IconCard icon={BookOpen} title="How it works" footer={<a href="/api-docs" className="btn btn-ghost w-full">Read the architecture</a>}>
+                <IconCard icon={BookOpen} title="How it works" footer={<a href="/#data" className="btn btn-ghost w-full">Where the data comes from</a>}>
                     Data sources, background jobs and the AI behind the emails.
                 </IconCard>
                 <IconCard icon={MessageCircle} title="Community chat" footer={<a href={DISCORD_URL} target="_blank" rel="noreferrer" className="btn btn-ghost w-full">Join Discord</a>}>

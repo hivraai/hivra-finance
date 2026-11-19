@@ -1,46 +1,36 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Github } from "lucide-react";
-import { formatCount, getRepoStats } from "@/lib/github";
+import { headers } from "next/headers";
 import SiteFooter from "@/components/marketing/SiteFooter";
-import UpdateBanner from "@/components/UpdateBanner";
-import { REPO_URL } from "@/lib/constants";
+import Wordmark from "@/components/marketing/Wordmark";
+import { LANDING_COPY, landingLang } from "@/lib/landing-copy";
 
 // No session read here: it made every public page (and every <Link> prefetch of one) a function call.
 // The header always shows the signed-out buttons; /sign-in and /sign-up send a signed-in visitor to /dashboard.
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
-    const repo = await getRepoStats();
+    const t = LANDING_COPY[landingLang((await headers()).get('accept-language'))];
 
     return (
-        <div className="min-h-dvh bg-page">
-            <UpdateBanner className="mx-5 mt-3 xl:mx-auto xl:max-w-[1160px]" />
+        <div className="theme-site min-h-dvh bg-page">
             <header className="sticky top-0 z-40 border-b border-transparent bg-page/80 backdrop-blur-md">
                 <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-6 px-5">
-                    <Link href="/" aria-label="OpenStock home" className="shrink-0">
-                        <Image src="/assets/images/logo.png" alt="OpenStock" width={140} height={35} priority />
+                    <Link href="/" aria-label="HIVRA Finance" className="shrink-0">
+                        <Wordmark />
                     </Link>
                     <nav className="hidden items-center gap-1 md:flex">
-                        {[['/#inside', 'Product'], ['/#data', 'Data'], ['/#self-host', 'Self-host'], ['/about', 'About']].map(([href, label]) => (
+                        {[['/#inside', t.nav.product], ['/#plans', t.nav.plans], ['/#data', t.nav.data]].map(([href, label]) => (
                             <Link key={href} href={href} className="side-item h-8 font-semibold">{label}</Link>
                         ))}
-                        <Link href="/sponsor" className="side-item h-8 gap-2 font-semibold text-brand-ink hover:text-brand-ink">
-                            <span className="live-dot" /> Sponsor
-                        </Link>
                     </nav>
                     <div className="ml-auto flex items-center gap-2">
-                        <a href={REPO_URL} target="_blank" rel="noreferrer" className="btn btn-ghost hidden h-9 px-3 sm:inline-flex" aria-label="OpenStock on GitHub">
-                            <Github />
-                            {repo && <span className="num">{formatCount(repo.stars)}</span>}
-                        </a>
-                        <Link href="/sign-in" className="btn h-9 px-3 text-muted-foreground hover:text-foreground">Sign in</Link>
-                        <Link href="/sign-up" className="btn btn-primary h-9">Get started</Link>
+                        <Link href="/sign-in" className="btn h-9 px-3 text-muted-foreground hover:text-foreground">{t.nav.signIn}</Link>
+                        <Link href="/sign-up" className="btn btn-primary h-9">{t.nav.start}</Link>
                     </div>
                 </div>
             </header>
 
             <main>{children}</main>
 
-            <SiteFooter />
+            <SiteFooter footer={t.footer} />
         </div>
     );
 }
