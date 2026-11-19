@@ -28,14 +28,15 @@ const Layout = async ({ children }: { children : React.ReactNode }) => {
         <HtmlLang locale={locale} />
         <main className="auth-shell">
             <div className="auth-column">
-                <Link href="/" className="mx-auto mb-8 flex items-center" aria-label={t('home')}>
+                <Link href="/" className="mx-auto mb-6 flex items-center" aria-label={t('home')}>
                     <Wordmark />
                 </Link>
                 <div className="auth-card">
                     <SocialProvidersProvider enabled={socialProviders}>{children}</SocialProvidersProvider>
                 </div>
                 <p className="mt-6 text-center text-[12px] text-faint">
-                    {t('legal')} <Link href="/terms" className="underline underline-offset-2 hover:text-muted-foreground">{t('terms')}</Link>
+                    {t('legal')} <Link href="/terms" className="underline underline-offset-2 hover:text-muted-foreground">{t('terms')}</Link> {t('and')}{' '}
+                    <Link href="/privacy" className="underline underline-offset-2 hover:text-muted-foreground">{t('privacy')}</Link>.
                 </p>
             </div>
         </main>

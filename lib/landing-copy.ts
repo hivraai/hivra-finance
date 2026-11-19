@@ -48,7 +48,7 @@ export const LANDING_COPY = {
             note: 'Market analytics software. Not investment advice and not a broker: no trades are placed on your behalf.',
         },
         cta: { title: 'Your next trade deserves a second opinion.', button: 'Start free' },
-        footer: { tagline: 'Options research and backtesting with an AI analyst.', terms: 'Terms', help: 'Help', rights: 'HIVRA Finance', source: 'Source code (AGPL-3.0)' },
+        footer: { tagline: 'Options research and backtesting with an AI analyst.', terms: 'Terms', privacy: 'Privacy', help: 'Help', rights: 'HIVRA Finance', source: 'Source code (AGPL-3.0)' },
     },
     es: {
         nav: { product: 'Producto', plans: 'Planes', data: 'Datos', signIn: 'Entrar', start: 'Empezar' },
@@ -94,7 +94,7 @@ export const LANDING_COPY = {
             note: 'Software de análisis de mercado. No es asesoría de inversión ni un bróker: no se ejecutan operaciones a tu nombre.',
         },
         cta: { title: 'Tu próxima operación merece una segunda opinión.', button: 'Empieza gratis' },
-        footer: { tagline: 'Análisis de opciones y backtests con un analista de IA.', terms: 'Términos', help: 'Ayuda', rights: 'HIVRA Finance', source: 'Código fuente (AGPL-3.0)' },
+        footer: { tagline: 'Análisis de opciones y backtests con un analista de IA.', terms: 'Términos', privacy: 'Privacidad', help: 'Ayuda', rights: 'HIVRA Finance', source: 'Código fuente (AGPL-3.0)' },
     },
 } as const;
 

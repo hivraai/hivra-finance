@@ -4,6 +4,7 @@ export const PUBLIC_EXACT_PATHS = [
     '/',
     '/help',
     '/terms',
+    '/privacy',
     '/s',
 ] as const;
 

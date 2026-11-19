@@ -153,7 +153,9 @@
   "AuthLayout": {
     "home": "HIVRA Finance home",
     "legal": "By continuing you agree to the",
-    "terms": "Terms and Privacy"
+    "terms": "Terms",
+    "and": "and",
+    "privacy": "Privacy Policy"
   },
   "AuthFields": {
     "email": "Email",
@@ -168,11 +170,11 @@
   },
   "SignIn": {
     "title": "Welcome back",
-    "subtitle": "Sign in to your watchlist and alerts.",
+    "subtitle": "Sign in to your watchlist, AI analyst and alerts.",
     "passwordLabel": "Password",
     "passwordPlaceholder": "Enter your password",
     "forgotPassword": "Forgot password?",
-    "submit": "Sign In",
+    "submit": "Sign in",
     "submitting": "Signing In",
     "noAccount": "Don't have an account?",
     "createAccount": "Create an account",
@@ -407,6 +409,14 @@
       "calloutBodyBelow": "{symbol} dropped below your target price. This might be a good time to buy.",
       "cta": "View Dashboard",
       "footer": "You're receiving this because you subscribed to HIVRA Finance news updates."
+    },
+    "magicLink": {
+      "subject": "Your HIVRA Finance sign-in link",
+      "heading": "Sign in to HIVRA Finance",
+      "body": "Click the button to sign in. The link works once and expires in 15 minutes.",
+      "cta": "Sign in",
+      "ignore": "If you did not ask for this, you can ignore this email; nobody can sign in without it.",
+      "text": "Sign in to HIVRA Finance: {url}"
     }
   },
   "Sidebar": {
@@ -842,5 +852,18 @@
         "features": {}
       }
     }
+  },
+  "EmailLink": {
+    "send": "Email me a sign-in link",
+    "sending": "Sending…",
+    "createSend": "Create account",
+    "sentTitle": "Check your email",
+    "sentBody": "We sent a sign-in link to {email}. It expires in 15 minutes.",
+    "otherEmail": "Use a different email",
+    "resend": "Send again",
+    "usePassword": "Use a password instead",
+    "useLink": "Email me a link instead",
+    "expired": "That sign-in link has expired or was already used. Send a new one.",
+    "noPassword": "No password needed: we email you a link."
   }
 }

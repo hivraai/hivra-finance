@@ -10,7 +10,8 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SocialAuthButtons from "@/components/forms/SocialAuthButtons";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import EmailLinkForm from "@/components/forms/EmailLinkForm";
 import Turnstile, { TURNSTILE_SITE_KEY, type TurnstileHandle } from '@/components/forms/Turnstile';
 
 
@@ -21,6 +22,11 @@ const SignIn = () => {
     const router = useRouter()
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
     const human = useRef<TurnstileHandle>(null);
+    const tLink = useTranslations('EmailLink');
+    const [withPassword, setWithPassword] = useState(false);
+    const [expired, setExpired] = useState(false);
+    // ?link=expired comes back from a used or old sign-in link
+    useEffect(() => { setExpired(new URLSearchParams(window.location.search).get('link') === 'expired'); }, []);
     const {
         register,
         handleSubmit,
@@ -54,11 +60,20 @@ const SignIn = () => {
 
     return (
         <>
-            <h1 className="form-title mb-2">{t('title')}</h1>
-            <p className="mb-6 text-[14px] text-faint">{t('subtitle')}</p>
+            <h1 className="form-title mb-1.5 text-center">{t('title')}</h1>
+            <p className="mb-6 text-center text-[14px] text-faint">{t('subtitle')}</p>
+
+            {expired && <p className="mb-4 rounded-xl border border-line px-3 py-2 text-center text-[13px] text-muted-foreground">{tLink('expired')}</p>}
 
             <SocialAuthButtons />
 
+            {!withPassword ? (
+                <>
+                    <EmailLinkForm />
+                    <button type="button" className="footer-link mx-auto mt-4 block text-[13px]" onClick={() => setWithPassword(true)}>{tLink('usePassword')}</button>
+                    <div className="mt-4"><FooterLink text={t('noAccount')} linkText={t('createAccount')} href="/sign-up" /></div>
+                </>
+            ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                 <InputField
                     name="email"
@@ -97,8 +112,9 @@ const SignIn = () => {
                     {isSubmitting ? t('submitting') : t('submit')}
                 </Button>
 
-                <FooterLink text={t('noAccount')} linkText={t('createAccount')} href="/sign-up" />
+                <button type="button" className="footer-link mx-auto block text-[13px]" onClick={() => setWithPassword(false)}>{tLink('useLink')}</button>
             </form>
+            )}
         </>
     );
 };

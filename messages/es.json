@@ -153,7 +153,9 @@
   "AuthLayout": {
     "home": "Inicio de HIVRA Finance",
     "legal": "Al continuar aceptas los",
-    "terms": "Términos y la Privacidad"
+    "terms": "Términos",
+    "and": "y la",
+    "privacy": "Política de privacidad"
   },
   "AuthFields": {
     "email": "Correo",
@@ -407,6 +409,14 @@
       "calloutBodyBelow": "{symbol} bajó de tu precio objetivo. Puede ser un buen momento para comprar.",
       "cta": "Ver el panel",
       "footer": "Recibes este correo porque te suscribiste a las novedades de HIVRA Finance."
+    },
+    "magicLink": {
+      "subject": "Tu enlace para entrar a HIVRA Finance",
+      "heading": "Entra a HIVRA Finance",
+      "body": "Haz clic en el botón para entrar. El enlace funciona una sola vez y vence en 15 minutos.",
+      "cta": "Entrar",
+      "ignore": "Si no lo pediste, ignora este correo; nadie puede entrar sin él.",
+      "text": "Entra a HIVRA Finance: {url}"
     }
   },
   "Sidebar": {
@@ -842,5 +852,18 @@
         "features": {}
       }
     }
+  },
+  "EmailLink": {
+    "send": "Enviarme un enlace para entrar",
+    "sending": "Enviando…",
+    "createSend": "Crear cuenta",
+    "sentTitle": "Revisa tu correo",
+    "sentBody": "Enviamos un enlace para entrar a {email}. Vence en 15 minutos.",
+    "otherEmail": "Usar otro correo",
+    "resend": "Enviar de nuevo",
+    "usePassword": "Usar contraseña",
+    "useLink": "Enviarme un enlace",
+    "expired": "Ese enlace venció o ya se usó. Pide uno nuevo.",
+    "noPassword": "Sin contraseña: te enviamos un enlace por correo."
   }
 }

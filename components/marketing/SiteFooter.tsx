@@ -16,6 +16,7 @@ export default function SiteFooter({ footer }: { footer: LandingCopy['footer'] }
                 <nav className="flex flex-wrap gap-x-6 gap-y-3">
                     <Link href="/help" className={linkClass}>{footer.help}</Link>
                     <Link href="/terms" className={linkClass}>{footer.terms}</Link>
+                    <Link href="/privacy" className={linkClass}>{footer.privacy}</Link>
                     {/* AGPL-3.0: users of the hosted app must be able to get its source. */}
                     <a href={REPO_URL} target="_blank" rel="noreferrer" className={linkClass}>{footer.source}</a>
                 </nav>

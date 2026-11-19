@@ -2,11 +2,13 @@ import { betterAuth } from "better-auth";
 import {mongodbAdapter} from "better-auth/adapters/mongodb";
 import {connectToDatabase, isWorkersRuntime} from "@/database/mongoose";
 import {nextCookies} from "better-auth/next-js";
-import { captcha } from "better-auth/plugins";
+import { captcha, magicLink } from "better-auth/plugins";
 import { headers } from "next/headers";
 import { after } from "next/server";
 import { cache } from "react";
 import { sendPasswordResetEmail } from "@/lib/nodemailer/reset-password";
+import { sendMagicLinkEmail } from "@/lib/nodemailer/magic-link";
+import { inngest } from "@/lib/inngest/client";
 import { resolveLocale } from "@/i18n/locale";
 
 
@@ -83,11 +85,47 @@ const createAuth = (database: MongoDb) => betterAuth({
                 ipAddressHeaders: isWorkersRuntime() ? ["cf-connecting-ip"] : ["x-forwarded-for"],
             },
         },
-        // With Turnstile on, the HTTP sign-up/sign-in/reset endpoints need a token too; the app's own forms go
-        // through server actions that verify it, so this closes the door a bot would use to skip the form.
-        plugins: process.env.TURNSTILE_SECRET_KEY
-            ? [captcha({ provider: "cloudflare-turnstile", secretKey: process.env.TURNSTILE_SECRET_KEY }), nextCookies()]
-            : [nextCookies()],
+        // Every new account (email link, Google, password) gets the welcome email from one place.
+        databaseHooks: {
+            user: {
+                create: {
+                    after: async (user) => {
+                        const u = user as typeof user & { country?: string; investmentGoals?: string; riskTolerance?: string; preferredIndustry?: string };
+                        const locale = await resolveLocale().catch(() => undefined);
+                        await inngest.send({
+                            name: 'app/user.created',
+                            data: {
+                                email: u.email, name: u.name,
+                                country: u.country ?? 'US', investmentGoals: u.investmentGoals ?? 'Growth',
+                                riskTolerance: u.riskTolerance ?? 'Medium', preferredIndustry: u.preferredIndustry ?? 'Technology',
+                                locale,
+                            },
+                        }).catch((e) => console.error('welcome event failed', e));
+                    },
+                },
+            },
+        },
+        plugins: [
+            // Passwordless: a one-time sign-in link by email, valid 15 minutes. Creates the account on first use.
+            magicLink({
+                expiresIn: 15 * 60,
+                rateLimit: { window: 60, max: 3 },
+                sendMagicLink: async ({ email, url }) => {
+                    const locale = await resolveLocale().catch(() => undefined);
+                    // Awaited, not after(): the form says "check your email" only once it has really gone out.
+                    await sendMagicLinkEmail({ email, url, locale });
+                },
+            }),
+            // With Turnstile on, the HTTP endpoints need a token too; the app's own forms go through server
+            // actions that verify it, so this closes the door a bot would use to skip the form.
+            ...(process.env.TURNSTILE_SECRET_KEY
+                ? [captcha({
+                    provider: "cloudflare-turnstile", secretKey: process.env.TURNSTILE_SECRET_KEY,
+                    endpoints: ["/sign-up/email", "/sign-in/email", "/request-password-reset", "/sign-in/magic-link"],
+                })]
+                : []),
+            nextCookies(),
+        ],
 });
 
 let authInstance: ReturnType<typeof createAuth> | null = null;

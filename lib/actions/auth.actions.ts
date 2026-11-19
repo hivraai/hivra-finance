@@ -1,7 +1,6 @@
 'use server';
 
 import { auth } from "@/lib/better-auth/auth";
-import { inngest } from "@/lib/inngest/client";
 import { headers } from "next/headers";
 import { INVESTMENT_GOALS, PREFERRED_INDUSTRIES, RISK_TOLERANCE_OPTIONS } from "@/lib/constants";
 import countryList from "react-select-country-list";
@@ -31,21 +30,6 @@ export const signUpWithEmail = async ({ email, password, fullName, country, inve
     }
     try {
         const response = await auth.api.signUpEmail({ body: { email, password, name: fullName, country, investmentGoals, riskTolerance, preferredIndustry } })
-
-        if (response) {
-            try {
-                console.log('📤 Sending Inngest event: app/user.created for', email);
-                await inngest.send({
-                    name: 'app/user.created',
-                    // The welcome email is sent later, outside this request, in the language picked now
-                    data: { email, name: fullName, country, investmentGoals, riskTolerance, preferredIndustry, locale: await resolveLocale() }
-                });
-                console.log('✅ Inngest event sent successfully');
-            } catch (error) {
-                console.error('❌ Failed to send Inngest event:', error);
-                // Don't fail signup if email fails
-            }
-        }
 
         return { success: true, data: response }
     } catch (e) {
@@ -87,6 +71,31 @@ export const signInWithEmail = async ({ email, password, captchaToken }: SignInF
     } catch (e) {
         console.log('Sign in failed', e)
         return { success: false, error: t('signInFailed') }
+    }
+}
+
+// Passwordless sign-in / sign-up: emails a one-time link. Same answer whether or not the email has an
+// account, so the form cannot be used to find out who is registered.
+export const sendSignInLink = async ({ email, name, captchaToken }: { email: string; name?: string; captchaToken?: string | null }) => {
+    const t = await getTranslations('Errors');
+    if (!(await verifyTurnstile(captchaToken, await clientIp()))) return { success: false, error: t('humanCheck') };
+    const address = String(email ?? '').trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(address) || address.length > 200) return { success: false, error: t('signInFailed') };
+    if (!emailConfigured()) return { success: false, error: t('resetEmailNotConfigured') };
+    // Every request sends a real email
+    if (await isRateLimited(`link:email:${address}`, 4, 15 * 60) || await isRateLimited(`link:ip:${await clientIp()}`, 15, 60 * 60)) {
+        return { success: false, error: t('tooManyAttempts') };
+    }
+    const cleanName = typeof name === 'string' ? name.trim().slice(0, 80) : '';
+    try {
+        await auth.api.signInMagicLink({
+            body: { email: address, ...(cleanName ? { name: cleanName } : {}), callbackURL: '/dashboard', newUserCallbackURL: '/welcome', errorCallbackURL: '/sign-in?link=expired' },
+            headers: await headers(),
+        });
+        return { success: true };
+    } catch (e) {
+        console.error('Sign-in link failed', e);
+        return { success: false, error: t('signInFailed') };
     }
 }
 
