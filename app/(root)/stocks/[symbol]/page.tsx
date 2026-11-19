@@ -6,8 +6,9 @@ import StockHeader, { StockHeaderSkeleton } from "@/components/stocks/StockHeade
 import StockSentimentCard from "@/components/stocks/StockSentimentCard";
 import StockChart from "@/components/stocks/StockChart";
 import Panel from "@/components/Panel";
+import TechnicalsPanel from "@/components/stocks/TechnicalsPanel";
+import AgentChat from "@/components/agent/AgentChat";
 import {
-    TECHNICAL_ANALYSIS_WIDGET_CONFIG,
     COMPANY_PROFILE_WIDGET_CONFIG,
     COMPANY_FINANCIALS_WIDGET_CONFIG,
 } from "@/lib/constants";
@@ -83,13 +84,12 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                 </div>
 
                 <div className="flex min-w-0 flex-col gap-3">
-                    <Panel title={t('technicalsTitle')} sub={t('technicalsSub')}>
-                        <TradingViewWidget
-                            scriptUrl={`${scriptUrl}technical-analysis.js`}
-                            config={TECHNICAL_ANALYSIS_WIDGET_CONFIG(tvSymbol, locale)}
-                            height={400}
-                        />
+                    <Panel title={t('aiTitle')} sub={t('aiSub')}>
+                        <AgentChat symbol={symbol} compact />
                     </Panel>
+                    <Suspense fallback={null}>
+                        <TechnicalsPanel symbol={symbol} />
+                    </Suspense>
                     <Suspense fallback={null}>
                         <DividendYield symbol={symbol} />
                     </Suspense>

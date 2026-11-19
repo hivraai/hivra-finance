@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 // The parser next-intl itself uses (via use-intl)
 import { parse, type MessageFormatElement } from '@formatjs/icu-messageformat-parser';
 import en from '@/messages/en.json';
-import pl from '@/messages/pl.json';
+import es from '@/messages/es.json';
 import ar from '@/messages/ar.json';
 import { LOCALES, localeDir } from '@/i18n/config';
 
@@ -23,7 +23,7 @@ const args = (msg: string) => collect(parse(msg), new Set());
 
 describe('message files', () => {
     const base = flat(en as Tree);
-    for (const [locale, messages] of Object.entries({ pl, ar })) {
+    for (const [locale, messages] of Object.entries({ es, ar })) {
         const other = flat(messages as Tree);
         it(`${locale} has exactly the English keys`, () => {
             expect(Object.keys(other).sort()).toEqual(Object.keys(base).sort());
@@ -38,7 +38,7 @@ describe('message files', () => {
     }
 
     it('ships every locale it lists, and only Arabic is right to left', () => {
-        expect([...LOCALES].sort()).toEqual(['ar', 'en', 'pl']);
+        expect([...LOCALES].sort()).toEqual(['ar', 'en', 'es']);
         expect(LOCALES.filter((l) => localeDir(l) === 'rtl')).toEqual(['ar']);
     });
 });

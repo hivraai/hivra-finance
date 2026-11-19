@@ -4,7 +4,7 @@ import Wordmark from "@/components/marketing/Wordmark";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { BookOpen, LayoutDashboard, LifeBuoy, LogOut, Search, Star } from "lucide-react";
+import { BookOpen, FlaskConical, LayoutDashboard, LifeBuoy, LogOut, Search, Sigma, Sparkles, Star } from "lucide-react";
 import { openSearch } from "@/components/SearchCommand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { signOut } from "@/lib/actions/auth.actions";
@@ -49,6 +49,15 @@ const Sidebar = ({ user, watchlist }: SidebarProps) => {
                 <Link href="/watchlist" className={cn('side-item', pathname === '/watchlist' && 'is-active')}>
                     <Star /> <span className="flex-1">{t('watchlist')}</span>
                     <span className="num text-xs text-faint">{watchlist.length}</span>
+                </Link>
+                <Link href="/agent" className={cn('side-item', pathname === '/agent' && 'is-active')}>
+                    <Sparkles /> {t('agent')}
+                </Link>
+                <Link href="/options" className={cn('side-item', pathname === '/options' && 'is-active')}>
+                    <Sigma /> {t('options')}
+                </Link>
+                <Link href="/backtest" className={cn('side-item', pathname === '/backtest' && 'is-active')}>
+                    <FlaskConical /> {t('backtest')}
                 </Link>
             </nav>
 

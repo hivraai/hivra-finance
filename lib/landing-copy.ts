@@ -19,7 +19,7 @@ export const LANDING_COPY = {
             features: [
                 { title: 'Options desk', body: 'End-of-day chains with Greeks and implied volatility for US stock, ETF and index options, strike by strike.' },
                 { title: 'Strategy builder', body: 'Spreads, straddles, condors and custom legs, with the payoff chart and break-evens before you trade.' },
-                { title: 'Backtests as reports', body: 'Run a strategy over 13 years of history and get a report: P&L, win rate, drawdown, equity curve and every trade.' },
+                { title: 'Backtests as reports', body: 'Run a strategy on daily prices since 2018 and get a report: P&L, win rate, drawdown, equity curve and every trade.' },
                 { title: 'AI analyst', body: 'Ask about a ticker or a strategy and get a written read of the setup, the risks and what the numbers say.' },
                 { title: 'Volatility and gamma', body: 'IV surface and smile, and dealer gamma exposure by strike, to see where the market is pinned.' },
                 { title: 'Live charts', body: 'TradingView candles with indicators and drawing tools, plus a watchlist and price alerts.' },
@@ -43,7 +43,7 @@ export const LANDING_COPY = {
             items: [
                 { label: 'Stock charts', value: 'Live, from TradingView' },
                 { label: 'Option chains and Greeks', value: 'Exchange data, as of the last close' },
-                { label: 'Backtests', value: '13 years of exchange history' },
+                { label: 'Backtests', value: 'Daily prices since 2018' },
             ],
             note: 'Market analytics software. Not investment advice and not a broker: no trades are placed on your behalf.',
         },
@@ -65,7 +65,7 @@ export const LANDING_COPY = {
             features: [
                 { title: 'Mesa de opciones', body: 'Cadenas al cierre con griegas y volatilidad implícita de opciones sobre acciones, ETF e índices de EE. UU., strike por strike.' },
                 { title: 'Constructor de estrategias', body: 'Spreads, straddles, cóndores y patas a la medida, con la gráfica de ganancia y los puntos de equilibrio antes de operar.' },
-                { title: 'Backtests en reporte', body: 'Corre una estrategia sobre 13 años de historia y recibe un reporte: ganancia, tasa de acierto, caída máxima, curva y cada operación.' },
+                { title: 'Backtests en reporte', body: 'Corre una estrategia sobre precios diarios desde 2018 y recibe un reporte: ganancia, tasa de acierto, caída máxima, curva y cada operación.' },
                 { title: 'Analista de IA', body: 'Pregunta por un ticker o una estrategia y recibe una lectura escrita del escenario, los riesgos y lo que dicen los números.' },
                 { title: 'Volatilidad y gamma', body: 'Superficie y sonrisa de volatilidad, y exposición gamma por strike, para ver dónde está anclado el mercado.' },
                 { title: 'Gráficas en vivo', body: 'Velas de TradingView con indicadores y herramientas de dibujo, más lista de seguimiento y alertas de precio.' },
@@ -89,7 +89,7 @@ export const LANDING_COPY = {
             items: [
                 { label: 'Gráficas de acciones', value: 'En vivo, de TradingView' },
                 { label: 'Cadenas de opciones y griegas', value: 'Datos de la bolsa, al último cierre' },
-                { label: 'Backtests', value: '13 años de historia de la bolsa' },
+                { label: 'Backtests', value: 'Precios diarios desde 2018' },
             ],
             note: 'Software de análisis de mercado. No es asesoría de inversión ni un bróker: no se ejecutan operaciones a tu nombre.',
         },

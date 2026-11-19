@@ -915,3 +915,20 @@ html[dir="rtl"] .mono {
 .theme-site .btn-primary { box-shadow: 0 8px 20px rgb(58 111 216 / 0.25); }
 .theme-site .btn-primary:hover:not(:disabled) { background: var(--brand-strong); }
 .theme-site h1, .theme-site h2, .theme-site h3 { font-family: var(--font-poppins), var(--font-inter), sans-serif; }
+
+/* Form fields in the quant tools */
+.input-like { height: 36px; border-radius: 8px; border: 1px solid var(--line); background: var(--canvas); padding: 0 10px; font-size: 14px; color: inherit; outline: none; width: 100%; }
+.input-like:focus-visible { box-shadow: 0 0 0 2px oklch(0.64 0.16 262 / 0.4); }
+
+/* AI agent replies (markdown) */
+.agent-md > * + * { margin-top: 0.6em; }
+.agent-md h1, .agent-md h2, .agent-md h3 { font-size: 15px; font-weight: 600; margin-top: 1em; }
+.agent-md ul { list-style: disc; padding-inline-start: 1.25em; }
+.agent-md ol { list-style: decimal; padding-inline-start: 1.25em; }
+.agent-md li + li { margin-top: 0.25em; }
+.agent-md strong { font-weight: 600; }
+.agent-md a { color: var(--brand-ink); text-decoration: underline; }
+.agent-md code { font-size: 0.92em; background: var(--hover); padding: 0.1em 0.35em; border-radius: 5px; }
+.agent-md table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; display: block; overflow-x: auto; }
+.agent-md th { text-align: start; font-weight: 500; color: var(--muted-foreground); padding: 4px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.agent-md td { padding: 4px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
