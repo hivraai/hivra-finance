@@ -8,6 +8,16 @@ import { isRateLimited } from '@/lib/rate-limit';
 export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
+    try {
+        return await handle(req);
+    } catch (e) {
+        const err = e as { type?: string; code?: string; message?: string };
+        console.error('[billing] stripe error', err.type, err.code, err.message);
+        return Response.json({ error: 'Payments are not available right now. Try again in a minute.' }, { status: 502 });
+    }
+}
+
+async function handle(req: Request) {
     const session = await getSession();
     if (!session?.user) return Response.json({ error: 'Sign in' }, { status: 401 });
     if (!billingConfigured()) return Response.json({ error: 'Payments are not switched on yet.' }, { status: 503 });

@@ -35,8 +35,17 @@ export async function customerFor(userId: string, email: string): Promise<string
     const db = await connectToDatabase();
     const Billing = billingModel(db);
     const row = await Billing.findOne({ userId }).lean();
-    if (row?.stripeCustomerId) return row.stripeCustomerId;
-    const c = await stripe().customers.create({ email, metadata: { userId, app: 'hivra-finance' } }, { idempotencyKey: `hf-customer-${userId}` });
+    // A customer saved in the other Stripe mode (test before going live) does not exist here: make a new one.
+    if (row?.stripeCustomerId) {
+        try {
+            const c = await stripe().customers.retrieve(row.stripeCustomerId);
+            if (!('deleted' in c && c.deleted)) return c.id;
+        } catch (e) {
+            if ((e as { code?: string }).code !== 'resource_missing') throw e;
+        }
+    }
+    const live = (process.env.STRIPE_SECRET_KEY ?? '').includes('_live_');
+    const c = await stripe().customers.create({ email, metadata: { userId, app: 'hivra-finance' } }, { idempotencyKey: `hf-customer-${live ? 'live' : 'test'}-${userId}` });
     await Billing.updateOne({ userId }, { $set: { stripeCustomerId: c.id, email }, $setOnInsert: { plan: 'free', bonusCredits: 0 } }, { upsert: true });
     return c.id;
 }
