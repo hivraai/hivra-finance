@@ -4,6 +4,7 @@ import PageHero from '@/components/marketing/PageHero';
 export const metadata: Metadata = {
     title: 'Privacy Policy | HIVRA Finance',
     description: 'What HIVRA Finance collects, why, who processes it, and how to delete it.',
+    alternates: { canonical: '/privacy' },
 };
 
 const CONTACT = 'hello@hivra.ai';

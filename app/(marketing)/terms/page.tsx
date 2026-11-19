@@ -6,6 +6,7 @@ import SectionHead from '@/components/marketing/SectionHead';
 export const metadata: Metadata = {
     title: 'Terms of Service | HIVRA Finance',
     description: 'Fair, transparent, and open terms for our community.',
+    alternates: { canonical: '/terms' },
 };
 
 const PROMISES = [

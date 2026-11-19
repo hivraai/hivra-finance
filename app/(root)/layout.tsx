@@ -7,6 +7,9 @@ import AppShell from "@/components/shell/AppShell";
 import { searchStocks } from "@/lib/actions/finnhub.actions";
 import { getUserWatchlist } from "@/lib/actions/watchlist.actions";
 
+// Signed-in pages are personal: never in search results.
+export const metadata = { robots: { index: false, follow: false } };
+
 const Layout = async ({ children }: { children: React.ReactNode }) => {
     const session = await getSession();
 

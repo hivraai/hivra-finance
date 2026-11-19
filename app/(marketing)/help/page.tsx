@@ -7,6 +7,7 @@ import IconCard from '@/components/marketing/IconCard';
 export const metadata: Metadata = {
     title: 'Help | HIVRA Finance',
     description: 'Help with HIVRA Finance: plans, data and your account.',
+    alternates: { canonical: '/help' },
 };
 
 const FAQS = [

@@ -3,6 +3,7 @@ import { Inter, Poppins, IBM_Plex_Mono, IBM_Plex_Sans_Arabic } from "next/font/g
 import { Analytics } from "@vercel/analytics/next";
 import {Toaster} from "@/components/ui/sonner";
 import "./globals.css";
+import { siteUrl } from "@/lib/seo/site";
 
 // hivra.ai's faces: Inter for text, Poppins for headlines.
 const inter = Inter({
@@ -42,9 +43,21 @@ export const viewport: Viewport = {
   // TradingView iframes with an opaque white backdrop, so every widget card turns white.
 };
 
+const DESCRIPTION = "AI stock analyst, options desk with Greeks and implied volatility, and strategy backtests since 2018. Research the trade before you make it. Market analytics software, not investment advice.";
+
 export const metadata: Metadata = {
-  title: "HIVRA Finance",
+  metadataBase: new URL(siteUrl()),
+  title: "HIVRA Finance: AI stock analyst, options desk and backtesting",
+  description: DESCRIPTION,
   applicationName: "HIVRA Finance",
+  keywords: ["AI stock analyst", "options analysis", "option chain Greeks", "implied volatility", "options strategy builder", "backtesting", "stock backtest", "covered call backtest", "stock market dashboard", "heatmap", "futures", "gold price", "crypto prices"],
+  category: "finance",
+  creator: "HIVRA",
+  publisher: "HIVRA",
+  openGraph: { type: "website", siteName: "HIVRA Finance", locale: "en_US", title: "HIVRA Finance: AI stock analyst, options desk and backtesting", description: DESCRIPTION, url: "/" },
+  twitter: { card: "summary_large_image", title: "HIVRA Finance: AI stock analyst, options desk and backtesting", description: DESCRIPTION },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
+  formatDetection: { telephone: false },
   appleWebApp: { capable: true, title: "HIVRA Finance", statusBarStyle: "black-translucent" },
   // Setting `icons` replaces the app/icon.svg convention, so the tab icon is listed here too.
   icons: {
@@ -54,7 +67,6 @@ export const metadata: Metadata = {
     ],
     apple: "/hivra-finance-logo-512.png",
   },
-  description: "Options research and backtesting with an AI analyst. Market analytics software, not investment advice.",
 };
 
 export default function RootLayout({
