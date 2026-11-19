@@ -6,6 +6,8 @@ import OptionsDesk from '@/components/quant/OptionsDesk';
 import SymbolForm from '@/components/quant/SymbolForm';
 import { getChain, getRecentBars, isDatabentoSymbol } from '@/lib/databento';
 import { defaultExpiry, enrich, expiries } from '@/lib/quant/chain';
+import { getAccount } from '@/lib/agent/meter';
+import { getSession } from '@/lib/better-auth/auth';
 
 export const maxDuration = 120;
 
@@ -18,7 +20,11 @@ export async function generateMetadata() {
 // renders at once and the desk streams in behind a loading state.
 async function Desk({ symbol }: { symbol: string }) {
     const t = await getTranslations('Options');
-    const [chain, bars] = await Promise.all([getChain(symbol).catch(() => null), getRecentBars(symbol).catch(() => [])]);
+    const session = await getSession();
+    const [chain, bars, account] = await Promise.all([
+        getChain(symbol).catch(() => null), getRecentBars(symbol).catch(() => []),
+        session?.user ? getAccount(session.user.id, session.user.email) : null,
+    ]);
     if (!chain || !bars.length) return <Panel><p className="text-[13px]">{t('noChain', { symbol })}</p></Panel>;
     // The stock's close on the chain's own day, so IV and delta match the quotes.
     const day = chain.asOf.slice(0, 10);
@@ -28,7 +34,7 @@ async function Desk({ symbol }: { symbol: string }) {
     const rows = enrich(near, spot, chain.asOf);
     const sums = expiries(rows, spot).filter((e) => e.days >= 0);
     const def = defaultExpiry(sums) ?? sums[0]?.expiry ?? '';
-    return <OptionsDesk symbol={symbol} spot={spot} asOf={chain.asOf} rows={rows} expiries={sums} defaultExpiry={def} />;
+    return <OptionsDesk symbol={symbol} spot={spot} asOf={chain.asOf} rows={rows} expiries={sums} defaultExpiry={def} locked={!account || account.plan === 'free'} />;
 }
 
 async function Loading({ symbol }: { symbol: string }) {

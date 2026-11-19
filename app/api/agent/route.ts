@@ -8,7 +8,7 @@ import { Types } from 'mongoose';
 import { getSession } from '@/lib/better-auth/auth';
 import { connectToDatabase } from '@/database/mongoose';
 import { agentThreadModel } from '@/database/models/agent.model';
-import { ALLOWANCE, creditsUsed, planFor, record } from '@/lib/agent/meter';
+import { ALLOWANCE, creditsUsed, getAccount, record, spendable } from '@/lib/agent/meter';
 import { TOOL_DEFS, runTool } from '@/lib/agent/tools';
 import { isRateLimited } from '@/lib/rate-limit';
 import { displayItems } from '@/lib/agent/display';
@@ -48,14 +48,15 @@ export async function GET(req: Request) {
         if (!t) return Response.json({ error: 'Not found' }, { status: 404 });
         return Response.json({ id, title: t.title, symbol: t.symbol, items: displayItems(t.messages as Anthropic.MessageParam[]) });
     }
-    const plan = planFor(session.user.email);
-    const [threads, used] = await Promise.all([
+    const [threads, used, account] = await Promise.all([
         Thread.find({ userId }, { title: 1, symbol: 1, updatedAt: 1 }).sort({ updatedAt: -1 }).limit(30).lean(),
         creditsUsed(userId),
+        getAccount(userId, session.user.email),
     ]);
+    const total = spendable(account);
     return Response.json({
         threads: threads.map((t) => ({ id: String(t._id), title: t.title, symbol: t.symbol, updatedAt: t.updatedAt })),
-        used, allowance: Number.isFinite(ALLOWANCE[plan]) ? ALLOWANCE[plan] : null, plan,
+        used, allowance: Number.isFinite(total) ? total : null, plan: account.plan,
     });
 }
 
@@ -72,11 +73,11 @@ export async function POST(req: Request) {
 
     if (await isRateLimited(`agent:${userId}`, 20, 600)) return Response.json({ error: 'Too many questions in a short time. Try again in a few minutes.' }, { status: 429 });
 
-    const plan = planFor(session.user.email);
-    const allowance = ALLOWANCE[plan];
-    const usedBefore = await creditsUsed(userId);
+    const [account, usedBefore] = await Promise.all([getAccount(userId, session.user.email), creditsUsed(userId)]);
+    const monthly = ALLOWANCE[account.plan];
+    const allowance = spendable(account);
     if (usedBefore >= allowance) {
-        return Response.json({ error: 'You have used this month\'s AI credits. Upgrade to Pro for more.', used: usedBefore, allowance }, { status: 402 });
+        return Response.json({ error: 'You have used this month\'s AI credits. Upgrade your plan or buy credits on the Billing page.', used: usedBefore, allowance, upgrade: '/billing' }, { status: 402 });
     }
 
     const db = await connectToDatabase();
@@ -111,7 +112,7 @@ export async function POST(req: Request) {
                     });
                     s.on('text', (text) => send({ type: 'text', text }));
                     const msg = await s.finalMessage();
-                    credits += await record(userId, MODEL, msg.usage as Parameters<typeof record>[2]);
+                    credits += await record(userId, MODEL, msg.usage as Parameters<typeof record>[2], monthly);
                     messages.push({ role: 'assistant', content: msg.content as Anthropic.ContentBlockParam[] });
 
                     if (msg.stop_reason === 'pause_turn') continue;

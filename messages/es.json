@@ -87,7 +87,10 @@
       "iron_condor": "Iron condor",
       "iron_butterfly": "Iron butterfly"
     },
-    "loading": "Cargando la cadena de opciones de {symbol}… La primera carga de un ticker puede tardar hasta un minuto."
+    "loading": "Cargando la cadena de opciones de {symbol}… La primera carga de un ticker puede tardar hasta un minuto.",
+    "lockedTitle": "El constructor de estrategias es de Pro",
+    "lockedBody": "En Gratis puedes leer la cadena. Pro agrega el constructor: elige patas y ve el resultado, ganancia y pérdida máximas, puntos de equilibrio y griegas.",
+    "lockedCta": "Ver planes"
   },
   "Password": {
     "rules": {
@@ -412,7 +415,8 @@
       "help": "Ayuda",
       "apiDocs": "Documentación de la API",
       "about": "Acerca de",
-      "terms": "Términos"
+      "terms": "Términos",
+      "billing": "Plan y pagos"
     },
     "support": "Apoya a HIVRA Finance",
     "sponsor": "Patrocina",
@@ -772,6 +776,64 @@
       "days": "Días al vencimiento",
       "wingPct": "% de strikes vendidos",
       "widthPct": "% de ancho de las alas"
+    }
+  },
+  "Billing": {
+    "pageTitle": "Plan y pagos",
+    "pageSub": "Tu plan, el uso de este mes y los créditos de IA.",
+    "manage": "Gestionar suscripción",
+    "current": "Plan actual",
+    "renewsOn": "Se renueva el {date}",
+    "endsOn": "Termina el {date}",
+    "pastDue": "El pago falló: actualiza tu tarjeta en Gestionar suscripción.",
+    "aiCredits": "Créditos de IA este mes",
+    "bonus": "+ {credits} créditos comprados",
+    "backtests": "Backtests este mes",
+    "unlimited": "Ilimitado",
+    "notLive": "Los pagos aún no están activos. Por ahora todos están en Gratis.",
+    "perMonth": "/mes",
+    "yourPlan": "Tu plan",
+    "downgrade": "Bajar de plan",
+    "upgradeTo": "Subir a {plan}",
+    "switchTo": "Cambiar a {plan}",
+    "packsTitle": "Paquetes de créditos de IA",
+    "packsSub": "Recargas únicas para cuando se acaben los créditos del mes. No vencen y se usan después de tus créditos mensuales.",
+    "packCredits": "{credits} créditos",
+    "buy": "Comprar",
+    "fineprint": "Precios en dólares estadounidenses, cobro mensual, cancela cuando quieras. 1.000 créditos de IA = US$1 de uso de IA. Datos y análisis de mercado solo informativos, no son asesoría de inversión.",
+    "plans": {
+      "free": {
+        "name": "Gratis",
+        "features": {
+          "f1": "Panel, gráficas en vivo y lista de seguimiento",
+          "f2": "Alertas de precio",
+          "f3": "Técnicos en cada acción",
+          "f4": "2.500 créditos de IA al mes",
+          "f5": "Cadena de opciones (solo lectura)",
+          "f6": "3 backtests al mes"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "features": {
+          "f1": "Todo lo de Gratis",
+          "f2": "Mesa de opciones y constructor de estrategias",
+          "f3": "50.000 créditos de IA al mes",
+          "f4": "20 backtests al mes"
+        }
+      },
+      "elite": {
+        "name": "Elite",
+        "features": {
+          "f1": "Todo lo de Pro",
+          "f2": "150.000 créditos de IA al mes",
+          "f3": "Backtests ilimitados"
+        }
+      },
+      "unlimited": {
+        "name": "Equipo",
+        "features": {}
+      }
     }
   }
 }

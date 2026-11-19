@@ -17,8 +17,9 @@ const px = (n: number) => n.toFixed(2);
 
 type OptLeg = Extract<Leg, { kind: 'option' }>;
 
-export default function OptionsDesk({ symbol, spot, asOf, rows, expiries, defaultExpiry }: {
+export default function OptionsDesk({ symbol, spot, asOf, rows, expiries, defaultExpiry, locked = false }: {
     symbol: string; spot: number; asOf: string; rows: ChainRow[]; expiries: ExpirySummary[]; defaultExpiry: string;
+    locked?: boolean; // Free plan: the chain is visible, the strategy builder is Pro
 }) {
     const t = useTranslations('Options');
     const [expiry, setExpiry] = useState(defaultExpiry);
@@ -39,6 +40,7 @@ export default function OptionsDesk({ symbol, spot, asOf, rows, expiries, defaul
         return { kind: 'option', right: r.right, strike: r.strike, qty, premium, vol: r.iv ?? undefined, years: r.years };
     }
     function add(r: ChainRow, side: 'buy' | 'sell') {
+        if (locked) return;
         setLegs((ls) => [...ls, legFrom(r, side === 'buy' ? 1 : -1)]);
     }
     function applyPreset(name: PresetName) {
@@ -137,6 +139,13 @@ export default function OptionsDesk({ symbol, spot, asOf, rows, expiries, defaul
                     <p className="px-3 py-2 text-[11.5px] text-faint">{t('chainHint')}</p>
                 </div>
 
+                {locked ? (
+                    <div className="card flex flex-col items-start gap-2 self-start">
+                        <p className="font-semibold">{t('lockedTitle')}</p>
+                        <p className="text-[13px] text-muted-foreground">{t('lockedBody')}</p>
+                        <Link href="/billing" className="btn btn-primary mt-1">{t('lockedCta')}</Link>
+                    </div>
+                ) : (
                 <div className="flex flex-col gap-3">
                     <div className="card flex flex-col gap-2">
                         <div className="flex flex-wrap items-center gap-2">
@@ -197,6 +206,7 @@ export default function OptionsDesk({ symbol, spot, asOf, rows, expiries, defaul
                         </div>
                     )}
                 </div>
+                )}
             </div>
         </div>
     );

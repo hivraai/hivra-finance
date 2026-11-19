@@ -32,9 +32,9 @@ export const LANDING_COPY = {
             perMonth: '/month',
             popular: 'Most popular',
             tiers: [
-                { name: 'Free', price: '$0', body: 'Dashboard, live charts, watchlist and price alerts.', cta: 'Start free' },
-                { name: 'Pro', price: '$99', body: 'Options desk, strategy builder, AI analyst and 20 backtest reports a month.', cta: 'Coming soon · start free' },
-                { name: 'Elite', price: '$199', body: 'Everything in Pro, unlimited backtests, IV surface, gamma exposure and unusual flow.', cta: 'Coming soon · start free' },
+                { name: 'Free', price: '$0', body: 'Dashboard, live charts, watchlist, price alerts, a taste of the AI analyst and 3 backtests a month.', cta: 'Start free' },
+                { name: 'Pro', price: '$99', body: 'Options desk and strategy builder, the AI analyst with 50,000 credits a month, and 20 backtest reports a month.', cta: 'Get Pro' },
+                { name: 'Elite', price: '$199', body: 'Everything in Pro, 150,000 AI credits a month and unlimited backtests.', cta: 'Get Elite' },
             ],
         },
         data: {
@@ -78,9 +78,9 @@ export const LANDING_COPY = {
             perMonth: '/mes',
             popular: 'El más elegido',
             tiers: [
-                { name: 'Gratis', price: '$0', body: 'Panel, gráficas en vivo, lista de seguimiento y alertas de precio.', cta: 'Empieza gratis' },
-                { name: 'Pro', price: '$99', body: 'Mesa de opciones, constructor de estrategias, analista de IA y 20 reportes de backtest al mes.', cta: 'Muy pronto · empieza gratis' },
-                { name: 'Elite', price: '$199', body: 'Todo lo de Pro, backtests ilimitados, superficie de volatilidad, exposición gamma y flujo inusual.', cta: 'Muy pronto · empieza gratis' },
+                { name: 'Gratis', price: '$0', body: 'Panel, gráficas en vivo, lista de seguimiento, alertas de precio, una prueba del analista de IA y 3 backtests al mes.', cta: 'Empieza gratis' },
+                { name: 'Pro', price: '$99', body: 'Mesa de opciones y constructor de estrategias, el analista de IA con 50.000 créditos al mes y 20 reportes de backtest al mes.', cta: 'Quiero Pro' },
+                { name: 'Elite', price: '$199', body: 'Todo lo de Pro, 150.000 créditos de IA al mes y backtests ilimitados.', cta: 'Quiero Elite' },
             ],
         },
         data: {

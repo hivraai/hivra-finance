@@ -1,6 +1,7 @@
 'use server';
 
-import { requireUserId } from '@/lib/better-auth/auth';
+import { BACKTESTS, getAccount, takeBacktest } from '@/lib/agent/meter';
+import { getSession, requireUserId } from '@/lib/better-auth/auth';
 import { isRateLimited } from '@/lib/rate-limit';
 import { getFullBars, isDatabentoSymbol } from '@/lib/databento';
 import { OPTION_PARAMS, STOCK_PARAMS, cleanParams } from '@/lib/quant/backtest-presets';
@@ -31,6 +32,11 @@ export async function runBacktest(req: BacktestRequest): Promise<{ ok: true; rep
     if (await isRateLimited(`backtest:${userId}`, 30, 600)) return { ok: false, error: 'Too many backtests. Wait a few minutes.' };
     const symbol = String(req.symbol ?? '').trim().toUpperCase();
     if (!isDatabentoSymbol(symbol)) return { ok: false, error: 'Enter a US stock or ETF ticker.' };
+    const session = await getSession();
+    const account = await getAccount(userId, session?.user?.email);
+    if (!(await takeBacktest(userId, account.plan))) {
+        return { ok: false, error: `Your plan includes ${BACKTESTS[account.plan]} backtests a month and they are used. Upgrade on the Billing page for more.` };
+    }
     const table = req.kind === 'options' ? OPTION_PARAMS : STOCK_PARAMS;
     if (!Object.hasOwn(table, req.strategy)) return { ok: false, error: 'Unknown strategy.' };
     const params = cleanParams(table[req.strategy], req.params);

@@ -87,7 +87,10 @@
       "iron_condor": "Iron condor",
       "iron_butterfly": "Iron butterfly"
     },
-    "loading": "Loading the {symbol} option chain… The first load of a ticker can take up to a minute."
+    "loading": "Loading the {symbol} option chain… The first load of a ticker can take up to a minute.",
+    "lockedTitle": "The strategy builder is on Pro",
+    "lockedBody": "On Free you can read the chain. Pro adds the builder: pick legs, see the payoff, max profit and loss, breakevens and Greeks.",
+    "lockedCta": "See plans"
   },
   "Password": {
     "rules": {
@@ -412,7 +415,8 @@
       "help": "Help",
       "apiDocs": "API docs",
       "about": "About",
-      "terms": "Terms"
+      "terms": "Terms",
+      "billing": "Plan & billing"
     },
     "support": "Support HIVRA Finance",
     "sponsor": "Sponsor",
@@ -772,6 +776,64 @@
       "days": "Days to expiry",
       "wingPct": "Short strikes %",
       "widthPct": "Wing width %"
+    }
+  },
+  "Billing": {
+    "pageTitle": "Plan & billing",
+    "pageSub": "Your plan, this month’s usage and AI credits.",
+    "manage": "Manage subscription",
+    "current": "Current plan",
+    "renewsOn": "Renews {date}",
+    "endsOn": "Ends {date}",
+    "pastDue": "Payment failed: update your card in Manage subscription.",
+    "aiCredits": "AI credits this month",
+    "bonus": "+ {credits} bought credits",
+    "backtests": "Backtests this month",
+    "unlimited": "Unlimited",
+    "notLive": "Payments are not switched on yet. Everyone is on Free for now.",
+    "perMonth": "/month",
+    "yourPlan": "Your plan",
+    "downgrade": "Downgrade",
+    "upgradeTo": "Upgrade to {plan}",
+    "switchTo": "Switch to {plan}",
+    "packsTitle": "AI credit packs",
+    "packsSub": "One-off top-ups for when the month’s credits run out. They never expire and are used after your monthly credits.",
+    "packCredits": "{credits} credits",
+    "buy": "Buy",
+    "fineprint": "Prices in US dollars, billed monthly, cancel any time. 1,000 AI credits = US$1 of AI usage. Market data and analysis for information only, not investment advice.",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "features": {
+          "f1": "Dashboard, live charts and watchlist",
+          "f2": "Price alerts",
+          "f3": "Technicals on every stock",
+          "f4": "2,500 AI credits a month",
+          "f5": "Options chain (read only)",
+          "f6": "3 backtests a month"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "features": {
+          "f1": "Everything in Free",
+          "f2": "Options desk and strategy builder",
+          "f3": "50,000 AI credits a month",
+          "f4": "20 backtests a month"
+        }
+      },
+      "elite": {
+        "name": "Elite",
+        "features": {
+          "f1": "Everything in Pro",
+          "f2": "150,000 AI credits a month",
+          "f3": "Unlimited backtests"
+        }
+      },
+      "unlimited": {
+        "name": "Team",
+        "features": {}
+      }
     }
   }
 }

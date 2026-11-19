@@ -32,6 +32,7 @@ export interface IAiUsage {
     requests: number;
     inputTokens: number;
     outputTokens: number;
+    backtests: number;
 }
 
 const AiUsageSchema = new Schema<IAiUsage>({
@@ -42,6 +43,7 @@ const AiUsageSchema = new Schema<IAiUsage>({
     requests: { type: Number, default: 0 },
     inputTokens: { type: Number, default: 0 },
     outputTokens: { type: Number, default: 0 },
+    backtests: { type: Number, default: 0 },
 }, { timestamps: true });
 AiUsageSchema.index({ userId: 1, month: 1 }, { unique: true });
 

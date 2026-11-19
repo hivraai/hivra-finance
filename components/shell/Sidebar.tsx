@@ -4,7 +4,7 @@ import Wordmark from "@/components/marketing/Wordmark";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { BookOpen, FlaskConical, LayoutDashboard, LifeBuoy, LogOut, Search, Sigma, Sparkles, Star } from "lucide-react";
+import { BookOpen, CreditCard, FlaskConical, LayoutDashboard, LifeBuoy, LogOut, Search, Sigma, Sparkles, Star } from "lucide-react";
 import { openSearch } from "@/components/SearchCommand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { signOut } from "@/lib/actions/auth.actions";
@@ -16,6 +16,7 @@ type SidebarProps = {
 };
 
 const RESOURCES = [
+    { href: '/billing', label: 'billing', icon: CreditCard },
     { href: '/help', label: 'help', icon: LifeBuoy },
     { href: '/terms', label: 'terms', icon: BookOpen },
 ] as const;

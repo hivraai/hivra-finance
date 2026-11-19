@@ -62,7 +62,7 @@ export default async function LandingPage() {
                                         {tier.price}<small className="text-faint"> {t.plans.perMonth}</small>
                                     </p>
                                     <p className="text-[14px] leading-relaxed text-muted-foreground">{tier.body}</p>
-                                    <Link href="/sign-up" className={cn('btn mt-auto', featured ? 'btn-primary' : 'btn-ghost')}>{tier.cta}</Link>
+                                    <Link href={i === 0 ? '/sign-up' : '/billing'} className={cn('btn mt-auto', featured ? 'btn-primary' : 'btn-ghost')}>{tier.cta}</Link>
                                 </div>
                             </div>
                         );
