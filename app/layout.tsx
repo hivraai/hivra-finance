@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Poppins, IBM_Plex_Mono, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import {Toaster} from "@/components/ui/sonner";
@@ -31,8 +31,21 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500", "600"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  // Stops iOS zooming into a form field on focus; pinch-zoom still works on iOS.
+  maximumScale: 1,
+  viewportFit: "cover",
+  themeColor: "#0b0d12",
+  colorScheme: "dark",
+};
+
 export const metadata: Metadata = {
   title: "HIVRA Finance",
+  applicationName: "HIVRA Finance",
+  appleWebApp: { capable: true, title: "HIVRA Finance", statusBarStyle: "black-translucent" },
+  icons: { apple: "/hivra-finance-logo-512.png" },
   description: "Options research and backtesting with an AI analyst. Market analytics software, not investment advice.",
 };
 

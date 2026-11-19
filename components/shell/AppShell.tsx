@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/shell/Sidebar";
 import TabBar from "@/components/shell/TabBar";
+import { MobileTabBar, MobileTopBar } from "@/components/shell/MobileNav";
 import SearchCommand from "@/components/SearchCommand";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +43,8 @@ const AppShell = ({ user, watchlist, initialStocks, children }: AppShellProps) =
 
             <div className="shell-container">
                 <div className="app">
-                    <TabBar onMenu={() => setNavOpen(true)} />
+                    <div className="max-lg:hidden"><TabBar onMenu={() => setNavOpen(true)} /></div>
+                    <MobileTopBar />
                     <main ref={workspaceRef} className={cn('workspace', pathname === '/dashboard' && 'is-first-tab')}>
                         <div className="workspace-inner">
                             {children}
@@ -50,6 +52,8 @@ const AppShell = ({ user, watchlist, initialStocks, children }: AppShellProps) =
                     </main>
                 </div>
             </div>
+
+            <MobileTabBar onMore={() => setNavOpen((o) => !o)} moreOpen={navOpen} />
 
             <SearchCommand initialStocks={initialStocks} />
         </div>

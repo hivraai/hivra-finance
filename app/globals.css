@@ -220,9 +220,56 @@
     @media (max-width: 1023px) {
         .shell { grid-template-columns: minmax(0, 1fr); }
         .shell-container { padding: 0; }
-        .app { border-radius: 0; }
-        .workspace-inner { padding: 12px; }
+        .app { border-radius: 0; box-shadow: none; }
+        .workspace { border-radius: 0; }
+        /* Room for the bottom tab bar and the home indicator */
+        .workspace-inner { padding: 12px 12px calc(76px + env(safe-area-inset-bottom)); }
+        .sidebar { padding-top: max(12px, env(safe-area-inset-top)); padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
     }
+
+    /* ============ Phone chrome ============ */
+
+    .mobile-top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: max(8px, env(safe-area-inset-top)) 12px 8px;
+        padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right));
+        background: var(--side);
+        border-bottom: 1px solid var(--line);
+    }
+
+    .mobile-tabs {
+        position: fixed;
+        inset-inline: 0;
+        bottom: 0;
+        z-index: 45; /* above the drawer's backdrop (40), under the drawer and dialogs (50) */
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+        background: oklch(0.17 0.012 265 / 0.92);
+        backdrop-filter: saturate(1.4) blur(16px);
+        -webkit-backdrop-filter: saturate(1.4) blur(16px);
+        border-top: 1px solid var(--line);
+    }
+    .mobile-tab {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        min-height: 48px;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--faint);
+        transition: color 150ms, transform 120ms;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-tab svg { width: 22px; height: 22px; }
+    .mobile-tab span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mobile-tab:active { transform: scale(0.94); }
+    .mobile-tab.is-active { color: var(--brand-ink); }
 
     /* ============ Sidebar ============ */
 

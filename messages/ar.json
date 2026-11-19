@@ -457,7 +457,11 @@
     "signOut": "تسجيل الخروج",
     "agent": "المحلل الذكي",
     "options": "مكتب الخيارات",
-    "backtest": "الاختبار التاريخي"
+    "backtest": "الاختبار التاريخي",
+    "agentShort": "الذكاء",
+    "optionsShort": "الخيارات",
+    "more": "المزيد",
+    "mobileNav": "الرئيسية"
   },
   "TabBar": {
     "pages": {

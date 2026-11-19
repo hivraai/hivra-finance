@@ -457,7 +457,11 @@
     "signOut": "Cerrar sesión",
     "agent": "Analista IA",
     "options": "Mesa de opciones",
-    "backtest": "Backtest"
+    "backtest": "Backtest",
+    "agentShort": "IA",
+    "optionsShort": "Opciones",
+    "more": "Más",
+    "mobileNav": "Principal"
   },
   "TabBar": {
     "pages": {
