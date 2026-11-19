@@ -491,3 +491,22 @@ export const checkInactiveUsers = inngest.createFunction(
         return { processed: inactiveUsers.length, sent: results };
     }
 );
+
+// Keep the popular option chains stored, so the options desk opens instantly for them. Databento
+// is asked only when the newest close is not stored yet, so most runs cost nothing. A failed
+// ticker is retried by Inngest (step retries) without redoing the others.
+// OPRA history lands a few hours after the close, hence every 3 hours on trading days and Saturday.
+export const prewarmOptionChains = inngest.createFunction(
+    { id: 'prewarm-option-chains', concurrency: 1, triggers: [{ event: 'app/prewarm.chains' }, { cron: '20 */3 * * 1-6' }] },
+    async ({ step }) => {
+        const { POPULAR_CHAINS } = await import('@/lib/databento');
+        const out: Record<string, string> = {};
+        for (const symbol of POPULAR_CHAINS) {
+            out[symbol] = await step.run(`chain-${symbol}`, async () => {
+                const { ensureLatestChain } = await import('@/lib/databento');
+                return ensureLatestChain(symbol);
+            });
+        }
+        return out;
+    },
+);

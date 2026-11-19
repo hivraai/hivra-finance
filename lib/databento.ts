@@ -8,7 +8,10 @@
 // Option chain: OPRA.PILLAR cbbo-1m, the last minute before the close.
 import 'server-only';
 import { unstable_cache } from 'next/cache';
+import { after } from 'next/server';
 import type { Bar } from '@/lib/quant/indicators';
+import { connectToDatabase } from '@/database/mongoose';
+import { optionChainModel } from '@/database/models/option-chain.model';
 
 const BASE = 'https://hist.databento.com/v0';
 export const databentoConfigured = () => Boolean(process.env.DATABENTO_API_KEY);
@@ -20,7 +23,7 @@ function authHeader() {
     return 'Basic ' + Buffer.from(`${process.env.DATABENTO_API_KEY}:`).toString('base64');
 }
 
-async function call(path: string, params: Record<string, string>, timeoutMs = 25_000): Promise<string> {
+async function call(path: string, params: Record<string, string>, timeoutMs = 25_000, abort?: AbortSignal): Promise<string> {
     const qs = new URLSearchParams(params).toString();
     const get = path.startsWith('metadata.');
     const res = await fetch(get ? `${BASE}/${path}?${qs}` : `${BASE}/${path}`, {
@@ -28,7 +31,7 @@ async function call(path: string, params: Record<string, string>, timeoutMs = 25
         headers: { Authorization: authHeader(), ...(get ? {} : { 'Content-Type': 'application/x-www-form-urlencoded' }) },
         body: get ? undefined : qs,
         cache: 'no-store',
-        signal: AbortSignal.timeout(timeoutMs),
+        signal: abort ? AbortSignal.any([AbortSignal.timeout(timeoutMs), abort]) : AbortSignal.timeout(timeoutMs),
     });
     const text = await res.text();
     if (!res.ok) throw new Error(`Databento ${path} ${res.status}: ${text.slice(0, 200)}`);
@@ -145,13 +148,7 @@ function closeUtc(date: string): Date {
     return new Date(`${date}T${String(16 + offset).padStart(2, '0')}:00:00Z`);
 }
 
-async function chainAt(symbol: string, date: string): Promise<Chain> {
-    const close = closeUtc(date);
-    const start = new Date(close.getTime() - 60_000).toISOString();
-    const csv = await call('timeseries.get_range', {
-        dataset: 'OPRA.PILLAR', schema: 'cbbo-1m', symbols: `${symbol}.OPT`, stype_in: 'parent',
-        start, end: close.toISOString(), encoding: 'csv', pretty_px: 'true', pretty_ts: 'true', map_symbols: 'true',
-    }, 40_000);
+function toChain(symbol: string, csv: string, asOf: string): Chain {
     const latest = new Map<string, ChainQuote>();
     for (const r of parseCsv(csv)) {
         const p = parseOcc(r.symbol ?? '');
@@ -160,25 +157,95 @@ async function chainAt(symbol: string, date: string): Promise<Chain> {
         if (!(ask > 0)) continue;
         latest.set(p.symbol, { ...p, bid: bid > 0 ? bid : 0, ask, bidSize: +(r.bid_sz_00 ?? 0), askSize: +(r.ask_sz_00 ?? 0) });
     }
-    return { underlying: symbol, asOf: close.toISOString(), quotes: [...latest.values()].sort((a, b) => a.expiry.localeCompare(b.expiry) || a.strike - b.strike) };
+    return { underlying: symbol, asOf, quotes: [...latest.values()].sort((a, b) => a.expiry.localeCompare(b.expiry) || a.strike - b.strike) };
 }
 
-// The chain as of the most recent close with data. Walks back up to 5 days over weekends/holidays.
-export const getChain = unstable_cache(async (symbol: string): Promise<Chain | null> => {
-    if (!databentoConfigured() || !isDatabentoSymbol(symbol)) return null;
-    const endTs = Date.parse(await datasetEndTs('OPRA.PILLAR'));
+// Databento's latency for the same request swings from ~3 s to over 40 s, so two equivalent
+// snapshots of the close race (the last 1-minute CBBO and the last 1-second CBBO) and the first
+// complete answer wins; the other is aborted. Costs about a cent per ticker per day.
+async function chainAt(symbol: string, date: string): Promise<Chain> {
+    const close = closeUtc(date);
+    const base = { dataset: 'OPRA.PILLAR', symbols: `${symbol}.OPT`, stype_in: 'parent', encoding: 'csv', pretty_px: 'true', pretty_ts: 'true', map_symbols: 'true' };
+    const stop = new AbortController();
+    const shapes = [
+        { ...base, schema: 'cbbo-1m', start: new Date(close.getTime() - 60_000).toISOString(), end: close.toISOString() },
+        { ...base, schema: 'cbbo-1s', start: new Date(close.getTime() - 2_000).toISOString(), end: new Date(close.getTime() - 1_000).toISOString() },
+    ];
+    try {
+        return await Promise.any(shapes.map(async (params) => {
+            const chain = toChain(symbol, await call('timeseries.get_range', params, 55_000, stop.signal), close.toISOString());
+            if (!chain.quotes.length) throw new Error('empty chain');
+            return chain;
+        }));
+    } catch (e) {
+        throw e instanceof AggregateError ? new Error(e.errors.map((x) => (x instanceof Error ? x.message : String(x))).join(' | ')) : e;
+    } finally {
+        stop.abort();
+    }
+}
+
+// Trading days whose close the dataset already covers, newest first (weekends skipped).
+function candidateDays(endTs: number, n = 6): string[] {
+    const out: string[] = [];
     const d = new Date(endTs);
-    let tried = 0; // the most recent close gets a second try
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; out.length < n && i < 14; i++) {
         const date = d.toISOString().slice(0, 10);
-        const close = closeUtc(date);
-        if (d.getUTCDay() !== 0 && d.getUTCDay() !== 6 && close.getTime() <= endTs) {
-            const attempt = () => chainAt(symbol, date).catch((e) => { console.warn('[databento] chain', symbol, date, e instanceof Error ? e.message : e); return null; });
-            const c = (await attempt()) ?? (tried === 0 ? await attempt() : null);
-            tried++;
-            if (c && c.quotes.length) return c;
-        }
+        if (d.getUTCDay() !== 0 && d.getUTCDay() !== 6 && closeUtc(date).getTime() <= endTs) out.push(date);
         d.setUTCDate(d.getUTCDate() - 1);
     }
+    return out;
+}
+
+async function fetchAndStore(symbol: string, day: string): Promise<Chain> {
+    const chain = await chainAt(symbol, day);
+    const db = await connectToDatabase();
+    await optionChainModel(db).updateOne({ symbol, day }, { $set: { asOf: chain.asOf, quotes: chain.quotes } }, { upsert: true })
+        .catch((e) => console.warn('[databento] store chain', symbol, day, e instanceof Error ? e.message : e));
+    return chain;
+}
+
+const refreshing = new Set<string>();
+
+// The chain as of the most recent close with data. Stored in Mongo per ticker per day (a closed
+// day never changes). A visitor never waits on Databento when any recent close is stored: the
+// stored one is served at once and the newer close is fetched in the background
+// (stale-while-revalidate). Only a ticker never seen before waits, and then tries at most the two
+// newest closes.
+export async function getChain(symbol: string): Promise<Chain | null> {
+    if (!databentoConfigured() || !isDatabentoSymbol(symbol)) return null;
+    const days = candidateDays(Date.parse(await datasetEndTs('OPRA.PILLAR')));
+    if (!days.length) return null;
+    const db = await connectToDatabase();
+    const stored = await optionChainModel(db).findOne({ symbol, day: { $in: days } }).sort({ day: -1 }).lean();
+    if (stored) {
+        if (stored.day !== days[0] && !refreshing.has(symbol)) {
+            refreshing.add(symbol);
+            const job = () => fetchAndStore(symbol, days[0])
+                .catch((e) => console.warn('[databento] refresh chain', symbol, days[0], e instanceof Error ? e.message : e))
+                .finally(() => refreshing.delete(symbol));
+            try { after(job); } catch { void job(); } // outside a request (scripts, tests)
+        }
+        return { underlying: symbol, asOf: stored.asOf, quotes: stored.quotes };
+    }
+    for (const day of days.slice(0, 2)) {
+        try {
+            return await fetchAndStore(symbol, day);
+        } catch (e) {
+            console.warn('[databento] chain', symbol, day, e instanceof Error ? e.message : e);
+        }
+    }
     return null;
-}, ['databento-chain-v1'], { revalidate: 6 * 3600 });
+}
+
+// For the pre-load job: make sure the newest close is stored (waits for Databento if needed).
+export async function ensureLatestChain(symbol: string): Promise<string> {
+    const days = candidateDays(Date.parse(await datasetEndTs('OPRA.PILLAR')));
+    if (!days.length) return 'no days';
+    const db = await connectToDatabase();
+    if (await optionChainModel(db).exists({ symbol, day: days[0] })) return `${days[0]} stored`;
+    const c = await fetchAndStore(symbol, days[0]);
+    return `${days[0]} fetched · ${c.quotes.length}`;
+}
+
+// Tickers kept warm so most visitors never wait on Databento (lib/inngest prewarm job).
+export const POPULAR_CHAINS = ['AAPL', 'NVDA', 'TSLA', 'SPY', 'QQQ', 'AMZN', 'MSFT', 'META', 'GOOGL', 'AMD', 'NFLX', 'PLTR', 'IWM', 'COIN', 'MSTR', 'AVGO', 'SMCI', 'UBER', 'JPM', 'BAC', 'INTC', 'SOFI', 'HOOD', 'BABA', 'DIS'];
