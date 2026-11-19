@@ -81,7 +81,7 @@ else if (!APPLY) console.log('create  customer portal configuration');
 else if (out.STRIPE_PRICE_PRO && out.STRIPE_PRICE_ELITE) {
     const pro = await stripe('GET', `prices/${out.STRIPE_PRICE_PRO}`), elite = await stripe('GET', `prices/${out.STRIPE_PRICE_ELITE}`);
     portal = await stripe('POST', 'billing_portal/configurations', {
-        business_profile: { headline: 'HIVRA Finance: manage your plan', privacy_policy_url: 'https://finance.hivra.ai/terms', terms_of_service_url: 'https://finance.hivra.ai/terms' },
+        business_profile: { headline: 'HIVRA Finance: manage your plan', privacy_policy_url: 'https://finance.hivra.ai/privacy', terms_of_service_url: 'https://finance.hivra.ai/terms' },
         default_return_url: 'https://finance.hivra.ai/billing',
         features: {
             customer_update: { enabled: true, allowed_updates: ['email', 'address'] },
