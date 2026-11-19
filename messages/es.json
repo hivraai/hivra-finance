@@ -388,7 +388,11 @@
       "f3Title": "Haz backtest de una idea",
       "f3Body": "Pruébala con precios diarios desde 2018 y obtén P&L, tasa de acierto, drawdown y cada operación.",
       "note": "Marca primero algunas acciones: tu lista alimenta el panel y tus alertas.",
-      "disclaimer": "Datos y análisis de mercado solo informativos, no son asesoría de inversión."
+      "disclaimer": "Datos y análisis de mercado solo informativos, no son asesoría de inversión.",
+      "waTitle": "Únete a los miembros en WhatsApp",
+      "waBody": "Charla de mercados, novedades y ayuda rápida del equipo.",
+      "waCta": "Unirme al grupo de WhatsApp",
+      "waScan": "Escanéalo con tu teléfono"
     },
     "resetPassword": {
       "subject": "Restablece tu contraseña de HIVRA Finance",

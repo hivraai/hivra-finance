@@ -8,7 +8,8 @@ import {
 import { escapeHtml, formatPrice, sanitizeEmailIntro } from "@/lib/utils";
 import { escapeAll, fillTemplate, getEmailTranslator } from "@/lib/nodemailer/i18n";
 import { isWorkersRuntime } from "@/database/mongoose";
-import { emailLayout, featureRows } from '@/lib/nodemailer/layout';
+import { emailLayout, featureRows, whatsappBlock } from '@/lib/nodemailer/layout';
+import { communityQrEmailUrl, communityUrl } from '@/lib/community';
 
 type EmailSendResult =
     | { status: 'skipped' }
@@ -71,6 +72,11 @@ export const sendWelcomeEmail = async ({ email, name, intro, locale }: WelcomeEm
 
         const { lang, t } = await getEmailTranslator(locale);
         const site = 'https://finance.hivra.ai';
+        const group = communityUrl();
+        const community = group ? whatsappBlock({
+            title: t('welcome.waTitle'), body: t('welcome.waBody'), cta: t('welcome.waCta'), scan: t('welcome.waScan'),
+            href: group, qrSrc: communityQrEmailUrl(email, site),
+        }) : '';
         const htmlTemplate = emailLayout({
             lang,
             preheader: t('welcome.preheader'),
@@ -79,7 +85,7 @@ export const sendWelcomeEmail = async ({ email, name, intro, locale }: WelcomeEm
                 { title: t('welcome.f1Title'), body: t('welcome.f1Body') },
                 { title: t('welcome.f2Title'), body: t('welcome.f2Body') },
                 { title: t('welcome.f3Title'), body: t('welcome.f3Body') },
-            ]),
+            ]) + community,
             cta: t('welcome.cta'),
             href: `${site}/dashboard`,
             note: t('welcome.note'),

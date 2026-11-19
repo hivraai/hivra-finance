@@ -388,7 +388,11 @@
       "f3Title": "Backtest an idea",
       "f3Body": "Run it on daily prices since 2018 and get P&L, win rate, drawdown and every trade.",
       "note": "Star a few stocks first: your watchlist feeds the dashboard and your alerts.",
-      "disclaimer": "Market data and analysis for information only, not investment advice."
+      "disclaimer": "Market data and analysis for information only, not investment advice.",
+      "waTitle": "Join the members on WhatsApp",
+      "waBody": "Market talk, new features and quick help from the team.",
+      "waCta": "Join the WhatsApp group",
+      "waScan": "Scan on your phone"
     },
     "resetPassword": {
       "subject": "Reset your HIVRA Finance password",

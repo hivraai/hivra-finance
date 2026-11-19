@@ -46,3 +46,24 @@ export function featureRows(items: { title: string; body: string }[]): string {
   <div style="font-size:13.5px;line-height:1.55;color:#a1a1aa;padding-top:2px;">${escapeHtml(i.body)}</div>
 </td></tr>`).join('')}</table>`;
 }
+
+// The members' WhatsApp group: a green "Join" pill and the QR to scan from a computer.
+// `href` and `qrSrc` come from lib/community.ts (env-only invite link, signed QR URL), never from user input.
+export function whatsappBlock({ title, body, cta, scan, href, qrSrc }: {
+    title: string; body: string; cta: string; scan: string; href: string; qrSrc: string;
+}): string {
+    return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:22px 0 0;background:#0e1a14;border:1px solid #1d3a2a;border-radius:14px;">
+<tr><td style="padding:20px;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"><tr>
+    <td style="vertical-align:top;">
+      <div style="font-size:15px;font-weight:700;color:#ffffff;">${escapeHtml(title)}</div>
+      <div style="font-size:13.5px;line-height:1.55;color:#a1a1aa;padding:4px 0 14px;">${escapeHtml(body)}</div>
+      <a href="${escapeHtml(href)}" style="display:inline-block;background:#25d366;color:#0b0d12;padding:11px 20px;border-radius:9999px;text-decoration:none;font-weight:700;font-size:14px;">${escapeHtml(cta)}</a>
+    </td>
+    <td width="112" style="vertical-align:top;padding-left:16px;text-align:center;">
+      <img src="${escapeHtml(qrSrc)}" width="112" height="112" alt="QR" style="display:block;border-radius:10px;background:#ffffff;">
+      <div style="font-size:11px;color:#71717a;padding-top:6px;">${escapeHtml(scan)}</div>
+    </td>
+  </tr></table>
+</td></tr></table>`;
+}
