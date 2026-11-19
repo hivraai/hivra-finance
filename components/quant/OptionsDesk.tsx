@@ -72,7 +72,7 @@ export default function OptionsDesk({ symbol, spot, asOf, rows, expiries, defaul
 
     return (
         <div className="flex flex-col gap-3">
-            <div className="card flex flex-wrap items-center gap-x-6 gap-y-2">
+            <div className="card flex flex-wrap items-center gap-x-6 gap-y-2 px-5 py-4">
                 <div><span className="mono text-lg font-semibold">{symbol}</span> <span className="num ms-2 text-lg">{px(spot)}</span></div>
                 <span className="text-[12.5px] text-muted-foreground">{t('asOf', { date: new Date(asOf).toISOString().slice(0, 10) })}</span>
                 {sum && (
@@ -140,14 +140,14 @@ export default function OptionsDesk({ symbol, spot, asOf, rows, expiries, defaul
                 </div>
 
                 {locked ? (
-                    <div className="card flex flex-col items-start gap-2 self-start">
+                    <div className="card flex flex-col items-start gap-2 self-start p-5">
                         <p className="font-semibold">{t('lockedTitle')}</p>
                         <p className="text-[13px] text-muted-foreground">{t('lockedBody')}</p>
                         <Link href="/billing" className="btn btn-primary mt-1">{t('lockedCta')}</Link>
                     </div>
                 ) : (
                 <div className="flex flex-col gap-3">
-                    <div className="card flex flex-col gap-2">
+                    <div className="card flex flex-col gap-3 p-4">
                         <div className="flex flex-wrap items-center gap-2">
                             <select className="h-9 rounded-lg border border-line bg-canvas px-2 text-[13px]" defaultValue="" onChange={(e) => { if (e.target.value) applyPreset(e.target.value as PresetName); e.target.value = ''; }}>
                                 <option value="">{t('preset')}</option>
@@ -180,7 +180,7 @@ export default function OptionsDesk({ symbol, spot, asOf, rows, expiries, defaul
                     </div>
 
                     {a && g && (
-                        <div className="card flex flex-col gap-3">
+                        <div className="card flex flex-col gap-3 p-4">
                             <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-[13px] sm:grid-cols-4">
                                 <Stat k={net >= 0 ? t('credit') : t('debit')} v={money(Math.abs(net))} />
                                 <Stat k={t('maxProfit')} v={money(a.maxProfit)} tone="text-up" />

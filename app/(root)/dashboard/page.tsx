@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import type { Messages } from "next-intl";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import Panel from "@/components/Panel";
+import TopStories, { TopStoriesSkeleton } from "@/components/news/TopStories";
 import IndexPulse, { PulseSkeleton } from "@/components/IndexPulse";
 import { LocalizedDataFreshness } from "@/components/DataFreshness";
 import MarketSwitcher from "@/components/MarketSwitcher";
@@ -13,7 +14,6 @@ import {
     STOCK_HEATMAP_CONFIG,
     marketOverviewConfig,
     marketQuotesConfig,
-    timelineConfig,
 } from "@/lib/constants";
 import { MARKETS, MARKET_COOKIE, getMarket, isMarketOpen, marketForCountry } from "@/lib/markets";
 import { getSession } from "@/lib/better-auth/auth";
@@ -101,7 +101,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
                         </Panel>
                     )}
                     <Panel title={t('storiesTitle')} sub={t('storiesSub')} className={heatmap ? '' : 'xl:col-span-2'}>
-                        <TradingViewWidget scriptUrl={`${scriptUrl}timeline.js`} config={timelineConfig(market.news, locale)} height={560} />
+                        <Suspense fallback={<TopStoriesSkeleton />}><TopStories market={market.news} /></Suspense>
                     </Panel>
                 </div>
             </div>

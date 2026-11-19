@@ -5,8 +5,8 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Asks the server for a Stripe Checkout or portal URL and goes there. Prices never come from here.
-export default function BillingButton({ item, portal, children, primary, className }: {
-    item?: string; portal?: boolean; children: React.ReactNode; primary?: boolean; className?: string;
+export default function BillingButton({ item, portal, children, primary, className, block }: {
+    item?: string; portal?: boolean; children: React.ReactNode; primary?: boolean; className?: string; block?: boolean;
 }) {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState('');
@@ -26,8 +26,8 @@ export default function BillingButton({ item, portal, children, primary, classNa
         setBusy(false);
     }
     return (
-        <div className="flex flex-col gap-1">
-            <button type="button" onClick={go} disabled={busy} className={cn('btn h-10 px-4', primary ? 'btn-primary' : 'btn-ghost', className)}>
+        <div className={cn('flex flex-col gap-1', block && 'w-full')}>
+            <button type="button" onClick={go} disabled={busy} className={cn('btn h-10 px-4', block && 'w-full justify-center', primary ? 'btn-primary' : 'btn-ghost', className)}>
                 {busy && <Loader2 className="size-4 animate-spin" />}{children}
             </button>
             {error && <span className="text-[12px] text-down">{error}</span>}

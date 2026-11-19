@@ -301,7 +301,7 @@
     "quotesTitle": "Cotizaciones",
     "quotesSub": "Líderes de {market} por grupo",
     "storiesTitle": "Noticias principales",
-    "storiesSub": "Las más recientes primero"
+    "storiesSub": "Solo finanzas · lo más reciente primero · cada 5 min"
   },
   "MarketSwitcher": {
     "label": "Mercados",

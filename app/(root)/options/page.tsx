@@ -11,6 +11,20 @@ import { getSession } from '@/lib/better-auth/auth';
 
 export const maxDuration = 120;
 
+function nearMoney<T extends { expiry: string; strike: number }>(quotes: T[], spot: number, n: number): T[] {
+    const by = new Map<string, T[]>();
+    for (const q of quotes) { const l = by.get(q.expiry); if (l) l.push(q); else by.set(q.expiry, [q]); }
+    const out: T[] = [];
+    for (const qs of by.values()) {
+        const strikes = [...new Set(qs.map((q) => q.strike))].sort((a, b) => a - b);
+        const i = strikes.findIndex((k) => k >= spot);
+        const c = i < 0 ? strikes.length : i;
+        const keep = new Set(strikes.slice(Math.max(c - n, 0), c + n));
+        for (const q of qs) if (keep.has(q.strike)) out.push(q);
+    }
+    return out;
+}
+
 export async function generateMetadata() {
     const t = await getTranslations('Options');
     return { title: t('pageTitle') };
@@ -29,9 +43,10 @@ async function Desk({ symbol }: { symbol: string }) {
     // The stock's close on the chain's own day, so IV and delta match the quotes.
     const day = chain.asOf.slice(0, 10);
     const spot = (bars.find((b) => b.date === day) ?? bars.at(-1)!).close;
-    // Strikes within ±40% of spot keep the page light on index ETFs with thousands of contracts.
-    const near = chain.quotes.filter((q) => q.strike >= spot * 0.6 && q.strike <= spot * 1.4);
-    const rows = enrich(near, spot, chain.asOf);
+    // The desk shows 24 strikes around the money and presets step a few further, so each expiry
+    // sends 20 strikes on each side of spot. SPY went from ~9,800 rows (2.2 MB) to ~2,500.
+    // Only the fields the desk reads go to the browser (no OCC symbol, no sizes).
+    const rows = enrich(nearMoney(chain.quotes, spot, 20).map((q) => ({ symbol: '', expiry: q.expiry, right: q.right, strike: q.strike, bid: q.bid, ask: q.ask })), spot, chain.asOf);
     const sums = expiries(rows, spot).filter((e) => e.days >= 0);
     const def = defaultExpiry(sums) ?? sums[0]?.expiry ?? '';
     return <OptionsDesk symbol={symbol} spot={spot} asOf={chain.asOf} rows={rows} expiries={sums} defaultExpiry={def} locked={!account || account.plan === 'free'} />;

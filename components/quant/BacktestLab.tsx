@@ -48,7 +48,7 @@ export default function BacktestLab({ initialSymbol }: { initialSymbol: string }
 
     return (
         <div className="grid gap-3 xl:grid-cols-[320px_minmax(0,1fr)]">
-            <div className="card flex flex-col gap-3 self-start">
+            <div className="card flex flex-col gap-3 self-start p-4">
                 <Field label={t('symbol')}>
                     <input value={symbol} onChange={(e) => setSymbol(e.target.value.toUpperCase())} maxLength={10} className="mono input-like" />
                 </Field>
@@ -91,7 +91,7 @@ export default function BacktestLab({ initialSymbol }: { initialSymbol: string }
                     </div>
                 ) : (
                     <>
-                        <div className="card flex flex-col gap-3">
+                        <div className="card flex flex-col gap-3 p-4">
                             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                                 <span className="mono text-lg font-semibold">{symbol.toUpperCase()}</span>
                                 <span className="text-[14px]">{t(`strategies.${report.strategy as StratKey}`)}</span>
@@ -111,7 +111,7 @@ export default function BacktestLab({ initialSymbol }: { initialSymbol: string }
                             <ul className="text-[11.5px] text-faint">{report.notes.map((n) => <li key={n}>{n}</li>)}</ul>
                         </div>
                         {report.trades.length > 0 && (
-                            <div className="card overflow-x-auto">
+                            <div className="card overflow-x-auto p-2">
                                 <h3 className="mb-2 text-[13px] font-semibold">{t('trades', { n: report.trades.length })}</h3>
                                 <table className="w-full text-[12.5px] tabular-nums">
                                     <thead className="text-muted-foreground"><tr>
