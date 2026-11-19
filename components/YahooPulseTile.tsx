@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LineChart } from 'lucide-react';
+import TileIcon from "@/components/TileIcon";
 import ChangePill from '@/components/ChangePill';
 import { yahooAppSymbol, type YahooDailyQuote } from '@/lib/yahoo';
 
@@ -17,7 +17,7 @@ export default function YahooPulseTile({ tvSymbol, label, quote, labels = ENGLIS
     const body = (
         <>
             <div className="bento-head">
-                <span className="bento-ico"><LineChart /></span>
+                <TileIcon symbol={tvSymbol} />
                 <span className="truncate">{label}</span>
                 <span className="mono ms-auto text-xs text-faint">{tvSymbol.split(':').pop()}</span>
             </div>

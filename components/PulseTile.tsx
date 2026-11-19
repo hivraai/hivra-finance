@@ -1,8 +1,8 @@
 'use client';
 
 import Link from "next/link";
-import { LineChart } from "lucide-react";
 import { useTranslations } from "next-intl";
+import TileIcon from "@/components/TileIcon";
 import ChangePill from "@/components/ChangePill";
 import PriceFlash from "@/components/PriceFlash";
 import { useLiveQuotes, type LiveQuote } from "@/hooks/useLiveQuotes";
@@ -26,7 +26,7 @@ export default function PulseTile({ symbol, label, initial, labels = ENGLISH }: 
     return (
         <Link href={`/stocks/${encodeURIComponent(symbol)}`} className="bento-tile transition-colors hover:bg-hover/60">
             <div className="bento-head">
-                <span className="bento-ico"><LineChart /></span>
+                <TileIcon symbol={symbol} />
                 <span className="truncate">{label}</span>
                 <span className="mono ms-auto text-xs text-faint">{symbol.replace('BINANCE:', '')}</span>
             </div>
