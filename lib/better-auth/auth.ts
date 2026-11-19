@@ -4,6 +4,7 @@ import {connectToDatabase, isWorkersRuntime} from "@/database/mongoose";
 import {nextCookies} from "better-auth/next-js";
 import { captcha } from "better-auth/plugins";
 import { headers } from "next/headers";
+import { after } from "next/server";
 import { cache } from "react";
 import { sendPasswordResetEmail } from "@/lib/nodemailer/reset-password";
 import { resolveLocale } from "@/i18n/locale";
@@ -37,14 +38,17 @@ const createAuth = (database: MongoDb) => betterAuth({
             sendResetPassword: async ({ user, url }) => {
                 // Read the cookie now, while the user's request is still in scope
                 const locale = await resolveLocale().catch(() => undefined);
-                void sendPasswordResetEmail({
+                // Sent after the response (no timing hint about which emails exist), but inside the request's
+                // lifetime: a bare un-awaited promise is frozen with the function on Vercel and never sends.
+                after(() => sendPasswordResetEmail({
                     email: user.email,
                     name: user.name,
                     resetUrl: url,
                     locale,
-                }).catch((error) => {
-                    console.error('Failed to queue password reset email:', error);
-                });
+                }).then((r) => console.log('Password reset email:', r?.status ?? 'sent'))
+                  .catch((error) => {
+                    console.error('Failed to send password reset email:', error);
+                }));
             },
         },
         // Signed session cookie for 5 min: pages stop paying a MongoDB round trip per request.
