@@ -30,7 +30,7 @@ export default function AgentDemo({ copy }: { copy: AgentDemoCopy }) {
     const lines = Math.max(phase - 1 - copy.steps.length, 0);
 
     return (
-        <div className="card flex h-[420px] flex-col overflow-hidden">
+        <div className="card flex h-[480px] flex-col overflow-hidden">
             <div className="flex items-center justify-between border-b border-line px-4 py-3">
                 <span className="inline-flex items-center gap-2 text-[13px] font-semibold">
                     <span className="grid size-6 place-items-center rounded-full bg-brand text-on-brand"><Sparkles className="size-3.5" /></span>
