@@ -1,4 +1,5 @@
 import { transporter } from "@/lib/nodemailer";
+import { emailConfigured, fromHeader } from "@/lib/nodemailer/config";
 import { escapeHtml } from "@/lib/utils";
 import { getEmailTranslator } from "@/lib/nodemailer/i18n";
 
@@ -13,7 +14,7 @@ export const sendPasswordResetEmail = async (
     { email, name, resetUrl, locale }: { email: string; name?: string | null; resetUrl: string; locale?: string }
 ) => {
     try {
-        if (!transporter || !process.env.NODEMAILER_EMAIL || !process.env.NODEMAILER_PASSWORD) {
+        if (!transporter || !emailConfigured()) {
             throw new Error('Email credentials not configured');
         }
 
@@ -43,7 +44,7 @@ export const sendPasswordResetEmail = async (
         `;
 
         const info = await transporter.sendMail({
-            from: `"HIVRA Finance" <${process.env.NODEMAILER_EMAIL}>`,
+            from: fromHeader(),
             to: email,
             subject: t('resetPassword.subject'),
             text: t('resetPassword.text', { url: encodeUnsafeUrlChars(resetUrl) }),

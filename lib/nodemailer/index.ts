@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { emailConfigured, fromHeader, transportOptions } from '@/lib/nodemailer/config';
 import {
     WELCOME_EMAIL_TEMPLATE,
     NEWS_SUMMARY_EMAIL_TEMPLATE,
@@ -30,10 +31,10 @@ type EmailSendResult =
     | { status: 'skipped' }
     | { status: 'sent'; messageId: string };
 
-const hasEmailConfig = Boolean(process.env.NODEMAILER_EMAIL && process.env.NODEMAILER_PASSWORD);
+const hasEmailConfig = emailConfigured();
 
 if (!hasEmailConfig) {
-    console.warn('⚠️ Email credentials are not configured. Welcome and news summary emails are disabled until NODEMAILER_EMAIL and NODEMAILER_PASSWORD are set.');
+    console.warn('⚠️ Email credentials are not configured. Welcome and news summary emails are disabled until RESEND_API_KEY (or NODEMAILER_EMAIL and NODEMAILER_PASSWORD) is set.');
 }
 
 // The transporter is created lazily on first use. Creating the SMTP pool (and
@@ -47,18 +48,11 @@ function getTransporter(): Transporter {
     // A Workers socket belongs to the request that opened it, so a pool cached for the next
     // request would fail there: open one plain SMTP connection per send instead.
     if (isWorkersRuntime()) {
-        return nodemailer.createTransport({
-            service: 'gmail',
-            auth: { user: process.env.NODEMAILER_EMAIL!, pass: process.env.NODEMAILER_PASSWORD! },
-        });
+        return nodemailer.createTransport(transportOptions());
     }
     if (!transporterInstance) {
         transporterInstance = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.NODEMAILER_EMAIL!,
-                pass: process.env.NODEMAILER_PASSWORD!,
-            },
+            ...transportOptions(),
             // Keep the pool small because email volume is low in this app.
             pool: true,
             maxConnections: 1,
@@ -114,7 +108,7 @@ export const sendWelcomeEmail = async ({ email, name, intro, locale }: WelcomeEm
         });
 
         const mailOptions = {
-            from: `"HIVRA Finance" <${process.env.NODEMAILER_EMAIL}>`,
+            from: fromHeader(),
             to: email,
             subject: t('welcome.subject'),
             text: t('welcome.text'),
@@ -144,7 +138,7 @@ export const sendNewsSummaryEmail = async (
             .replace('{{newsContent}}', newsContent);
 
         const mailOptions = {
-            from: `"HIVRA Finance" <${process.env.NODEMAILER_EMAIL}>`,
+            from: fromHeader(),
             to: email,
             subject: `📈 Market News Summary Today - ${date}`,
             text: `Today's market news summary from HIVRA Finance`,
@@ -204,7 +198,7 @@ export const sendStockAlertEmail = async (
         });
 
         const mailOptions = {
-            from: `"HIVRA Finance" <${process.env.NODEMAILER_EMAIL}>`,
+            from: fromHeader(),
             to: email,
             subject: t(`stockAlert.subject${dir}`, values),
             text: t(`stockAlert.text${dir}`, values),

@@ -9,6 +9,7 @@ import { clientIp, isRateLimited } from "@/lib/rate-limit";
 import { getTranslations } from "next-intl/server";
 import { resolveLocale } from "@/i18n/locale";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { emailConfigured } from "@/lib/nodemailer/config";
 
 const isOption = (options: readonly { value: string }[], value: unknown) => options.some((o) => o.value === value);
 const COUNTRY_CODES = new Set(countryList().getValues()); // the same list the sign-up country picker shows
@@ -105,7 +106,7 @@ export const signInWithSocial = async (provider: 'google' | 'github') => {
 export const requestPasswordResetEmail =async ({ email, captchaToken }: { email: string; captchaToken?: string | null }) => {
     const t = await getTranslations('Errors');
     if (!(await verifyTurnstile(captchaToken, await clientIp()))) return { success: false, error: t('humanCheck') };
-    if (!process.env.NODEMAILER_EMAIL || !process.env.NODEMAILER_PASSWORD) {
+    if (!emailConfigured()) {
         return { success: false, error: t('resetEmailNotConfigured') }
     }
     // Every request sends a real email from our Gmail; unlimited requests could exhaust its daily quota
