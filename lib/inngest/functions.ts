@@ -114,7 +114,7 @@ export const sendWeeklyNewsSummary = inngest.createFunction(
 
             // --- HTML EMAIL TEMPLATE ---
             // Using inline styles for compatibility. Accent Color: Teal (#3A6FD8)
-            const logoUrl = "https://finance.hivra.ai/hivra-mark.svg";
+            const logoUrl = "https://finance.hivra.ai/hivra-finance-logo.png";
 
             const content = `
             <!DOCTYPE html>

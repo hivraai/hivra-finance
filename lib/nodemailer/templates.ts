@@ -97,7 +97,7 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="{{logoAlt}}" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-finance-logo.png" alt="{{logoAlt}}" width="56" height="56" style="display:block;">
                         </td>
                     </tr>
 
@@ -261,7 +261,7 @@ export const NEWS_SUMMARY_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="HIVRA Finance Logo" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-finance-logo.png" alt="HIVRA Finance Logo" width="56" height="56" style="display:block;">
                         </td>
                     </tr>
 
@@ -411,7 +411,7 @@ export const STOCK_ALERT_UPPER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="{{logoAlt}}" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-finance-logo.png" alt="{{logoAlt}}" width="56" height="56" style="display:block;">
                         </td>
                     </tr>
 
@@ -619,7 +619,7 @@ export const STOCK_ALERT_LOWER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="{{logoAlt}}" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-finance-logo.png" alt="{{logoAlt}}" width="56" height="56" style="display:block;">
                         </td>
                     </tr>
 
@@ -819,7 +819,7 @@ export const VOLUME_ALERT_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="HIVRA Finance Logo" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-finance-logo.png" alt="HIVRA Finance Logo" width="56" height="56" style="display:block;">
                         </td>
                     </tr>
 
@@ -1042,7 +1042,7 @@ export const INACTIVE_USER_REMINDER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="HIVRA Finance Logo" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-finance-logo.png" alt="HIVRA Finance Logo" width="56" height="56" style="display:block;">
                         </td>
                     </tr>
 
