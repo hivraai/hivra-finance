@@ -86,7 +86,8 @@
       "long_strangle": "Long strangle",
       "iron_condor": "Iron condor",
       "iron_butterfly": "Iron butterfly"
-    }
+    },
+    "loading": "جارٍ تحميل سلسلة خيارات {symbol}… قد يستغرق أول تحميل لرمز ما حتى دقيقة."
   },
   "Password": {
     "rules": {
@@ -680,7 +681,16 @@
       "backtest_stock": "اختبار تاريخي للسهم",
       "backtest_options": "اختبار تاريخي للخيارات",
       "web_search": "بحث في الويب"
-    }
+    },
+    "agentName": "محلل HIVRA",
+    "done": "تم",
+    "steps": "{n, plural, one {خطوة واحدة} two {خطوتان} few {⁦#⁩ خطوات} many {⁦#⁩ خطوة} other {⁦#⁩ خطوة}}",
+    "creditsWord": "رصيد",
+    "eyebrow": "محلل HIVRA",
+    "greeting": "كيف يمكنني المساعدة؟",
+    "greetingName": "مرحبًا {name}، كيف يمكنني المساعدة؟",
+    "activeConversations": "المحادثات النشطة",
+    "continue": "متابعة"
   },
   "Technicals": {
     "title": "التحليل الفني",

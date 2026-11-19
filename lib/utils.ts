@@ -241,6 +241,21 @@ export function isInternationalSymbol(symbol: string): boolean {
     return Object.keys(FINNHUB_TO_TRADINGVIEW_EXCHANGE).some((suffix) => upper.endsWith(suffix.toUpperCase()));
 }
 
+// TradingView "EXCHANGE:TICKER" -> our /stocks symbol: US listings drop the exchange, other
+// exchanges get the Finnhub suffix back (XETR:SAP -> SAP.DE). Anything else passes through.
+const US_TV_EXCHANGES = new Set(['NASDAQ', 'NYSE', 'AMEX', 'NYSEARCA', 'NYSEAMERICAN', 'BATS', 'CBOE', 'OTC', 'ARCA']);
+export function appSymbolFromTradingView(tv: string): string {
+    const upper = tv.trim().toUpperCase();
+    const [exchange, ticker] = upper.includes(':') ? upper.split(':', 2) : ['', upper];
+    if (!exchange || US_TV_EXCHANGES.has(exchange)) return ticker;
+    const suffix = exchange === 'NSE' ? '.NS' : Object.entries(FINNHUB_TO_TRADINGVIEW_EXCHANGE).find(([, ex]) => ex === exchange)?.[0];
+    if (!suffix) return upper;
+    let t = ticker;
+    if (TICKER_SEPARATOR[exchange]) t = t.split(TICKER_SEPARATOR[exchange]).join('-');
+    if (exchange === 'HKEX') t = t.padStart(4, '0');
+    return `${t}${suffix.toUpperCase()}`;
+}
+
 export function formatSymbolForTradingView(symbol: string): string {
     if (!symbol) return '';
     const upperSymbol = symbol.toUpperCase();

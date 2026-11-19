@@ -86,7 +86,8 @@
       "long_strangle": "Long strangle",
       "iron_condor": "Iron condor",
       "iron_butterfly": "Iron butterfly"
-    }
+    },
+    "loading": "Loading the {symbol} option chain… The first load of a ticker can take up to a minute."
   },
   "Password": {
     "rules": {
@@ -680,7 +681,16 @@
       "backtest_stock": "Stock backtest",
       "backtest_options": "Options backtest",
       "web_search": "Web search"
-    }
+    },
+    "agentName": "HIVRA Analyst",
+    "done": "Done",
+    "steps": "{n, plural, one {# step} other {# steps}}",
+    "creditsWord": "credits",
+    "eyebrow": "HIVRA Analyst",
+    "greeting": "How can I help?",
+    "greetingName": "Hi {name}, how can I help?",
+    "activeConversations": "Active conversations",
+    "continue": "Continue"
   },
   "Technicals": {
     "title": "Technicals",

@@ -39,6 +39,9 @@ export const CONDITION_OPTIONS = [
 // TradingView widgets, built per market from lib/markets.ts groups. `locale` is the widget UI language
 // (TradingView ships "es"); callers outside the translated app keep the English default.
 // TradingView spells Arabic "ar_AE"; English and Spanish are the same code as ours.
+// Widgets that link a symbol send it here (?tvwidgetsymbol=EXCHANGE:TICKER) instead of tradingview.com.
+export const WIDGET_LINK_URL = `${process.env.NEXT_PUBLIC_APP_URL || 'https://finance.hivra.ai'}/go`;
+
 const tvLocale = (locale: Locale) => (locale === 'ar' ? 'ar_AE' : locale);
 
 type SymbolGroup = { title: string; symbols: [symbol: string, name: string][] };
@@ -47,7 +50,7 @@ export const marketOverviewConfig = (groups: SymbolGroup[], locale: Locale = 'en
     colorTheme: 'dark',
     dateRange: '12M',
     locale: tvLocale(locale),
-    largeChartUrl: '',
+    largeChartUrl: WIDGET_LINK_URL,
     isTransparent: true,
     showFloatingTooltip: true,
     plotLineColorGrowing: '#47d9bb', // brand teal (oklch 0.80 0.13 176)
@@ -80,7 +83,7 @@ export const STOCK_HEATMAP_CONFIG = {
     grouping: 'sector',
     isTransparent: true,
     locale: 'en',
-    symbolUrl: '',
+    symbolUrl: WIDGET_LINK_URL,
     colorTheme: 'dark',
     exchanges: [],
     hasTopBar: false,
@@ -95,7 +98,7 @@ export const CRYPTO_HEATMAP_CONFIG = {
     blockSize: 'market_cap_calc',
     blockColor: 'change',
     locale: 'en',
-    symbolUrl: '',
+    symbolUrl: WIDGET_LINK_URL,
     colorTheme: 'dark',
     hasTopBar: false,
     isDataSetEnabled: false,
@@ -116,6 +119,7 @@ export const timelineConfig = (market: 'stock' | 'crypto' | 'forex', locale: Loc
 
 export const symbolInfoConfig = (symbol: string, locale: Locale = 'en') => ({
     symbol,
+    largeChartUrl: WIDGET_LINK_URL,
     colorTheme: 'dark',
     isTransparent: true,
     locale: tvLocale(locale),
@@ -124,6 +128,7 @@ export const symbolInfoConfig = (symbol: string, locale: Locale = 'en') => ({
 
 export const singleQuoteConfig = (symbol: string, locale: Locale = 'en') => ({
     symbol,
+    largeChartUrl: WIDGET_LINK_URL,
     colorTheme: 'dark',
     isTransparent: true,
     locale: tvLocale(locale),
@@ -163,7 +168,7 @@ export const TECHNICAL_ANALYSIS_WIDGET_CONFIG = (symbol: string, locale: Locale 
     width: '100%',
     height: 400,
     interval: '1h',
-    largeChartUrl: '',
+    largeChartUrl: WIDGET_LINK_URL,
 });
 
 // embed-widget-company-profile.js was retired by TradingView (403); symbol-profile.js takes the same config
@@ -184,7 +189,7 @@ export const COMPANY_FINANCIALS_WIDGET_CONFIG = (symbol: string, locale: Locale 
     width: '100%',
     height: 464,
     displayMode: 'regular',
-    largeChartUrl: '',
+    largeChartUrl: WIDGET_LINK_URL,
 });
 
 // Default list in the search palette (static on purpose, see searchStocks)

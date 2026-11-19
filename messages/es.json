@@ -86,7 +86,8 @@
       "long_strangle": "Long strangle",
       "iron_condor": "Iron condor",
       "iron_butterfly": "Iron butterfly"
-    }
+    },
+    "loading": "Cargando la cadena de opciones de {symbol}… La primera carga de un ticker puede tardar hasta un minuto."
   },
   "Password": {
     "rules": {
@@ -680,7 +681,16 @@
       "backtest_stock": "Backtest de acción",
       "backtest_options": "Backtest de opciones",
       "web_search": "Búsqueda web"
-    }
+    },
+    "agentName": "Analista HIVRA",
+    "done": "Listo",
+    "steps": "{n, plural, one {# paso} other {# pasos}}",
+    "creditsWord": "créditos",
+    "eyebrow": "Analista HIVRA",
+    "greeting": "¿En qué te ayudo?",
+    "greetingName": "Hola {name}, ¿en qué te ayudo?",
+    "activeConversations": "Conversaciones activas",
+    "continue": "Continuar"
   },
   "Technicals": {
     "title": "Análisis técnico",
