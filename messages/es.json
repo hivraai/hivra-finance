@@ -694,7 +694,9 @@
     "greeting": "¿En qué te ayudo?",
     "greetingName": "Hola {name}, ¿en qué te ayudo?",
     "activeConversations": "Conversaciones activas",
-    "continue": "Continuar"
+    "continue": "Continuar",
+    "outTitle": "Usaste tus créditos de IA. Agrega créditos o sube de plan para seguir.",
+    "addCredits": "Agregar créditos"
   },
   "Technicals": {
     "title": "Análisis técnico",

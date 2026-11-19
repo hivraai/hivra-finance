@@ -30,6 +30,7 @@ export default function AgentChat({ symbol, compact = false, initialThreadId, in
     const [input, setInput] = useState(initialQuestion ?? '');
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [noCredits, setNoCredits] = useState(false);
     const [meter, setMeter] = useState<{ used: number; allowance: number | null } | null>(null);
     const [openSteps, setOpenSteps] = useState<Record<number, boolean>>({});
     const endRef = useRef<HTMLDivElement>(null);
@@ -69,7 +70,7 @@ export default function AgentChat({ symbol, compact = false, initialThreadId, in
             const res = await fetch('/api/agent', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ threadId, message, symbol }) });
             if (!res.ok || !res.body) {
                 const j = await res.json().catch(() => ({}));
-                setError(j.error ?? t('error'));
+                if (res.status === 402) { setNoCredits(true); setInput(message); } else setError(j.error ?? t('error'));
                 setItems((xs) => xs.slice(0, -1));
                 return;
             }
@@ -107,8 +108,16 @@ export default function AgentChat({ symbol, compact = false, initialThreadId, in
         : [t('suggest.general1'), t('suggest.general2'), t('suggest.general3')];
 
     // ── pieces ───────────────────────────────────────────────────────────────
+    const out = noCredits || (meter != null && meter.allowance != null && meter.used >= meter.allowance);
+    const creditsBanner = out ? (
+        <div className="mb-2 flex flex-wrap items-center gap-2 rounded-2xl border border-line bg-canvas/60 px-3 py-2.5">
+            <span className="flex-1 text-[13px]">{t('outTitle')}</span>
+            <Link href="/billing" className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3.5 py-1.5 text-[12.5px] font-semibold text-on-brand"><Plus className="size-3.5" />{t('addCredits')}</Link>
+        </div>
+    ) : null;
+
     const composer = (big: boolean) => (
-        <form onSubmit={(e) => { e.preventDefault(); send(input); }}
+        <>{creditsBanner}<form onSubmit={(e) => { e.preventDefault(); send(input); }}
             className="rounded-2xl border border-line bg-canvas/60 p-2 shadow-sm focus-within:border-line-strong">
             <textarea
                 value={input}
@@ -129,7 +138,7 @@ export default function AgentChat({ symbol, compact = false, initialThreadId, in
                     {busy ? <Loader2 className="size-4 animate-spin" /> : <ArrowUp className="size-4" />}
                 </button>
             </div>
-        </form>
+        </form></>
     );
 
     const messages = (
@@ -217,6 +226,9 @@ export default function AgentChat({ symbol, compact = false, initialThreadId, in
                         </span>
                         <span className="h-1 overflow-hidden rounded-full bg-hover"><span className="block h-full rounded-full bg-brand" style={{ width: `${meter.allowance == null ? 2 : Math.max(pct, 2)}%` }} /></span>
                     </div>
+                )}
+                {meter && meter.allowance != null && (
+                    <Link href="/billing" className="text-[12.5px] font-medium text-brand-ink hover:underline">{t('addCredits')}</Link>
                 )}
                 {items.length > 0 && (
                     <button type="button" onClick={newChat} className="ms-auto inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-[12.5px] hover:bg-hover">

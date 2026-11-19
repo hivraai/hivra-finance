@@ -694,7 +694,9 @@
     "greeting": "How can I help?",
     "greetingName": "Hi {name}, how can I help?",
     "activeConversations": "Active conversations",
-    "continue": "Continue"
+    "continue": "Continue",
+    "outTitle": "You’ve used your AI credits. Add credits or upgrade to keep going.",
+    "addCredits": "Add credits"
   },
   "Technicals": {
     "title": "Technicals",
