@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Activity, Bot, CandlestickChart, FileBarChart, Layers, Sigma } from "lucide-react";
 import { MarketDial, MarketStatus } from "@/components/landing/MarketClock";
 import ProductPreview from "@/components/landing/ProductPreview";
+import { Audience, FactStrip, Faq, HowItWorks, Showcase } from "@/components/landing/LandingSections";
 import SectionHead from "@/components/marketing/SectionHead";
 import IconCard from "@/components/marketing/IconCard";
 import { cn } from "@/lib/utils";
@@ -37,6 +38,10 @@ export default async function LandingPage() {
                 <ProductPreview theme="light" />
             </section>
 
+            <FactStrip t={t} />
+
+            <HowItWorks t={t} />
+
             <section id="inside" className="mx-auto mt-28 max-w-[1200px] scroll-mt-24 px-5">
                 <SectionHead kicker={t.inside.kicker} title={t.inside.title} sub={t.inside.sub} />
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -45,6 +50,10 @@ export default async function LandingPage() {
                     ))}
                 </div>
             </section>
+
+            <Showcase t={t} />
+
+            <Audience t={t} />
 
             <section id="plans" className="mx-auto mt-28 max-w-[1200px] scroll-mt-24 px-5">
                 <SectionHead kicker={t.plans.kicker} title={t.plans.title} sub={t.plans.sub} />
@@ -74,14 +83,18 @@ export default async function LandingPage() {
                 <SectionHead kicker={t.data.kicker} title={t.data.title} />
                 <dl className="grid gap-3 md:grid-cols-3">
                     {t.data.items.map(({ label, value }) => (
-                        <div key={label} className="bento-tile bg-page">
-                            <dt className="kicker">{label}</dt>
-                            <dd className="mt-2 text-[16px] font-semibold">{value}</dd>
+                        <div key={label} className="hatch">
+                            <div className="card h-full p-5">
+                                <dt className="kicker">{label}</dt>
+                                <dd className="mt-2 text-[16px] font-semibold">{value}</dd>
+                            </div>
                         </div>
                     ))}
                 </dl>
                 <p className="mt-4 text-[13px] text-faint">{t.data.note}</p>
             </section>
+
+            <Faq t={t} />
 
             <section className="mx-auto mt-28 max-w-[1200px] px-5">
                 <div className="hatch">
