@@ -38,7 +38,8 @@ export const viewport: Viewport = {
   maximumScale: 1,
   viewportFit: "cover",
   themeColor: "#0b0d12",
-  colorScheme: "dark",
+  // No colorScheme here: a dark color-scheme on the page makes browsers paint the light-scheme
+  // TradingView iframes with an opaque white backdrop, so every widget card turns white.
 };
 
 export const metadata: Metadata = {

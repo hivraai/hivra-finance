@@ -13,7 +13,8 @@ import {
     COMPANY_FINANCIALS_WIDGET_CONFIG,
 } from "@/lib/constants";
 import { getStockSentimentInsights } from '@/lib/actions/adanos.actions';
-import { getStockMetrics } from '@/lib/actions/finnhub.actions';
+import { getCompanyProfile, getStockMetrics } from '@/lib/actions/finnhub.actions';
+import type { Locale } from '@/i18n/config';
 import { hasFinnhubCompanyData } from '@/lib/markets';
 import { formatSymbolForTradingView, isChartEmbeddable, tradingViewSymbolUrl } from '@/lib/utils';
 
@@ -38,6 +39,36 @@ async function DividendYield({ symbol }: { symbol: string }) {
             <p className="text-2xl font-semibold text-white">
                 {dividendYield !== null ? `${dividendYield.toFixed(2)}%` : "—"}
             </p>
+        </Panel>
+    );
+}
+
+// TradingView's financials and profile widgets only know companies: for a crypto pair, a currency pair or a
+// fund (BTC is the Grayscale Bitcoin trust, an ETF) they render a blank white "no data" card. US listings ask
+// Finnhub, whose profile is empty for ETFs and funds; non-US listings keep the panels (their exchanges are covered).
+async function isCompany(symbol: string): Promise<boolean> {
+    if (/^(BINANCE|COINBASE|KRAKEN|BITSTAMP|BYBIT|OKX|FX|FX_IDC|OANDA|CRYPTO|INDEX|TVC|CBOE|CME|COMEX|NYMEX|CBOT|ICE):/i.test(symbol)) return false;
+    if (!hasFinnhubCompanyData(symbol)) return !symbol.includes(':');
+    const profile = await getCompanyProfile(symbol);
+    return Boolean(profile?.name && profile?.finnhubIndustry);
+}
+
+async function FinancialsPanel({ symbol, tvSymbol, locale }: { symbol: string; tvSymbol: string; locale: Locale }) {
+    const [company, t] = await Promise.all([isCompany(symbol), getTranslations('StockPage')]);
+    if (!company) return null;
+    return (
+        <Panel title={t('financialsTitle')} sub={t('financialsSub')}>
+            <TradingViewWidget scriptUrl={`${scriptUrl}financials.js`} config={COMPANY_FINANCIALS_WIDGET_CONFIG(tvSymbol, locale)} height={500} />
+        </Panel>
+    );
+}
+
+async function ProfilePanel({ symbol, tvSymbol, locale }: { symbol: string; tvSymbol: string; locale: Locale }) {
+    const [company, t] = await Promise.all([isCompany(symbol), getTranslations('StockPage')]);
+    if (!company) return null;
+    return (
+        <Panel title={t('profileTitle')} sub={t('profileSub')}>
+            <TradingViewWidget scriptUrl={`${scriptUrl}symbol-profile.js`} config={COMPANY_PROFILE_WIDGET_CONFIG(tvSymbol, locale)} height={440} />
         </Panel>
     );
 }
@@ -74,13 +105,9 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                             </div>
                         </Panel>
                     )}
-                    <Panel title={t('financialsTitle')} sub={t('financialsSub')}>
-                        <TradingViewWidget
-                            scriptUrl={`${scriptUrl}financials.js`}
-                            config={COMPANY_FINANCIALS_WIDGET_CONFIG(tvSymbol, locale)}
-                            height={500}
-                        />
-                    </Panel>
+                    <Suspense fallback={null}>
+                        <FinancialsPanel symbol={symbol} tvSymbol={tvSymbol} locale={locale} />
+                    </Suspense>
                 </div>
 
                 <div className="flex min-w-0 flex-col gap-3">
@@ -96,13 +123,9 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                     <Suspense fallback={null}>
                         <Sentiment symbol={symbol} />
                     </Suspense>
-                    <Panel title={t('profileTitle')} sub={t('profileSub')}>
-                        <TradingViewWidget
-                            scriptUrl={`${scriptUrl}symbol-profile.js`}
-                            config={COMPANY_PROFILE_WIDGET_CONFIG(tvSymbol, locale)}
-                            height={440}
-                        />
-                    </Panel>
+                    <Suspense fallback={null}>
+                        <ProfilePanel symbol={symbol} tvSymbol={tvSymbol} locale={locale} />
+                    </Suspense>
                 </div>
             </div>
         </>
