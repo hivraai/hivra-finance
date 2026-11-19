@@ -88,16 +88,15 @@ export const sendWelcomeEmail = async ({ email, name, intro, locale }: WelcomeEm
                 featureDashboard: t('welcome.featureDashboard'),
                 closing: t('welcome.closing'),
                 cta: t('welcome.cta'),
-                initiative: t('welcome.initiative'),
                 unsubscribe: t('common.unsubscribe'),
-                visitOpenstock: t('common.visitOpenstock'),
+                visitSite: t('common.visitSite'),
             }),
             lang,
             intro: sanitizeEmailIntro(intro),
         });
 
         const mailOptions = {
-            from: `"Openstock" <${process.env.NODEMAILER_EMAIL}>`,
+            from: `"HIVRA Finance" <${process.env.NODEMAILER_EMAIL}>`,
             to: email,
             subject: t('welcome.subject'),
             text: t('welcome.text'),
@@ -127,10 +126,10 @@ export const sendNewsSummaryEmail = async (
             .replace('{{newsContent}}', newsContent);
 
         const mailOptions = {
-            from: `"Openstock" <${process.env.NODEMAILER_EMAIL}>`,
+            from: `"HIVRA Finance" <${process.env.NODEMAILER_EMAIL}>`,
             to: email,
             subject: `📈 Market News Summary Today - ${date}`,
-            text: `Today's market news summary from Openstock`,
+            text: `Today's market news summary from HIVRA Finance`,
             html: htmlTemplate,
         };
 
@@ -180,14 +179,14 @@ export const sendStockAlertEmail = async (
                 cta: t('stockAlert.cta'),
                 footer: t('stockAlert.footer'),
                 unsubscribe: t('common.unsubscribe'),
-                visitOpenstock: t('common.visitOpenstock'),
+                visitSite: t('common.visitSite'),
             }),
             company: '', // Alerts don't store the company name
             lang,
         });
 
         const mailOptions = {
-            from: `"Openstock" <${process.env.NODEMAILER_EMAIL}>`,
+            from: `"HIVRA Finance" <${process.env.NODEMAILER_EMAIL}>`,
             to: email,
             subject: t(`stockAlert.subject${dir}`, values),
             text: t(`stockAlert.text${dir}`, values),

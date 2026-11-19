@@ -97,7 +97,7 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://i.ibb.co/r28VWPjS/Screenshot-2025-10-04-123317-Picsart-Ai-Image-Enhancer-removebg-preview.png" alt="{{logoAlt}}" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="{{logoAlt}}" width="150" style="max-width: 100%; height: auto;">
                         </td>
                     </tr>
 
@@ -141,7 +141,7 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 0 40px 0; width: 100%;">
                                 <tr>
                                     <td align="center">
-                                        <a href="https://openstock-ods.vercel.app/" style="display: block; width: 100%; background: linear-gradient(135deg, #FDD458 0%, #E8BA40 100%); color: #000000; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-size: 16px; font-weight: 500; line-height: 1; text-align: center; box-sizing: border-box;">
+                                        <a href="https://finance.hivra.ai" style="display: block; width: 100%; background: linear-gradient(135deg, #FDD458 0%, #3A6FD8 100%); color: #000000; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-size: 16px; font-weight: 500; line-height: 1; text-align: center; box-sizing: border-box;">
                                             {{cta}}
                                         </a>
                                     </td>
@@ -150,10 +150,9 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
 
                             <!-- Footer Text -->
                             <p class="mobile-text dark-text-muted" style="margin: 40px 0 0 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important; text-align: center;">
-                               {{initiative}}<br>
                                 <a href="#" style="color: #CCDADC !important; text-decoration: underline;">{{unsubscribe}}</a> |
-                                <a href="https://stock-market-dev.vercel.app/" style="color: #CCDADC !important; text-decoration: underline;">{{visitOpenstock}}</a><br>
-                                © 2025 Open Dev Society
+                                <a href="https://finance.hivra.ai" style="color: #CCDADC !important; text-decoration: underline;">{{visitSite}}</a><br>
+                                © HIVRA Finance
                             </p>
                         </td>
                     </tr>
@@ -260,7 +259,7 @@ export const NEWS_SUMMARY_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://i.ibb.co/r28VWPjS/Screenshot-2025-10-04-123317-Picsart-Ai-Image-Enhancer-removebg-preview.png" alt="Openstock Logo" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="HIVRA Finance Logo" width="150" style="max-width: 100%; height: auto;">
                         </td>
                     </tr>
 
@@ -284,14 +283,14 @@ export const NEWS_SUMMARY_EMAIL_TEMPLATE = `<!DOCTYPE html>
                             <!-- Footer Text -->
                             <div style="text-align: center; margin: 40px 0 0 0;">
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    You're receiving this because you subscribed to Openstock news updates.
+                                    You're receiving this because you subscribed to HIVRA Finance news updates.
                                 </p>
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
                                     <a href="#" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> |
-                                    <a href="https://openstock.vercel.app" style="color: #CCDADC !important; text-decoration: underline;">Visit Openstock</a>
+                                    <a href="https://finance.hivra.ai" style="color: #CCDADC !important; text-decoration: underline;">Visit HIVRA Finance</a>
                                 </p>
                                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    © 2025 Open Dev Society
+                                    © HIVRA Finance
                                 </p>
                             </div>
                         </td>
@@ -410,7 +409,7 @@ export const STOCK_ALERT_UPPER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://i.ibb.co/r28VWPjS/Screenshot-2025-10-04-123317-Picsart-Ai-Image-Enhancer-removebg-preview.png" alt="{{logoAlt}}" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="{{logoAlt}}" width="150" style="max-width: 100%; height: auto;">
                         </td>
                     </tr>
 
@@ -471,7 +470,7 @@ export const STOCK_ALERT_UPPER_EMAIL_TEMPLATE = `<!DOCTYPE html>
 
                             <!-- Success Message -->
                             <div style="background-color: #050505; border: 1px solid #374151; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
-                                <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: #E8BA40;">
+                                <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: #3A6FD8;">
                                     {{calloutTitle}}
                                 </h3>
                                 <p class="mobile-text" style="margin: 0; font-size: 14px; line-height: 1.5; color: #ccdadc;">
@@ -483,7 +482,7 @@ export const STOCK_ALERT_UPPER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 30px;">
                                 <tr>
                                     <td align="center">
-                                        <a href="https://openstock-ods.vercel.app/" style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; color: #000000; background-color: #E8BA40; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-size: 16px; font-weight: 500; line-height: 1; text-align: center;">
+                                        <a href="https://finance.hivra.ai" style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; color: #000000; background-color: #3A6FD8; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-size: 16px; font-weight: 500; line-height: 1; text-align: center;">
                                             {{cta}}
                                         </a>
                                     </td>
@@ -497,10 +496,10 @@ export const STOCK_ALERT_UPPER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                                 </p>
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
                                     <a href="#" style="color: #CCDADC !important; text-decoration: underline;">{{unsubscribe}}</a> |
-                                    <a href="https://openstock-ods.vercel.app/" style="color: #CCDADC !important; text-decoration: underline;">{{visitOpenstock}}</a>
+                                    <a href="https://finance.hivra.ai" style="color: #CCDADC !important; text-decoration: underline;">{{visitSite}}</a>
                                 </p>
                                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    © 2025 Open Dev Society
+                                    © HIVRA Finance
                             </div>
                         </td>
                     </tr>
@@ -618,7 +617,7 @@ export const STOCK_ALERT_LOWER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://i.ibb.co/r28VWPjS/Screenshot-2025-10-04-123317-Picsart-Ai-Image-Enhancer-removebg-preview.png" alt="{{logoAlt}}" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="{{logoAlt}}" width="150" style="max-width: 100%; height: auto;">
                         </td>
                     </tr>
 
@@ -679,7 +678,7 @@ export const STOCK_ALERT_LOWER_EMAIL_TEMPLATE = `<!DOCTYPE html>
 
                             <!-- Opportunity Message -->
                             <div style="background-color: #050505; border: 1px solid #374151; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
-                                <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: #E8BA40;">
+                                <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: #3A6FD8;">
                                     {{calloutTitle}}
                                 </h3>
                                 <p class="mobile-text" style="margin: 0; font-size: 14px; line-height: 1.5; color: #ccdadc;">
@@ -691,7 +690,7 @@ export const STOCK_ALERT_LOWER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 30px;">
                                 <tr>
                                     <td align="center">
-                                        <a href="https://openstock-ods.vercel.app/" style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; background-color: #E8BA40; color: #000000; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-size: 16px; font-weight: 500; line-height: 1; text-align: center;">
+                                        <a href="https://finance.hivra.ai" style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; background-color: #3A6FD8; color: #000000; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-size: 16px; font-weight: 500; line-height: 1; text-align: center;">
                                             {{cta}}
                                         </a>
                                     </td>
@@ -705,10 +704,10 @@ export const STOCK_ALERT_LOWER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                                 </p>
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
                                     <a href="#" style="color: #CCDADC !important; text-decoration: underline;">{{unsubscribe}}</a> |
-                                    <a href="https://openstock-ods.vercel.app/" style="color: #CCDADC !important; text-decoration: underline;">{{visitOpenstock}}</a>
+                                    <a href="https://finance.hivra.ai" style="color: #CCDADC !important; text-decoration: underline;">{{visitSite}}</a>
                                 </p>
                                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    © 2025 Open Dev Society
+                                    © HIVRA Finance
                                 </p>
                             </div>
                         </td>
@@ -818,7 +817,7 @@ export const VOLUME_ALERT_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://i.ibb.co/r28VWPjS/Screenshot-2025-10-04-123317-Picsart-Ai-Image-Enhancer-removebg-preview.png" alt="Openstock Logo" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="HIVRA Finance Logo" width="150" style="max-width: 100%; height: auto;">
                         </td>
                     </tr>
 
@@ -904,7 +903,7 @@ export const VOLUME_ALERT_EMAIL_TEMPLATE = `<!DOCTYPE html>
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 30px;">
                                 <tr>
                                     <td align="center">
-                                        <a href="https://openstock-ods.vercel.app" style="display: inline-block; background-color: #E8BA40; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-size: 16px; font-weight: 500; line-height: 1;">
+                                        <a href="https://finance.hivra.ai" style="display: inline-block; background-color: #3A6FD8; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-size: 16px; font-weight: 500; line-height: 1;">
                                             View Dashboard
                                         </a>
                                     </td>
@@ -921,14 +920,14 @@ export const VOLUME_ALERT_EMAIL_TEMPLATE = `<!DOCTYPE html>
                              <!-- Footer Text -->
                             <div style="text-align: center; margin: 40px 0 0 0;">
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    You're receiving this because you subscribed to Openstock news updates.
+                                    You're receiving this because you subscribed to HIVRA Finance news updates.
                                 </p>
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
                                     <a href="#" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> |
-                                    <a href="https://openstock-ods.vercel.app" style="color: #CCDADC !important; text-decoration: underline;">Visit Openstock</a>
+                                    <a href="https://finance.hivra.ai" style="color: #CCDADC !important; text-decoration: underline;">Visit HIVRA Finance</a>
                                 </p>
                                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    © 2025 Open Dev Society
+                                    © HIVRA Finance
                                 </p>
                             </div>
                         </td>
@@ -1041,7 +1040,7 @@ export const INACTIVE_USER_REMINDER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                     <!-- Header with Logo -->
                     <tr>
                         <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://i.ibb.co/r28VWPjS/Screenshot-2025-10-04-123317-Picsart-Ai-Image-Enhancer-removebg-preview.png" alt="Openstock Logo" width="150" style="max-width: 100%; height: auto;">
+                            <img src="https://finance.hivra.ai/hivra-mark.svg" alt="HIVRA Finance Logo" width="150" style="max-width: 100%; height: auto;">
                         </td>
                     </tr>
 
@@ -1050,18 +1049,18 @@ export const INACTIVE_USER_REMINDER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                         <td class="mobile-padding" style="padding: 40px 40px 40px 40px;">
 
                             <!-- Welcome Back Heading -->
-                            <h1 class="mobile-title dark-text" style="margin: 0 0 15px 0; font-size: 28px; font-weight: 600; background: linear-gradient(135deg, #FDD458 0%, #E8BA40 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: #FDD458; line-height: 1.2;">
+                            <h1 class="mobile-title dark-text" style="margin: 0 0 15px 0; font-size: 28px; font-weight: 600; background: linear-gradient(135deg, #FDD458 0%, #3A6FD8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: #FDD458; line-height: 1.2;">
                                 We Miss You, {{name}}!
                             </h1>
 
                             <!-- Main Message -->
                             <p class="mobile-text dark-text-secondary" style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">
-                                We noticed you haven't visited Openstock in a while. The markets have been moving, and there might be some opportunities you don't want to miss!
+                                We noticed you haven't visited HIVRA Finance in a while. The markets have been moving, and there might be some opportunities you don't want to miss!
                             </p>
 
                             <!-- Additional Motivation -->
                             <div class="dark-info-box" style="background-color: #050505; border: 1px solid #374151; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
-                                <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: #E8BA40;">
+                                <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600; color: #3A6FD8;">
                                     Market Update
                                 </h3>
                                 <p class="mobile-text" style="margin: 0; font-size: 14px; line-height: 1.5; color: #ccdadc;">
@@ -1078,7 +1077,7 @@ export const INACTIVE_USER_REMINDER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 0 20px 0; width: 100%;">
                                 <tr>
                                     <td align="center" class="mobile-button">
-                                        <a href="https://openstock-ods.vercel.app" style="display: inline-block; background: #E8BA40; color: #000000; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-size: 16px; font-weight: 500; line-height: 1; text-align: center;  width: 100%;">
+                                        <a href="https://finance.hivra.ai" style="display: inline-block; background: #3A6FD8; color: #000000; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-size: 16px; font-weight: 500; line-height: 1; text-align: center;  width: 100%;">
                                             Return to Dashboard
                                         </a>
                                     </td>
@@ -1092,10 +1091,10 @@ export const INACTIVE_USER_REMINDER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                                 </p>
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
                                     <a href="#" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> |
-                                    <a href="https://openstock-ods.vercel.app" style="color: #CCDADC !important; text-decoration: underline;">Visit Openstock</a>
+                                    <a href="https://finance.hivra.ai" style="color: #CCDADC !important; text-decoration: underline;">Visit HIVRA Finance</a>
                                 </p>
                                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    © 2025 Openstock
+                                    © HIVRA Finance
                                 </p>
                             </div>
                         </td>

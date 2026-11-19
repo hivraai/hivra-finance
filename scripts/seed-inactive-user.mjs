@@ -32,7 +32,7 @@ async function run() {
             { email: email },
             {
                 $set: {
-                    name: "Ravi Pratap Singh",
+                    name: "Test User",
                     email: email,
                     createdAt: sixtyDaysAgo,
                     lastActiveAt: sixtyDaysAgo

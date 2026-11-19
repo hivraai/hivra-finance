@@ -3,7 +3,7 @@ import { cache } from "react";
 // Real repo numbers for the public site, refreshed daily. Null hides the stat instead of guessing.
 export const getRepoStats = cache(async () => {
     try {
-        const res = await fetch('https://api.github.com/repos/Open-Dev-Society/OpenStock', {
+        const res = await fetch('https://api.github.com/repos/hivraai/hivra-finance', {
             next: { revalidate: 86400 },
             signal: AbortSignal.timeout(4000),
         });

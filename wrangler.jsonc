@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "openstock",
+  "name": "hivra-finance",
   "compatibility_date": "2026-11-02",
   "compatibility_flags": [
     "nodejs_compat"

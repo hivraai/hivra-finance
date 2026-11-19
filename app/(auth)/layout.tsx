@@ -1,7 +1,6 @@
 import Wordmark from "@/components/marketing/Wordmark";
 import Link from "next/link";
 import React from "react";
-import Image from "next/image";
 import {redirect} from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -38,22 +37,6 @@ const Layout = async ({ children }: { children : React.ReactNode }) => {
                 </div>
             </section>
             <section className="auth-right-section">
-                <div className="z-10 relative lg:mt-4 lg:mb-16">
-                    <blockquote className="auth-blockquote">
-                        {t('testimonialQuote')}
-                    </blockquote>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <cite className="auth-testimonial-author">- Ravi Pratap Singh (@ravixalgorithm)</cite>
-                            <p className="max-md:text-xs text-gray-500">{t('founderRole', { org: '@opendevsociety' })}</p>
-                        </div>
-                        <div className="flex items-center gap-0.5">
-                            {[1,2,3,4,5].map((star) => (
-                                <Image src="/assets/icons/star.svg" alt={t('starAlt')} key={star} width={20} height={20} className="w-4 h-4"/>
-                            ))}
-                        </div>
-                    </div>
-                </div>
                 <div className="relative flex-1" aria-hidden>
                     <div className="auth-dashboard-preview absolute top-0">
                         <ProductPreview />

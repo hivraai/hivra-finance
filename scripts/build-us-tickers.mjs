@@ -10,7 +10,7 @@ import { writeFileSync } from 'node:fs';
 
 // SEC fair-access rules: a User-Agent that names the app and a contact address. A URL in the
 // header is what their edge blocks; the email form is the one their docs ask for.
-const UA = 'OpenStock (opendevsociety@gmail.com)';
+const UA = 'HIVRA Finance (support@hivra.ai)';
 const SP500_URL = 'https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv';
 const NDX_URL = 'https://en.wikipedia.org/wiki/List_of_NASDAQ-100_companies';
 const SEC_URL = 'https://www.sec.gov/files/company_tickers_exchange.json';

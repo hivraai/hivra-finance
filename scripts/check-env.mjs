@@ -4,7 +4,7 @@
  * Environment Variables Checker
  * Run: node scripts/check-env.mjs
  *
- * Checks your .env file against the requirements for OpenStock.
+ * Checks your .env file against the requirements for HIVRA Finance.
  * Provides detailed feedback on missing, present, and deprecated variables,
  * along with guidance on how to fix common issues.
  */
@@ -21,7 +21,7 @@ import 'dotenv/config';
  */
 const requiredVars = {
     // Database (MongoDB Atlas or local Docker)
-    'MONGODB_URI': 'MongoDB connection string (Atlas: mongodb+srv://... | Docker: mongodb://root:example@mongodb:27017/openstock?authSource=admin)',
+    'MONGODB_URI': 'MongoDB connection string (Atlas: mongodb+srv://... | Docker: mongodb://root:example@mongodb:27017/hivra-finance?authSource=admin)',
 
     // Better Auth
     'BETTER_AUTH_SECRET': 'Secret key for Better Auth (generate with: openssl rand -hex 32)',
@@ -65,7 +65,7 @@ const optionalVars = {
     'KIT_WELCOME_FORM_ID': 'Kit form new users are subscribed to',
 
     // Market data freshness (fixed at build time: rebuild after changing it)
-    'NEXT_PUBLIC_OPENSTOCK_DATA_MODE': '"cached" (default: quotes refresh hourly, shared by everyone) or "realtime" (every 15s, with price alerts)',
+    'NEXT_PUBLIC_DATA_MODE': '"cached" (default: quotes refresh hourly, shared by everyone) or "realtime" (every 15s, with price alerts)',
 
     // Docker Compose only
     'MONGO_ROOT_PASSWORD': 'Root password for the Compose MongoDB (use the same one in MONGODB_URI)',
@@ -85,7 +85,7 @@ const optionalVars = {
  * Warns if these are set so you can migrate away.
  */
 const deprecatedVars = {
-    'FINNHUB_BASE_URL': 'Not used: OpenStock always calls https://finnhub.io/api/v1. Safe to delete.',
+    'FINNHUB_BASE_URL': 'Not used: HIVRA Finance always calls https://finnhub.io/api/v1. Safe to delete.',
 };
 
 // =============================================
@@ -197,7 +197,7 @@ function getHint(key, type) {
         'NODEMAILER_EMAIL': 'Your Gmail address',
         'NODEMAILER_PASSWORD': 'Generate Gmail App Password: myaccount.google.com → Security → App passwords',
     };
-    return hints[key] || 'Check the OpenStock API_DOCS.md for setup instructions';
+    return hints[key] || 'Check the HIVRA Finance API_DOCS.md for setup instructions';
 }
 
 // Display Present Required Variables

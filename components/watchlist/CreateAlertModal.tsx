@@ -122,9 +122,9 @@ export default function CreateAlertModal({ symbol, currentPrice, currency = 'USD
                         </form>
                     </>
                 ) : (
-                    // Alerts are an OpenStock Cloud feature; the free hourly site points people to it
+                    // Alerts are an HIVRA Finance Pro feature; the free hourly site points people to it
                     <div>
-                        <p className="kicker text-brand-ink">OpenStock Cloud</p>
+                        <p className="kicker text-brand-ink">HIVRA Finance Pro</p>
                         <DialogTitle className="mt-1 text-xl font-bold tracking-tight">{t('cloudTitle')}</DialogTitle>
                         <DialogDescription className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
                             {t('cloudBody')}

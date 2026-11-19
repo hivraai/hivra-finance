@@ -53,7 +53,7 @@ function fakeConnection(id: number): FakeConn {
     return conn;
 }
 
-const nodeConnection = { connection: { db: { databaseName: 'openstock' } } };
+const nodeConnection = { connection: { db: { databaseName: 'hivra-finance' } } };
 
 describe('connectToDatabase', () => {
     beforeEach(() => {
@@ -67,7 +67,7 @@ describe('connectToDatabase', () => {
         connect.mockImplementation(async () => nodeConnection);
         createConnection.mockImplementation(() => fakeConnection(++nextId));
         delete (global as { mongooseCache?: unknown }).mongooseCache;
-        process.env.MONGODB_URI = 'mongodb://user:pass@a.example.net:27017,b.example.net:27017,c.example.net:27017/openstock';
+        process.env.MONGODB_URI = 'mongodb://user:pass@a.example.net:27017,b.example.net:27017,c.example.net:27017/hivra-finance';
     });
 
     afterEach(() => {

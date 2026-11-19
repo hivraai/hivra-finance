@@ -9,7 +9,7 @@ import { openSearch } from "@/components/SearchCommand";
 import { cn } from "@/lib/utils";
 
 const PINNED = ['/dashboard', '/watchlist'];
-const STORAGE_KEY = 'openstock-tabs';
+const STORAGE_KEY = 'hivra-finance-tabs';
 const MAX_TABS = 12;
 
 // Message keys under TabBar.pages

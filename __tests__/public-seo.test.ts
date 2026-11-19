@@ -3,7 +3,6 @@ import { NextRequest } from 'next/server';
 import { describe, expect, it, afterEach } from 'vitest';
 import { config, middleware } from '@/middleware';
 import { isPublicPath, PUBLIC_EXACT_PATHS } from '@/lib/public-paths';
-import { GUIDES, findGuide } from '@/lib/seo/comparisons';
 import { filingUrl, formatFiscalYearEnd, formatFilingDate, parseSubmissions, stateName } from '@/lib/seo/edgar';
 import { sitemapEntries } from '@/lib/seo/sitemap';
 import { siteUrl } from '@/lib/seo/site';
@@ -11,7 +10,7 @@ import { adjacentTickers, findTicker, relatedTickers, tickerIntro, tickerPath, U
 
 describe('isPublicPath', () => {
     it('lets crawlers and the new public sections through', () => {
-        for (const path of ['/', '/about', '/robots.txt', '/sitemap.xml', '/s', '/s/AAPL', '/s/BRK.B', '/compare', '/compare/self-hosted-stock-tracker']) {
+        for (const path of ['/', '/help', '/robots.txt', '/sitemap.xml', '/s', '/s/AAPL', '/s/BRK.B']) {
             expect(isPublicPath(path), path).toBe(true);
         }
     });
@@ -20,13 +19,13 @@ describe('isPublicPath', () => {
         for (const path of ['/stocks', '/stocks/AAPL', '/dashboard', '/watchlist', '/profile', '/sign-in', '/something']) {
             expect(isPublicPath(path), path).toBe(false);
         }
-        expect(isPublicPath('/sponsor')).toBe(true);
+        expect(isPublicPath('/terms')).toBe(true);
     });
 });
 
 describe('middleware', () => {
     it('does not redirect public pages or crawler files', async () => {
-        for (const path of ['/robots.txt', '/sitemap.xml', '/s/AAPL', '/compare/free-tradingview-alternative', '/about']) {
+        for (const path of ['/robots.txt', '/sitemap.xml', '/s/AAPL', '/help']) {
             const response = await middleware(new NextRequest(`http://localhost${path}`));
             expect(response.headers.get('location'), path).toBeNull();
         }
@@ -125,18 +124,14 @@ describe('edgar helpers', () => {
 });
 
 describe('sitemap', () => {
-    it('lists marketing pages, guides and every ticker, and not the signed-in app', () => {
-        const entries = sitemapEntries('https://openstock.example/');
+    it('lists marketing pages and every ticker, and not the signed-in app', () => {
+        const entries = sitemapEntries('https://example.test/');
         const urls = entries.map((entry) => entry.url);
-        expect(urls).toContain('https://openstock.example/');
-        expect(urls).toContain('https://openstock.example/s/AAPL');
-        expect(urls).toContain('https://openstock.example/s/BRK.B');
+        expect(urls).toContain('https://example.test/');
+        expect(urls).toContain('https://example.test/s/AAPL');
+        expect(urls).toContain('https://example.test/s/BRK.B');
         for (const path of PUBLIC_EXACT_PATHS) {
-            expect(urls).toContain(`https://openstock.example${path}`);
-        }
-        for (const guide of GUIDES) {
-            expect(urls).toContain(`https://openstock.example/compare/${guide.slug}`);
-            expect(findGuide(guide.slug)?.title).toBe(guide.title);
+            expect(urls).toContain(`https://example.test${path}`);
         }
         expect(urls.some((url) => url.includes('/stocks'))).toBe(false);
         expect(urls.some((url) => url.includes('/dashboard'))).toBe(false);
@@ -152,8 +147,8 @@ describe('siteUrl', () => {
     });
 
     it('uses BETTER_AUTH_URL without a trailing slash', () => {
-        process.env.BETTER_AUTH_URL = 'https://openstock.example/';
-        expect(siteUrl()).toBe('https://openstock.example');
+        process.env.BETTER_AUTH_URL = 'https://example.test/';
+        expect(siteUrl()).toBe('https://example.test');
     });
 });
 
@@ -162,8 +157,6 @@ describe('public pages do not call Finnhub', () => {
         const files = [
             'app/(marketing)/s/[ticker]/page.tsx',
             'app/(marketing)/s/page.tsx',
-            'app/(marketing)/compare/[slug]/page.tsx',
-            'app/(marketing)/compare/page.tsx',
             'lib/seo/edgar.ts',
             'lib/seo/tickers.ts',
             'components/seo/TradingViewEmbed.tsx',

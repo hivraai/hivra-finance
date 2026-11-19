@@ -95,11 +95,7 @@
       "action": "إجراءات"
     }
   },
-  "AuthLayout": {
-    "testimonialQuote": "بالنسبة لي، OpenStock ليس مجرد تطبيق أسهم آخر؛ إنه منح الناس وضوحاً وتحكّماً في السوق، بلا حواجز ولا اشتراكات.",
-    "founderRole": "المؤسس {org}",
-    "starAlt": "نجمة"
-  },
+  "AuthLayout": {},
   "AuthFields": {
     "email": "البريد",
     "emailRequired": "البريد الإلكتروني مطلوب",
@@ -299,31 +295,30 @@
   },
   "Emails": {
     "common": {
-      "logoAlt": "شعار OpenStock",
+      "logoAlt": "شعار HIVRA Finance",
       "unsubscribe": "إلغاء الاشتراك",
-      "visitOpenstock": "زر OpenStock"
+      "visitSite": "زر HIVRA Finance"
     },
     "welcome": {
-      "subject": "أهلًا بك في OpenStock، أدواتك مفتوحة المصدر لسوق الأسهم!",
-      "text": "شكرًا لانضمامك إلى OpenStock، مبادرة من Open Dev Society",
-      "title": "أهلًا بك في OpenStock",
-      "dashboardAlt": "معاينة لوحة OpenStock",
+      "subject": "أهلًا بك في HIVRA Finance، أدواتك مفتوحة المصدر لسوق الأسهم!",
+      "text": "شكرًا لانضمامك إلى HIVRA Finance",
+      "title": "أهلًا بك في HIVRA Finance",
+      "dashboardAlt": "معاينة لوحة HIVRA Finance",
       "heading": "أهلًا بك {name}",
-      "fallbackIntro": "شكرًا لانضمامك إلى OpenStock. أصبحت لديك الأدوات لمتابعة الأسواق واتخاذ قرارات أذكى.",
+      "fallbackIntro": "شكرًا لانضمامك إلى HIVRA Finance. أصبحت لديك الأدوات لمتابعة الأسواق واتخاذ قرارات أذكى.",
       "featuresLabel": "إليك ما يمكنك فعله الآن:",
       "featureWatchlist": "أنشئ قائمة متابعة لتتابع أسهمك المفضلة",
       "featureSearch": "ابحث عن أي سهم بـ ⌘K وافتحه في تبويب",
       "featureDashboard": "استكشف لوحة الأسواق لترى الاتجاهات وآخر أخبار السوق",
       "closing": "سنبقيك على اطلاع بالتحديثات والرؤى والتنبيهات في وقتها، لتركّز على اتخاذ القرار الصحيح.",
-      "cta": "اذهب إلى لوحة الأسواق",
-      "initiative": "مبادرة من Open Dev Society"
+      "cta": "اذهب إلى لوحة الأسواق"
     },
     "resetPassword": {
-      "subject": "أعد تعيين كلمة مرور OpenStock",
+      "subject": "أعد تعيين كلمة مرور HIVRA Finance",
       "heading": "أعد تعيين كلمة المرور",
       "greeting": "مرحبًا {name}،",
       "greetingNoName": "مرحبًا،",
-      "body": "وصلنا طلب لإعادة تعيين كلمة مرور OpenStock الخاصة بك. استخدم الزر أدناه لاختيار كلمة مرور جديدة.",
+      "body": "وصلنا طلب لإعادة تعيين كلمة مرور HIVRA Finance الخاصة بك. استخدم الزر أدناه لاختيار كلمة مرور جديدة.",
       "cta": "استعادة كلمة المرور",
       "ignore": "إن لم تطلب ذلك، يمكنك تجاهل هذه الرسالة بأمان.",
       "text": "أعد تعيين كلمة المرور: {url}"
@@ -348,11 +343,11 @@
       "calloutTitleBelow": "انخفض السعر",
       "calloutBodyBelow": "نزل {symbol} تحت سعرك المستهدف. قد يكون وقتًا مناسبًا للشراء.",
       "cta": "افتح لوحة الأسواق",
-      "footer": "تصلك هذه الرسالة لأنك مشترك في تحديثات أخبار OpenStock."
+      "footer": "تصلك هذه الرسالة لأنك مشترك في تحديثات أخبار HIVRA Finance."
     }
   },
   "Sidebar": {
-    "homeAria": "لوحة OpenStock",
+    "homeAria": "لوحة HIVRA Finance",
     "searchStocks": "ابحث عن الأسهم",
     "overview": "نظرة عامة",
     "watchlist": "قائمة المتابعة",
@@ -364,11 +359,11 @@
       "about": "عن التطبيق",
       "terms": "الشروط"
     },
-    "support": "ادعم OpenStock",
+    "support": "ادعم HIVRA Finance",
     "sponsor": "راعي",
     "sponsorSlotsOpen": "أماكن الرعاة متاحة",
     "sponsorSlotsLeft": "{count, plural, one {بقي مكان رعاية واحد} two {بقي مكانا رعاية} few {بقيت # أماكن رعاية} many {بقي # مكانًا للرعاية} other {بقي # مكان رعاية}}",
-    "sponsorPitch": "اجعل شركتك أمام كل مستخدمي OpenStock.",
+    "sponsorPitch": "اجعل شركتك أمام كل مستخدمي HIVRA Finance.",
     "signOut": "تسجيل الخروج"
   },
   "TabBar": {
@@ -398,21 +393,6 @@
     "addTitle": "أضف {symbol} إلى {list}",
     "add": "أضف",
     "adding": "جارٍ الإضافة"
-  },
-  "UpdateBanner": {
-    "new": "جديد",
-    "seeWhatsNew": "شاهد الجديد",
-    "fullChangelog": "اقرأ سجل التغييرات كاملاً"
-  },
-  "DonatePopup": {
-    "kicker": "الباب مفتوح للرعاة",
-    "title": "خلّ OpenStock مجانياً",
-    "description": "دعمكم لـ OpenStock و‏Open Dev Society ساعدنا على النمو، ووصلنا الآن إلى حدود الطبقة المجانية في Vercel. ارعَنا من ٥ دولارات شهرياً، أو تبرّع مرة واحدة، أو تحدّث معنا عن شراكة.",
-    "becomeSponsor": "كن راعياً",
-    "maybeLater": "لاحقاً"
-  },
-  "OpenDevSocietyBranding": {
-    "initiativeBy": "مبادرة من"
   },
   "StockPage": {
     "sentimentTitle": "المعنويات",
@@ -509,7 +489,7 @@
     "newsSubGeneral": "أخبار السوق العامة",
     "alertsTitle": "التنبيهات",
     "alertsSubActive": "{count} نشط · يُفحص كل ٥ دقائق",
-    "alertsSubCloud": "ميزة OpenStock Cloud",
+    "alertsSubCloud": "ميزة HIVRA Finance Pro",
     "listsTitle": "قوائمي",
     "listsSub": "رتّب الأسهم التي تتابعها في قوائم بأسماء"
   },
@@ -531,11 +511,11 @@
     "removed": "أُزيل تنبيه \"{symbol}\"",
     "removeFailed": "تعذر حذف التنبيه",
     "cloudTitle": "التنبيهات مع السحابة",
-    "cloudBody": "تنبيهات الأسعار بالبريد جزء من OpenStock Cloud، مقابل ٥ دولارات شهرياً وقريباً.",
-    "seeCloud": "شاهد OpenStock Cloud",
+    "cloudBody": "تنبيهات الأسعار بالبريد جزء من HIVRA Finance Pro، مقابل ٥ دولارات شهرياً وقريباً.",
+    "seeCloud": "شاهد HIVRA Finance Pro",
     "emptyTitle": "لا تنبيهات بعد",
     "emptyBody": "استخدم الجرس بأي صف، أو \"فعّل تنبيه\" بصفحة السهم. نراسلك عند تحققه.",
-    "movedNotice": "انتقلت التنبيهات إلى <link>OpenStock Cloud</link>، لذا أُوقفت مؤقتًا.",
+    "movedNotice": "انتقلت التنبيهات إلى <link>HIVRA Finance Pro</link>، لذا أُوقفت مؤقتًا.",
     "above": "فوق ⁦{price}⁩",
     "below": "تحت ⁦{price}⁩",
     "until": "حتى {date}",
@@ -559,7 +539,7 @@
     "setAlert": "فعّل تنبيه",
     "cloudTitle": "تنبيهات الأسعار تأتي مع Cloud",
     "cloudBody": "يضيف Cloud تنبيهات الأسعار بالبريد والأسعار المباشرة مقابل ٥ دولارات شهرياً، وهو قادم قريباً. أما الاستضافة الذاتية فتتضمن الميزتين اليوم.",
-    "seeCloud": "شاهد OpenStock Cloud",
+    "seeCloud": "شاهد HIVRA Finance Pro",
     "selfHost": "استضف بنفسك"
   },
   "NewsList": {

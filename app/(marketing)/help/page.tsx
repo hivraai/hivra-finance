@@ -1,19 +1,18 @@
 import { Metadata } from 'next';
-import { BookOpen, ChevronDown, Github, MessageCircle } from 'lucide-react';
+import { BookOpen, ChevronDown } from 'lucide-react';
 import PageHero from '@/components/marketing/PageHero';
 import SectionHead from '@/components/marketing/SectionHead';
 import IconCard from '@/components/marketing/IconCard';
-import { DISCORD_URL, REPO_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-    title: 'Help | OpenStock',
-    description: 'Community-driven support for OpenStock. No paywalls, just help.',
+    title: 'Help | HIVRA Finance',
+    description: 'Help with HIVRA Finance: plans, data and your account.',
 };
 
 const FAQS = [
     {
-        question: 'Is OpenStock really free?',
-        answer: 'Yes. We run on sponsors and community contributions. Charts, watchlists and research stay free. OpenStock Cloud, coming soon, adds live quotes and email price alerts for $5 a month. Self-hosting includes both.',
+        question: 'What do the plans include?',
+        answer: 'Free gives you the dashboard, live charts, a watchlist and price alerts. Pro ($99 a month) adds the options desk, the strategy builder, the AI analyst and 20 backtest reports a month. Elite ($199 a month) adds unlimited backtests, the IV surface, gamma exposure and unusual flow.',
     },
     {
         question: 'How do I add a stock to my watchlist?',
@@ -21,36 +20,26 @@ const FAQS = [
     },
     {
         question: 'Where does the market data come from?',
-        answer: 'Charts come live from TradingView. Quotes, watchlist prices and alerts come from Finnhub; on this site they refresh hourly and every price shows when it was last traded.',
+        answer: 'Stock charts come live from TradingView and quotes from Finnhub. Option chains and backtests use exchange data from Databento: chains are shown as of the last close, and backtests run on up to 13 years of history.',
     },
     {
-        question: 'Which markets are supported?',
-        answer: 'US stocks, crypto and forex live; Canada and Australia delayed; Saudi Arabia and Poland delayed through Yahoo Finance; India (through BSE) and Germany end of day. Alerts work for US stocks and crypto.',
+        question: 'Is this investment advice?',
+        answer: 'No. HIVRA Finance is market analytics software. It is not a broker or an investment adviser, and it never places trades for you.',
     },
     {
-        question: 'My alert hasn’t fired.',
-        answer: 'Price alerts are part of OpenStock Cloud (or a self-hosted instance in realtime mode). There they are checked every five minutes and emailed to your account address when the price crosses your target. Check the alert’s status on the watchlist page.',
-    },
-    {
-        question: 'Can I contribute code or designs?',
-        answer: 'Absolutely. Issues labelled “good first issue” are a good start. We welcome designers, developers and writers alike.',
+        question: 'How do I cancel?',
+        answer: 'Plans are billed monthly and you can cancel any time from your profile. You keep access until the end of the month you paid for.',
     },
 ];
 
 export default function HelpPage() {
     return (
         <>
-            <PageHero kicker="Help" title="How can we help?" sub="Community-powered support for everyone." />
+            <PageHero kicker="Help" title="How can we help?" sub="Plans, data and your account." />
 
             <section className="mx-auto mt-14 grid max-w-[1200px] gap-3 px-5 md:grid-cols-3">
                 <IconCard icon={BookOpen} title="How it works" footer={<a href="/#data" className="btn btn-ghost w-full">Where the data comes from</a>}>
                     Data sources, background jobs and the AI behind the emails.
-                </IconCard>
-                <IconCard icon={MessageCircle} title="Community chat" footer={<a href={DISCORD_URL} target="_blank" rel="noreferrer" className="btn btn-ghost w-full">Join Discord</a>}>
-                    Get answers from other users and the maintainers.
-                </IconCard>
-                <IconCard icon={Github} title="Report a bug" footer={<a href={`${REPO_URL}/issues`} target="_blank" rel="noreferrer" className="btn btn-ghost w-full">Open an issue</a>}>
-                    Found something broken? Tell us on GitHub.
                 </IconCard>
             </section>
 
@@ -77,9 +66,9 @@ export default function HelpPage() {
                     <div className="card flex flex-col items-start justify-between gap-5 p-8 md:flex-row md:items-center">
                         <div>
                             <h2 className="text-[22px] font-bold tracking-[-0.03em]">Still stuck?</h2>
-                            <p className="mt-1 text-muted-foreground">Our team and community answer emails, for free.</p>
+                            <p className="mt-1 text-muted-foreground">Write to us and the team answers by email.</p>
                         </div>
-                        <a href="mailto:opendevsociety@gmail.com" className="btn btn-primary h-11 px-5 text-[15px]">Email support</a>
+                        <a href="mailto:support@hivra.ai" className="btn btn-primary h-11 px-5 text-[15px]">Email support</a>
                     </div>
                 </div>
             </section>

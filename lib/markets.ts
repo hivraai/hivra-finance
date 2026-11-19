@@ -1,4 +1,4 @@
-// Markets OpenStock can show for free. Coverage was tested against the free data sources:
+// Markets HIVRA Finance can show for free. Coverage was tested against the free data sources:
 //   - Finnhub free: US stocks and crypto only (every other exchange returns 403).
 //   - TradingView embeds: US, crypto, forex live; TSX + ASX delayed; BSE + XETRA end-of-day.
 //     NSE and TVC indices (NIFTY, FTSE, DAX, N225, HSI) are blocked in embeds; LSE, Tokyo, Hong Kong and
@@ -170,7 +170,7 @@ export const MARKETS: Market[] = [
 ];
 
 export const DEFAULT_MARKET: MarketId = 'us';
-export const MARKET_COOKIE = 'openstock-market';
+export const MARKET_COOKIE = 'hivra-finance-market';
 
 export const getMarket = (id?: string | null) => MARKETS.find((m) => m.id === id) ?? MARKETS[0];
 
