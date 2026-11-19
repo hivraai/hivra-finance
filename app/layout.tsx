@@ -46,7 +46,14 @@ export const metadata: Metadata = {
   title: "HIVRA Finance",
   applicationName: "HIVRA Finance",
   appleWebApp: { capable: true, title: "HIVRA Finance", statusBarStyle: "black-translucent" },
-  icons: { apple: "/hivra-finance-logo-512.png" },
+  // Setting `icons` replaces the app/icon.svg convention, so the tab icon is listed here too.
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/hivra-finance-logo-512.png",
+  },
   description: "Options research and backtesting with an AI analyst. Market analytics software, not investment advice.",
 };
 
