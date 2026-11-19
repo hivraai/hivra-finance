@@ -287,7 +287,8 @@
     "listLimit": "You can keep {max} lists. Delete one to make room.",
     "listExists": "You already have a list called “{name}”.",
     "symbolInvalid": "That is not a symbol we can look up.",
-    "listFull": "A list holds up to {max} symbols."
+    "listFull": "A list holds up to {max} symbols.",
+    "humanCheck": "Please complete the human check and try again."
   },
   "NewsSources": {
     "companyNews": "Company News",

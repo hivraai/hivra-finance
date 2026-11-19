@@ -8,12 +8,14 @@ import countryList from "react-select-country-list";
 import { clientIp, isRateLimited } from "@/lib/rate-limit";
 import { getTranslations } from "next-intl/server";
 import { resolveLocale } from "@/i18n/locale";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 const isOption = (options: readonly { value: string }[], value: unknown) => options.some((o) => o.value === value);
 const COUNTRY_CODES = new Set(countryList().getValues()); // the same list the sign-up country picker shows
 
-export const signUpWithEmail = async ({ email, password, fullName, country, investmentGoals, riskTolerance, preferredIndustry }: SignUpFormData) => {
+export const signUpWithEmail = async ({ email, password, fullName, country, investmentGoals, riskTolerance, preferredIndustry, captchaToken }: SignUpFormData & { captchaToken?: string | null }) => {
     const t = await getTranslations('Errors');
+    if (!(await verifyTurnstile(captchaToken, await clientIp()))) return { success: false, error: t('humanCheck') };
     // These fields go into the AI prompt for the welcome email, so only accept the form's own values
     if (typeof fullName !== 'string' || !fullName.trim() || fullName.length > 80
         || typeof country !== 'string' || !COUNTRY_CODES.has(country)
@@ -51,8 +53,9 @@ export const signUpWithEmail = async ({ email, password, fullName, country, inve
     }
 }
 
-export const signInWithEmail = async ({ email, password }: SignInFormData) => {
+export const signInWithEmail = async ({ email, password, captchaToken }: SignInFormData & { captchaToken?: string | null }) => {
     const t = await getTranslations('Errors');
+    if (!(await verifyTurnstile(captchaToken, await clientIp()))) return { success: false, error: t('humanCheck') };
     // Per IP against credential stuffing, per account against guessing one password from many IPs
     if (await isRateLimited(`sign-in:ip:${await clientIp()}`, 20, 10 * 60)
         || await isRateLimited(`sign-in:email:${String(email).trim().toLowerCase()}`, 10, 10 * 60)) {
@@ -99,8 +102,9 @@ export const signInWithSocial = async (provider: 'google' | 'github') => {
     }
 }
 
-export const requestPasswordResetEmail =async ({ email }: { email: string }) => {
+export const requestPasswordResetEmail =async ({ email, captchaToken }: { email: string; captchaToken?: string | null }) => {
     const t = await getTranslations('Errors');
+    if (!(await verifyTurnstile(captchaToken, await clientIp()))) return { success: false, error: t('humanCheck') };
     if (!process.env.NODEMAILER_EMAIL || !process.env.NODEMAILER_PASSWORD) {
         return { success: false, error: t('resetEmailNotConfigured') }
     }

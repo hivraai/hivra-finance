@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import {mongodbAdapter} from "better-auth/adapters/mongodb";
 import {connectToDatabase, isWorkersRuntime} from "@/database/mongoose";
 import {nextCookies} from "better-auth/next-js";
+import { captcha } from "better-auth/plugins";
 import { headers } from "next/headers";
 import { cache } from "react";
 import { sendPasswordResetEmail } from "@/lib/nodemailer/reset-password";
@@ -78,7 +79,11 @@ const createAuth = (database: MongoDb) => betterAuth({
                 ipAddressHeaders: isWorkersRuntime() ? ["cf-connecting-ip"] : ["x-forwarded-for"],
             },
         },
-        plugins: [nextCookies()],
+        // With Turnstile on, the HTTP sign-up/sign-in/reset endpoints need a token too; the app's own forms go
+        // through server actions that verify it, so this closes the door a bot would use to skip the form.
+        plugins: process.env.TURNSTILE_SECRET_KEY
+            ? [captcha({ provider: "cloudflare-turnstile", secretKey: process.env.TURNSTILE_SECRET_KEY }), nextCookies()]
+            : [nextCookies()],
 });
 
 let authInstance: ReturnType<typeof createAuth> | null = null;

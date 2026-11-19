@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import Turnstile, { TURNSTILE_SITE_KEY, type TurnstileHandle } from '@/components/forms/Turnstile';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
@@ -14,6 +15,8 @@ type ForgotPasswordFormData = {
 };
 
 const ForgotPasswordPage = () => {
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const human = useRef<TurnstileHandle>(null);
     const t = useTranslations('ForgotPassword');
     const tFields = useTranslations('AuthFields');
     const {
@@ -29,7 +32,8 @@ const ForgotPasswordPage = () => {
 
     const onSubmit = async (data: ForgotPasswordFormData) => {
         try {
-            const result = await requestPasswordResetEmail(data);
+            const result = await requestPasswordResetEmail({ ...data, captchaToken });
+            human.current?.reset();
 
             if (result.success) {
                 toast.success(t('sent'));
@@ -69,7 +73,9 @@ const ForgotPasswordPage = () => {
                     }}
                 />
 
-                <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full mt-5">
+                <Turnstile ref={human} onToken={setCaptchaToken} />
+
+                <Button type="submit" disabled={isSubmitting || (!!TURNSTILE_SITE_KEY && !captchaToken)} className="yellow-btn w-full mt-5">
                     {isSubmitting ? t('submitting') : t('submit')}
                 </Button>
 

@@ -10,13 +10,17 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SocialAuthButtons from "@/components/forms/SocialAuthButtons";
-import React from "react";
+import React, { useRef, useState } from "react";
+import Turnstile, { TURNSTILE_SITE_KEY, type TurnstileHandle } from '@/components/forms/Turnstile';
+
 
 const SignIn = () => {
     const t = useTranslations('SignIn');
     const tFields = useTranslations('AuthFields');
     const tPassword = useTranslations('Password');
     const router = useRouter()
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const human = useRef<TurnstileHandle>(null);
     const {
         register,
         handleSubmit,
@@ -31,11 +35,12 @@ const SignIn = () => {
 
     const onSubmit = async (data: SignInFormData) => {
         try {
-            const result = await signInWithEmail(data);
+            const result = await signInWithEmail({ ...data, captchaToken });
             if (result.success) {
                 router.push('/dashboard');
                 return;
             }
+            human.current?.reset();
             toast.error(t('failed'), {
                 description: result.error ?? t('invalidCredentials'),
             });
@@ -86,7 +91,9 @@ const SignIn = () => {
                     </Link>
                 </div>
 
-                <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full mt-5">
+                <Turnstile ref={human} onToken={setCaptchaToken} />
+
+                <Button type="submit" disabled={isSubmitting || (!!TURNSTILE_SITE_KEY && !captchaToken)} className="yellow-btn w-full mt-5">
                     {isSubmitting ? t('submitting') : t('submit')}
                 </Button>
 

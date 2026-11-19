@@ -13,9 +13,13 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import SocialAuthButtons from "@/components/forms/SocialAuthButtons";
-import React from "react";
+import React, { useRef, useState } from "react";
+import Turnstile, { TURNSTILE_SITE_KEY, type TurnstileHandle } from '@/components/forms/Turnstile';
+
 
 const SignUp = () => {
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const human = useRef<TurnstileHandle>(null);
     const t = useTranslations('SignUp');
     const tFields = useTranslations('AuthFields');
     const tPrefs = useTranslations('PreferenceFields');
@@ -44,11 +48,12 @@ const SignUp = () => {
 
     const onSubmit = async (data: SignUpFormData) => {
         try {
-            const result = await signUpWithEmail(data);
+            const result = await signUpWithEmail({ ...data, captchaToken });
             if (result.success) {
                 router.push('/welcome');
                 return;
             }
+            human.current?.reset();
             toast.error(t('failed'), {
                 description: result.error ?? t('couldNotCreate'),
             });
@@ -123,7 +128,8 @@ const SignUp = () => {
                 </section>
 
                 <div className="flex flex-col gap-4">
-                    <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full">
+                    <Turnstile ref={human} onToken={setCaptchaToken} />
+                    <Button type="submit" disabled={isSubmitting || (!!TURNSTILE_SITE_KEY && !captchaToken)} className="yellow-btn w-full">
                         {isSubmitting ? t('submitting') : t('submit')}
                     </Button>
                     <FooterLink text={t('haveAccount')} linkText={t('signIn')} href="/sign-in" />
