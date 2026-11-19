@@ -12,18 +12,6 @@ export const LANDING_COPY = {
             primary: 'Start free',
             secondary: 'See the plans',
         },
-        agent: {
-            label: 'AI analyst',
-            example: 'Example',
-            question: 'Is selling a 30-day put on NVDA worth it right now?',
-            steps: ['Reading the NVDA option chain · 25 expiries', 'Implied vs realised volatility', 'Backtesting monthly puts since 2018', 'Checking support levels and earnings date'],
-            answer: [
-                'Puts are rich: 30-day IV is 52% against 41% realised, so you are paid more than usual for the risk.',
-                'The 5% out-of-the-money put kept the premium in 78% of months since 2018, but the worst month lost 3.4x what it collected.',
-                'Earnings fall inside the window. Smaller size, or a put spread to cap the loss.',
-            ],
-            input: 'Ask about any stock or strategy…',
-        },
         inside: {
             kicker: "What's inside",
             title: 'The desk a trader actually uses.',
@@ -69,18 +57,6 @@ export const LANDING_COPY = {
             sub: 'Lee cualquier gráfica en segundos, arma estrategias de opciones y prueba tus ideas sobre años de historia del mercado. Luego recibe la lectura de la IA, en palabras simples, antes de poner tu dinero.',
             primary: 'Empieza gratis',
             secondary: 'Ver planes',
-        },
-        agent: {
-            label: 'Analista de IA',
-            example: 'Ejemplo',
-            question: '¿Vale la pena vender un put a 30 días de NVDA ahora?',
-            steps: ['Leyendo la cadena de opciones de NVDA · 25 vencimientos', 'Volatilidad implícita vs realizada', 'Backtest de puts mensuales desde 2018', 'Revisando soportes y fecha de resultados'],
-            answer: [
-                'Los puts están caros: la IV a 30 días es 52% contra 41% realizada, así que te pagan más de lo normal por el riesgo.',
-                'El put 5% fuera del dinero se quedó con la prima en el 78% de los meses desde 2018, pero el peor mes perdió 3.4 veces lo cobrado.',
-                'Los resultados caen dentro del plazo. Tamaño menor, o un put spread para limitar la pérdida.',
-            ],
-            input: 'Pregunta por cualquier acción o estrategia…',
         },
         inside: {
             kicker: 'Qué incluye',
