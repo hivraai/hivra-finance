@@ -113,7 +113,10 @@
       "sa": "السعودية",
       "crypto": "العملات الرقمية",
       "fx": "الفوركس",
-      "pl": "بولندا"
+      "pl": "بولندا",
+      "asia": "آسيا",
+      "metals": "المعادن",
+      "futures": "العقود الآجلة"
     },
     "feed": {
       "live": "مباشرة",
@@ -138,7 +141,15 @@
       "commodityFX": "عملات السلع",
       "banksInsurance": "البنوك والتأمين",
       "energyIndustry": "الطاقة والصناعة",
-      "consumerTech": "الاستهلاك والتقنية"
+      "consumerTech": "الاستهلاك والتقنية",
+      "japan": "اليابان",
+      "hongKong": "هونغ كونغ",
+      "koreaTaiwan": "كوريا وتايوان",
+      "precious": "النفيسة",
+      "industrial": "الصناعية",
+      "equityIndex": "مؤشرات الأسهم",
+      "ratesFX": "الفائدة والعملات",
+      "grains": "الحبوب"
     }
   },
   "WatchlistTable": {

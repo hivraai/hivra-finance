@@ -23,7 +23,8 @@ export default async function YahooQuotesTable({ market }: { market: Market }) {
         getTranslations('WatchlistTable.headers'),
         getTranslations('Markets'),
     ]);
-    const currency = Object.values(quotes)[0]?.currency;
+    const currencies = new Set(Object.values(quotes).map((q) => q.currency));
+    const currency = currencies.size === 1 ? [...currencies][0] : undefined;
 
     return (
         <div className="overflow-x-auto">
@@ -47,9 +48,13 @@ export default async function YahooQuotesTable({ market }: { market: Market }) {
                             return (
                                 <tr key={tvSymbol} className="border-t border-line/60 transition-colors hover:bg-hover/40">
                                     <td className="px-3 py-2">
-                                        <Link href={`/stocks/${appSymbol}`} className="font-semibold hover:text-brand-ink">
-                                            {name} <span className="mono text-[11px] text-faint">{appSymbol}</span>
-                                        </Link>
+                                        {appSymbol ? (
+                                            <Link href={`/stocks/${appSymbol}`} className="font-semibold hover:text-brand-ink">
+                                                {name} <span className="mono text-[11px] text-faint">{appSymbol}</span>
+                                            </Link>
+                                        ) : (
+                                            <span className="font-semibold">{name} <span className="mono text-[11px] text-faint">{tvSymbol.split(':').pop()}</span></span>
+                                        )}
                                     </td>
                                     <td className="num px-3 py-2 text-end font-semibold">{q ? fmt(q.price) : '—'}</td>
                                     <td className={`num px-3 py-2 text-end ${q && q.change < 0 ? 'text-down' : 'text-up'}`}>
@@ -86,7 +91,7 @@ export async function YahooMovers({ market, count = 8 }: { market: Market; count
                 const up = quote.changePercent >= 0;
                 return (
                     <li key={symbol}>
-                        <Link href={`/stocks/${yahooAppSymbol(symbol)}`} className="flex items-center gap-3 rounded-[10px] px-3 py-2 transition-colors hover:bg-hover/60">
+                        <MoverRow href={yahooAppSymbol(symbol)}>
                             <span className={up ? 'text-up' : 'text-down'}>
                                 {up ? <ArrowUpRight className="size-4" /> : <ArrowDownRight className="size-4" />}
                             </span>
@@ -101,10 +106,15 @@ export async function YahooMovers({ market, count = 8 }: { market: Market; count
                                 />
                             </span>
                             <ChangePill value={quote.changePercent} />
-                        </Link>
+                        </MoverRow>
                     </li>
                 );
             })}
         </ul>
     );
+}
+
+function MoverRow({ href, children }: { href: string | null; children: React.ReactNode }) {
+    const cls = 'flex items-center gap-3 rounded-[10px] px-3 py-2 transition-colors hover:bg-hover/60';
+    return href ? <Link href={`/stocks/${href}`} className={cls}>{children}</Link> : <div className={cls}>{children}</div>;
 }

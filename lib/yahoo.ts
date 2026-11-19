@@ -3,11 +3,25 @@
 // Pure functions, covered by tests; the network call lives in lib/actions/yahoo.actions.ts.
 
 type YahooExchange = { suffix: string; currency: string; ticker: RegExp; indices: Record<string, string> };
+const NONE = /(?!)/; // exchanges we only quote listed contracts or indices on
 
 // TradingView prefix -> Yahoo suffix, trading currency, the shape of a ticker, and index tickers with their Yahoo symbols
 const YAHOO_EXCHANGES: Record<string, YahooExchange> = {
     TADAWUL: { suffix: 'SR', currency: 'SAR', ticker: /^\d+$/, indices: { TASI: '^TASI.SR' } },
     GPW: { suffix: 'WA', currency: 'PLN', ticker: /^[A-Z0-9]+$/, indices: { WIG20: 'WIG20.WA', WIG: 'WIG.WA', MWIG40: 'MWIG40.WA', SWIG80: 'SWIG80.WA' } },
+    // Asia: Tokyo, Hong Kong, Shanghai, Korea and Taiwan charts are blocked in TradingView's free embeds.
+    TSE: { suffix: 'T', currency: 'JPY', ticker: /^\d{4}$/, indices: { N225: '^N225' } },
+    HKEX: { suffix: 'HK', currency: 'HKD', ticker: /^\d{4}$/, indices: { HSI: '^HSI' } },
+    SSE: { suffix: 'SS', currency: 'CNY', ticker: /^\d{6}$/, indices: { SHCOMP: '000001.SS' } },
+    KRX: { suffix: 'KS', currency: 'KRW', ticker: /^\d{6}$/, indices: { KOSPI: '^KS11' } },
+    TWSE: { suffix: 'TW', currency: 'TWD', ticker: /^\d{4}$/, indices: { TAIEX: '^TWII' } },
+    // Futures: continuous front month, ~10-15 min delayed on Yahoo. Only the listed contracts, never a stock ticker.
+    COMEX: { suffix: 'COMEX', currency: 'USD', ticker: NONE, indices: { GOLD: 'GC=F', SILVER: 'SI=F', COPPER: 'HG=F', ALUMINUM: 'ALI=F' } },
+    NYMEX: { suffix: 'NYMEX', currency: 'USD', ticker: NONE, indices: { PLATINUM: 'PL=F', PALLADIUM: 'PA=F', CRUDE: 'CL=F', NATGAS: 'NG=F', GASOLINE: 'RB=F', BRENT: 'BZ=F' } },
+    CME: { suffix: 'CME', currency: 'USD', ticker: NONE, indices: { ES: 'ES=F', NQ: 'NQ=F', YM: 'YM=F', RTY: 'RTY=F', EUR: '6E=F', JPY: '6J=F' } },
+    CBOT: { suffix: 'CBOT', currency: 'USD', ticker: NONE, indices: { ZB: 'ZB=F', ZN: 'ZN=F', ZF: 'ZF=F', CORN: 'ZC=F', WHEAT: 'ZW=F', SOY: 'ZS=F' } },
+    ICE: { suffix: 'ICE', currency: 'USD', ticker: NONE, indices: { DXY: 'DX-Y.NYB' } },
+    CBOE: { suffix: 'CBOE', currency: 'USD', ticker: NONE, indices: { VIX: '^VIX' } },
 };
 
 const INDEX_SYMBOLS = new Set(Object.values(YAHOO_EXCHANGES).flatMap((ex) => Object.values(ex.indices)));

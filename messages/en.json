@@ -113,7 +113,10 @@
       "sa": "Saudi Arabia",
       "crypto": "Crypto",
       "fx": "Forex",
-      "pl": "Poland"
+      "pl": "Poland",
+      "asia": "Asia",
+      "metals": "Metals",
+      "futures": "Futures"
     },
     "feed": {
       "live": "Live",
@@ -138,7 +141,15 @@
       "commodityFX": "Commodity FX",
       "banksInsurance": "Banks & insurance",
       "energyIndustry": "Energy & industry",
-      "consumerTech": "Consumer & tech"
+      "consumerTech": "Consumer & tech",
+      "japan": "Japan",
+      "hongKong": "Hong Kong",
+      "koreaTaiwan": "Korea & Taiwan",
+      "precious": "Precious",
+      "industrial": "Industrial",
+      "equityIndex": "Equity index",
+      "ratesFX": "Rates & FX",
+      "grains": "Grains"
     }
   },
   "WatchlistTable": {

@@ -10,7 +10,7 @@
 
 import { isInternationalSymbol } from "@/lib/utils";
 
-export type MarketId = 'us' | 'in' | 'de' | 'ca' | 'au' | 'sa' | 'pl' | 'crypto' | 'fx';
+export type MarketId = 'us' | 'asia' | 'in' | 'de' | 'ca' | 'au' | 'sa' | 'pl' | 'metals' | 'futures' | 'crypto' | 'fx';
 
 type Hours = { open: number; close: number }; // minutes of the local day
 
@@ -48,6 +48,21 @@ export const MARKETS: Market[] = [
             { title: 'Consumer', symbols: [['NASDAQ:AMZN', 'Amazon'], ['NASDAQ:TSLA', 'Tesla'], ['NYSE:WMT', 'Walmart'], ['NASDAQ:COST', 'Costco'], ['NYSE:KO', 'Coca-Cola'], ['NASDAQ:NFLX', 'Netflix']] },
         ],
         heatmap: 'stocks', news: 'stock',
+    },
+    {
+        id: 'asia', name: 'Asia', short: 'Asia', timeZone: 'Asia/Tokyo', hours: { open: hm(9), close: hm(15, 30) }, feed: 'Delayed', yahoo: true,
+        pulse: [
+            { symbol: 'TSE:N225', label: 'Nikkei 225' },
+            { symbol: 'HKEX:HSI', label: 'Hang Seng' },
+            { symbol: 'SSE:SHCOMP', label: 'Shanghai Composite' },
+            { symbol: 'KRX:KOSPI', label: 'KOSPI' },
+        ],
+        groups: [
+            { title: 'Japan', symbols: [['TSE:7203', 'Toyota'], ['TSE:6758', 'Sony'], ['TSE:8306', 'Mitsubishi UFJ'], ['TSE:9984', 'SoftBank Group'], ['TSE:6861', 'Keyence']] },
+            { title: 'Hong Kong', symbols: [['HKEX:0700', 'Tencent'], ['HKEX:9988', 'Alibaba'], ['HKEX:0005', 'HSBC'], ['HKEX:1299', 'AIA'], ['HKEX:3690', 'Meituan']] },
+            { title: 'Korea & Taiwan', symbols: [['TWSE:2330', 'TSMC'], ['KRX:005930', 'Samsung Electronics'], ['KRX:000660', 'SK hynix'], ['TWSE:2317', 'Hon Hai (Foxconn)'], ['TWSE:2454', 'MediaTek']] },
+        ],
+        news: 'stock',
     },
     {
         id: 'in', name: 'India', short: 'IN', timeZone: 'Asia/Kolkata', hours: { open: hm(9, 15), close: hm(15, 30) }, feed: 'End of day',
@@ -140,6 +155,36 @@ export const MARKETS: Market[] = [
         news: 'stock',
     },
     {
+        id: 'metals', name: 'Metals', short: 'Metals', timeZone: 'America/New_York', hours: '24/5', feed: 'Delayed', yahoo: true,
+        pulse: [
+            { symbol: 'COMEX:GOLD', label: 'Gold' },
+            { symbol: 'COMEX:SILVER', label: 'Silver' },
+            { symbol: 'COMEX:COPPER', label: 'Copper' },
+            { symbol: 'NYMEX:PLATINUM', label: 'Platinum' },
+        ],
+        groups: [
+            { title: 'Precious', symbols: [['COMEX:GOLD', 'Gold'], ['COMEX:SILVER', 'Silver'], ['NYMEX:PLATINUM', 'Platinum'], ['NYMEX:PALLADIUM', 'Palladium']] },
+            { title: 'Industrial', symbols: [['COMEX:COPPER', 'Copper'], ['COMEX:ALUMINUM', 'Aluminum']] },
+        ],
+        news: 'stock',
+    },
+    {
+        id: 'futures', name: 'Futures', short: 'Futures', timeZone: 'America/Chicago', hours: '24/5', feed: 'Delayed', yahoo: true,
+        pulse: [
+            { symbol: 'CME:ES', label: 'S&P 500 (ES)' },
+            { symbol: 'CME:NQ', label: 'Nasdaq 100 (NQ)' },
+            { symbol: 'NYMEX:CRUDE', label: 'Crude oil (CL)' },
+            { symbol: 'CBOT:ZN', label: '10-year T-note (ZN)' },
+        ],
+        groups: [
+            { title: 'Equity index', symbols: [['CME:ES', 'E-mini S&P 500'], ['CME:NQ', 'E-mini Nasdaq 100'], ['CME:YM', 'E-mini Dow'], ['CME:RTY', 'E-mini Russell 2000'], ['CBOE:VIX', 'VIX']] },
+            { title: 'Energy', symbols: [['NYMEX:CRUDE', 'WTI crude oil'], ['NYMEX:BRENT', 'Brent crude'], ['NYMEX:NATGAS', 'Natural gas'], ['NYMEX:GASOLINE', 'RBOB gasoline']] },
+            { title: 'Rates & FX', symbols: [['CBOT:ZB', '30-year T-bond'], ['CBOT:ZN', '10-year T-note'], ['CBOT:ZF', '5-year T-note'], ['CME:EUR', 'Euro FX'], ['ICE:DXY', 'US Dollar Index']] },
+            { title: 'Grains', symbols: [['CBOT:CORN', 'Corn'], ['CBOT:WHEAT', 'Wheat'], ['CBOT:SOY', 'Soybeans']] },
+        ],
+        news: 'stock',
+    },
+    {
         id: 'crypto', name: 'Crypto', short: 'Crypto', timeZone: 'UTC', hours: '24/7', feed: 'Live',
         pulse: [
             { symbol: 'BINANCE:BTCUSDT', label: 'Bitcoin', finnhub: 'BINANCE:BTCUSDT' },
@@ -174,7 +219,7 @@ export const MARKET_COOKIE = 'hivra-finance-market';
 
 export const getMarket = (id?: string | null) => MARKETS.find((m) => m.id === id) ?? MARKETS[0];
 
-const COUNTRY_MARKET: Record<string, MarketId> = { IN: 'in', DE: 'de', CA: 'ca', AU: 'au', SA: 'sa', PL: 'pl' };
+const COUNTRY_MARKET: Record<string, MarketId> = { IN: 'in', DE: 'de', CA: 'ca', AU: 'au', SA: 'sa', PL: 'pl', JP: 'asia', HK: 'asia', CN: 'asia', KR: 'asia', TW: 'asia', SG: 'asia' };
 export const marketForCountry = (country?: string | null): MarketId => COUNTRY_MARKET[country ?? ''] ?? DEFAULT_MARKET;
 
 // Finnhub free can price (and so alert on) US listings and Binance pairs only.
