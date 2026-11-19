@@ -90,7 +90,8 @@
     "loading": "Cargando la cadena de opciones de {symbol}… La primera carga de un ticker puede tardar hasta un minuto.",
     "lockedTitle": "El constructor de estrategias es de Pro",
     "lockedBody": "En Gratis puedes leer la cadena. Pro agrega el constructor: elige patas y ve el resultado, ganancia y pérdida máximas, puntos de equilibrio y griegas.",
-    "lockedCta": "Ver planes"
+    "lockedCta": "Ver planes",
+    "noChainFree": "El plan gratis incluye las acciones más negociadas (SPY, QQQ, AAPL, NVDA, TSLA y más). Pasa a Pro para abrir la cadena de {symbol}."
   },
   "Password": {
     "rules": {

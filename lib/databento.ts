@@ -12,6 +12,7 @@ import { after } from 'next/server';
 import type { Bar } from '@/lib/quant/indicators';
 import { connectToDatabase } from '@/database/mongoose';
 import { optionChainModel } from '@/database/models/option-chain.model';
+import { databentoUsageModel } from '@/database/models/databento-usage.model';
 
 const BASE = 'https://hist.databento.com/v0';
 export const databentoConfigured = () => Boolean(process.env.DATABENTO_API_KEY);
@@ -21,6 +22,59 @@ export const isDatabentoSymbol = (s: string) => SYMBOL.test(s);
 
 function authHeader() {
     return 'Basic ' + Buffer.from(`${process.env.DATABENTO_API_KEY}:`).toString('base64');
+}
+
+// ── Spend ledger and daily cap ───────────────────────────────────────────────
+// Every billable request is priced afterwards with metadata.get_cost (free) and added to today's
+// DatabentoUsage document. Past DATABENTO_DAILY_CAP_USD (default $10) new fetches are refused, except
+// the nightly pre-load; stored chains keep being served. A warning is logged from 80%.
+export type DatabentoKind = 'chain' | 'bars' | 'backtest' | 'agent' | 'prewarm';
+const DAILY_CAP_USD = () => Number(process.env.DATABENTO_DAILY_CAP_USD) || 10;
+const today = () => new Date().toISOString().slice(0, 10);
+
+export async function databentoSpentToday(): Promise<number> {
+    try {
+        const db = await connectToDatabase();
+        const doc = await databentoUsageModel(db).findOne({ day: today() }).lean();
+        return doc?.usd ?? 0;
+    } catch {
+        return 0; // the ledger never blocks data on its own failure
+    }
+}
+
+async function assertUnderCap(kind: DatabentoKind) {
+    if (kind === 'prewarm') return;
+    const spent = await databentoSpentToday();
+    if (spent >= DAILY_CAP_USD()) throw new Error(`Databento daily cap reached ($${spent.toFixed(2)} of $${DAILY_CAP_USD()})`);
+}
+
+function recordSpend(kind: DatabentoKind, params: Record<string, string>) {
+    const job = async () => {
+        const { dataset, symbols, schema, start, end, stype_in } = params;
+        let usd = 0;
+        try {
+            usd = Number(await call('metadata.get_cost', { dataset, symbols, schema, start, end, stype_in }, 10_000)) || 0;
+        } catch (e) {
+            console.warn('[databento] get_cost', e instanceof Error ? e.message : e);
+        }
+        const db = await connectToDatabase();
+        const doc = await databentoUsageModel(db).findOneAndUpdate(
+            { day: today() },
+            { $inc: { calls: 1, usd, [`kinds.${kind}.calls`]: 1, [`kinds.${kind}.usd`]: usd } },
+            { upsert: true, new: true },
+        ).lean();
+        if (doc && doc.usd >= DAILY_CAP_USD() * 0.8) console.warn(`[databento] spend today $${doc.usd.toFixed(2)} of cap $${DAILY_CAP_USD()}`);
+    };
+    const run = () => job().catch((e) => console.warn('[databento] ledger', e instanceof Error ? e.message : e));
+    try { after(run); } catch { void run(); }
+}
+
+// A billable timeseries request: refused past the daily cap, priced into the ledger after it succeeds.
+async function billed(kind: DatabentoKind, params: Record<string, string>, timeoutMs: number, abort?: AbortSignal): Promise<string> {
+    await assertUnderCap(kind);
+    const text = await call('timeseries.get_range', params, timeoutMs, abort);
+    recordSpend(kind, params);
+    return text;
 }
 
 async function call(path: string, params: Record<string, string>, timeoutMs = 25_000, abort?: AbortSignal): Promise<string> {
@@ -62,9 +116,9 @@ function parseCsv(text: string): Record<string, string>[] {
     });
 }
 
-async function ohlcv(dataset: string, symbol: string, start: string, end: string): Promise<Bar[]> {
+async function ohlcv(dataset: string, symbol: string, start: string, end: string, kind: DatabentoKind = 'bars'): Promise<Bar[]> {
     if (start >= end) return [];
-    const csv = await call('timeseries.get_range', {
+    const csv = await billed(kind, {
         dataset, schema: 'ohlcv-1d', symbols: symbol, stype_in: 'raw_symbol',
         start, end, encoding: 'csv', pretty_px: 'true', pretty_ts: 'true', map_symbols: 'true',
     }, 45_000);
@@ -115,9 +169,9 @@ export const getFullBars = unstable_cache(async (symbol: string): Promise<Bar[]>
     const [eqEnd, old] = await Promise.all([
         datasetEnd('EQUS.SUMMARY'),
         // No catch: a failed request must not be cached as "history starts in 2024".
-        ohlcv('XNAS.ITCH', symbol, XNAS_START, EQUS_START),
+        ohlcv('XNAS.ITCH', symbol, XNAS_START, EQUS_START, 'backtest'),
     ]);
-    const recent = await ohlcv('EQUS.SUMMARY', symbol, EQUS_START, eqEnd);
+    const recent = await ohlcv('EQUS.SUMMARY', symbol, EQUS_START, eqEnd, 'backtest');
     const seen = new Set(recent.map((b) => b.date));
     return adjustSplits([...old.filter((b) => !seen.has(b.date)), ...recent].sort((a, b) => a.date.localeCompare(b.date)));
 }, ['databento-full-bars-v2'], { revalidate: 12 * 3600 });
@@ -160,28 +214,29 @@ function toChain(symbol: string, csv: string, asOf: string): Chain {
     return { underlying: symbol, asOf, quotes: [...latest.values()].sort((a, b) => a.expiry.localeCompare(b.expiry) || a.strike - b.strike) };
 }
 
-// Databento's latency for the same request swings from ~3 s to over 40 s, so two equivalent
-// snapshots of the close race (the last 1-minute CBBO and the last 1-second CBBO) and the first
-// complete answer wins; the other is aborted. Costs about a cent per ticker per day.
-async function chainAt(symbol: string, date: string): Promise<Chain> {
+// The chain as of the close: the last 1-minute CBBO (SPY ~$0.02, AAPL ~$0.005). The 1-second CBBO is
+// asked only if that fails or comes back empty: it costs 25-40x more (SPY ~$0.76), so it is never
+// raced in parallel any more (it was, for speed, and was billed on every load).
+async function chainAt(symbol: string, date: string, kind: DatabentoKind = 'chain'): Promise<Chain> {
     const close = closeUtc(date);
     const base = { dataset: 'OPRA.PILLAR', symbols: `${symbol}.OPT`, stype_in: 'parent', encoding: 'csv', pretty_px: 'true', pretty_ts: 'true', map_symbols: 'true' };
-    const stop = new AbortController();
     const shapes = [
         { ...base, schema: 'cbbo-1m', start: new Date(close.getTime() - 60_000).toISOString(), end: close.toISOString() },
         { ...base, schema: 'cbbo-1s', start: new Date(close.getTime() - 2_000).toISOString(), end: new Date(close.getTime() - 1_000).toISOString() },
     ];
-    try {
-        return await Promise.any(shapes.map(async (params) => {
-            const chain = toChain(symbol, await call('timeseries.get_range', params, 55_000, stop.signal), close.toISOString());
-            if (!chain.quotes.length) throw new Error('empty chain');
-            return chain;
-        }));
-    } catch (e) {
-        throw e instanceof AggregateError ? new Error(e.errors.map((x) => (x instanceof Error ? x.message : String(x))).join(' | ')) : e;
-    } finally {
-        stop.abort();
+    const errors: string[] = [];
+    for (const params of shapes) {
+        try {
+            const chain = toChain(symbol, await billed(kind, params, 55_000), close.toISOString());
+            if (chain.quotes.length) return chain;
+            errors.push(`${params.schema}: empty chain`);
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            errors.push(`${params.schema}: ${msg}`);
+            if (msg.includes('daily cap')) break;
+        }
     }
+    throw new Error(errors.join(' | '));
 }
 
 // Trading days whose close the dataset already covers, newest first (weekends skipped).
@@ -196,8 +251,8 @@ function candidateDays(endTs: number, n = 6): string[] {
     return out;
 }
 
-async function fetchAndStore(symbol: string, day: string): Promise<Chain> {
-    const chain = await chainAt(symbol, day);
+async function fetchAndStore(symbol: string, day: string, kind: DatabentoKind = 'chain'): Promise<Chain> {
+    const chain = await chainAt(symbol, day, kind);
     const db = await connectToDatabase();
     await optionChainModel(db).updateOne({ symbol, day }, { $set: { asOf: chain.asOf, quotes: chain.quotes } }, { upsert: true })
         .catch((e) => console.warn('[databento] store chain', symbol, day, e instanceof Error ? e.message : e));
@@ -210,15 +265,16 @@ const refreshing = new Set<string>();
 // day never changes). A visitor never waits on Databento when any recent close is stored: the
 // stored one is served at once and the newer close is fetched in the background
 // (stale-while-revalidate). Only a ticker never seen before waits, and then tries at most the two
-// newest closes.
-export async function getChain(symbol: string): Promise<Chain | null> {
+// newest closes. `fetch: false` (free plans) serves stored chains only and never calls Databento:
+// the nightly pre-load keeps the popular tickers stored for them.
+export async function getChain(symbol: string, { fetch = true }: { fetch?: boolean } = {}): Promise<Chain | null> {
     if (!databentoConfigured() || !isDatabentoSymbol(symbol)) return null;
     const days = candidateDays(Date.parse(await datasetEndTs('OPRA.PILLAR')));
     if (!days.length) return null;
     const db = await connectToDatabase();
     const stored = await optionChainModel(db).findOne({ symbol, day: { $in: days } }).sort({ day: -1 }).lean();
     if (stored) {
-        if (stored.day !== days[0] && !refreshing.has(symbol)) {
+        if (fetch && stored.day !== days[0] && !refreshing.has(symbol)) {
             refreshing.add(symbol);
             const job = () => fetchAndStore(symbol, days[0])
                 .catch((e) => console.warn('[databento] refresh chain', symbol, days[0], e instanceof Error ? e.message : e))
@@ -227,6 +283,7 @@ export async function getChain(symbol: string): Promise<Chain | null> {
         }
         return { underlying: symbol, asOf: stored.asOf, quotes: stored.quotes };
     }
+    if (!fetch) return null;
     for (const day of days.slice(0, 2)) {
         try {
             return await fetchAndStore(symbol, day);
@@ -243,7 +300,7 @@ export async function ensureLatestChain(symbol: string): Promise<string> {
     if (!days.length) return 'no days';
     const db = await connectToDatabase();
     if (await optionChainModel(db).exists({ symbol, day: days[0] })) return `${days[0]} stored`;
-    const c = await fetchAndStore(symbol, days[0]);
+    const c = await fetchAndStore(symbol, days[0], 'prewarm');
     return `${days[0]} fetched · ${c.quotes.length}`;
 }
 

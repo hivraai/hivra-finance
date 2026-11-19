@@ -17,8 +17,10 @@ function sym(input: Json): string {
     return s;
 }
 
-async function loadChain(symbol: string) {
-    const [chain, bars] = await Promise.all([getChain(symbol), getRecentBars(symbol)]);
+async function loadChain(symbol: string, paid: boolean) {
+    // Free plans: stored chains only (popular tickers, pre-loaded nightly); a new ticker is a paid Databento request.
+    const [chain, bars] = await Promise.all([getChain(symbol, { fetch: paid }), getRecentBars(symbol)]);
+    if (!chain && !paid) throw new Error(`The free plan covers option chains for the most traded tickers only; ${symbol} needs Pro`);
     if (!chain || !bars.length) throw new Error(`No option chain for ${symbol}`);
     // The stock's close on the chain's own day, so IV and delta match the quotes.
     const day = chain.asOf.slice(0, 10);
@@ -80,7 +82,7 @@ function reportOut(rep: ReturnType<typeof backtestStock>) {
     };
 }
 
-export async function runTool(name: string, input: Json): Promise<Json> {
+export async function runTool(name: string, input: Json, { paid = false }: { paid?: boolean } = {}): Promise<Json> {
     switch (name) {
         case 'get_technicals': {
             const symbol = sym(input);
@@ -90,7 +92,7 @@ export async function runTool(name: string, input: Json): Promise<Json> {
         }
         case 'get_option_chain': {
             const symbol = sym(input);
-            const { chain, spot, rows, sums } = await loadChain(symbol);
+            const { chain, spot, rows, sums } = await loadChain(symbol, paid);
             const expiry = typeof input.expiry === 'string' && sums.some((s) => s.expiry === input.expiry) ? input.expiry : defaultExpiry(sums);
             const n = Math.min(Math.max(Number(input.strikes_each_side) || 8, 2), 25);
             return {
@@ -101,7 +103,7 @@ export async function runTool(name: string, input: Json): Promise<Json> {
         }
         case 'analyze_option_strategy': {
             const symbol = sym(input);
-            const { spot, rows, chain } = await loadChain(symbol);
+            const { spot, rows, chain } = await loadChain(symbol, paid);
             const expiry = String(input.expiry ?? '');
             const legsIn = Array.isArray(input.legs) ? (input.legs as Json[]).slice(0, 8) : [];
             const legs: Leg[] = legsIn.map((l) => {

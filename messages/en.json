@@ -90,7 +90,8 @@
     "loading": "Loading the {symbol} option chain… The first load of a ticker can take up to a minute.",
     "lockedTitle": "The strategy builder is on Pro",
     "lockedBody": "On Free you can read the chain. Pro adds the builder: pick legs, see the payoff, max profit and loss, breakevens and Greeks.",
-    "lockedCta": "See plans"
+    "lockedCta": "See plans",
+    "noChainFree": "The free plan covers the most traded tickers (SPY, QQQ, AAPL, NVDA, TSLA and more). Upgrade to Pro to open the chain for {symbol}."
   },
   "Password": {
     "rules": {

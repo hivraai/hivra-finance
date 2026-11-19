@@ -35,10 +35,14 @@ export async function generateMetadata() {
 async function Desk({ symbol }: { symbol: string }) {
     const t = await getTranslations('Options');
     const session = await getSession();
-    const [chain, bars, account] = await Promise.all([
-        getChain(symbol).catch(() => null), getRecentBars(symbol).catch(() => []),
-        session?.user ? getAccount(session.user.id, session.user.email) : null,
+    const account = session?.user ? await getAccount(session.user.id, session.user.email) : null;
+    // Free plans only see chains already stored (the popular tickers, pre-loaded nightly):
+    // a new ticker is a paid Databento request, so it is never fetched for them.
+    const paid = Boolean(account && account.plan !== 'free');
+    const [chain, bars] = await Promise.all([
+        getChain(symbol, { fetch: paid }).catch(() => null), getRecentBars(symbol).catch(() => []),
     ]);
+    if (!chain && !paid) return <Panel><p className="text-[13px]">{t('noChainFree', { symbol })}</p></Panel>;
     if (!chain || !bars.length) return <Panel><p className="text-[13px]">{t('noChain', { symbol })}</p></Panel>;
     // The stock's close on the chain's own day, so IV and delta match the quotes.
     const day = chain.asOf.slice(0, 10);

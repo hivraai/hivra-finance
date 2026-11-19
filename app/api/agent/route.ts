@@ -126,7 +126,7 @@ export async function POST(req: Request) {
                         if (b.type !== 'tool_use') continue;
                         send({ type: 'tool', name: b.name, input: b.input });
                         try {
-                            const out = await runTool(b.name, (b.input ?? {}) as Record<string, unknown>);
+                            const out = await runTool(b.name, (b.input ?? {}) as Record<string, unknown>, { paid: account.plan !== 'free' });
                             results.push({ type: 'tool_result', tool_use_id: b.id, content: JSON.stringify(out) });
                         } catch (e) {
                             results.push({ type: 'tool_result', tool_use_id: b.id, content: e instanceof Error ? e.message : 'Tool failed', is_error: true });
