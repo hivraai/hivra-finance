@@ -3,10 +3,8 @@
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import InputField from "@/components/forms/InputField";
-import ChoiceChips from "@/components/forms/ChoiceChips";
 import PasswordRequirements from "@/components/forms/PasswordRequirements";
-import { INVESTMENT_GOALS, passwordValidation, PREFERRED_INDUSTRIES, RISK_TOLERANCE_OPTIONS } from "@/lib/constants";
-import { CountrySelectField } from "@/components/forms/CountrySelectField";
+import { passwordValidation } from "@/lib/constants";
 import FooterLink from "@/components/forms/FooterLink";
 import { signUpWithEmail } from "@/lib/actions/auth.actions";
 import { useRouter } from "next/navigation";
@@ -22,13 +20,11 @@ const SignUp = () => {
     const human = useRef<TurnstileHandle>(null);
     const t = useTranslations('SignUp');
     const tFields = useTranslations('AuthFields');
-    const tPrefs = useTranslations('PreferenceFields');
     const tPassword = useTranslations('Password');
     const router = useRouter()
     const {
         register,
         handleSubmit,
-        control,
         watch,
         formState: { errors, isSubmitting },
     } = useForm<SignUpFormData>({
@@ -68,11 +64,11 @@ const SignUp = () => {
     return (
         <>
             <h1 className="form-title mb-2">{t('title')}</h1>
-            <p className="mb-8 text-faint">{t('subtitle')}</p>
+            <p className="mb-6 text-[14px] text-faint">{t('subtitle')}</p>
 
             <SocialAuthButtons />
 
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
                 <section className="flex flex-col gap-4" aria-label={t('accountSection')}>
                     <InputField
                         name="fullName"
@@ -106,30 +102,14 @@ const SignUp = () => {
                             error={errors.password}
                             validation={passwordValidation({ required: tPassword('required'), minLength: tPassword('minLength'), pattern: tPassword('pattern') })}
                         />
-                        <PasswordRequirements password={passwordValue ?? ''} />
+                        {passwordValue ? <PasswordRequirements password={passwordValue} /> : null}
                     </div>
                 </section>
 
-                <section className="flex flex-col gap-5 border-t border-line pt-6" aria-labelledby="personalize">
-                    <div>
-                        <p id="personalize" className="kicker text-brand-ink">{t('personalize')}</p>
-                        <p className="mt-1 text-[13px] text-faint">{t('personalizeHint')}</p>
-                    </div>
-                    <CountrySelectField
-                        name="country"
-                        label={tPrefs('country')}
-                        control={control}
-                        error={errors.country}
-                        required
-                    />
-                    <ChoiceChips name="investmentGoals" label={tPrefs('investmentGoal')} options={INVESTMENT_GOALS} optionGroup="investmentGoals" control={control} />
-                    <ChoiceChips name="riskTolerance" label={tPrefs('riskTolerance')} options={RISK_TOLERANCE_OPTIONS} optionGroup="riskTolerance" control={control} />
-                    <ChoiceChips name="preferredIndustry" label={tPrefs('preferredIndustry')} options={PREFERRED_INDUSTRIES} optionGroup="industries" control={control} />
-                </section>
 
                 <div className="flex flex-col gap-4">
                     <Turnstile ref={human} onToken={setCaptchaToken} />
-                    <Button type="submit" disabled={isSubmitting || (!!TURNSTILE_SITE_KEY && !captchaToken)} className="yellow-btn w-full">
+                    <Button type="submit" disabled={isSubmitting || (!!TURNSTILE_SITE_KEY && !captchaToken)} className="yellow-btn w-full rounded-full">
                         {isSubmitting ? t('submitting') : t('submit')}
                     </Button>
                     <FooterLink text={t('haveAccount')} linkText={t('signIn')} href="/sign-in" />

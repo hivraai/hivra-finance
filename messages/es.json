@@ -150,7 +150,11 @@
       "action": "Acciones"
     }
   },
-  "AuthLayout": {},
+  "AuthLayout": {
+    "home": "Inicio de HIVRA Finance",
+    "legal": "Al continuar aceptas los",
+    "terms": "Términos y la Privacidad"
+  },
   "AuthFields": {
     "email": "Correo",
     "emailRequired": "El correo es obligatorio",

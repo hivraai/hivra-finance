@@ -55,11 +55,11 @@ const SignIn = () => {
     return (
         <>
             <h1 className="form-title mb-2">{t('title')}</h1>
-            <p className="mb-8 text-faint">{t('subtitle')}</p>
+            <p className="mb-6 text-[14px] text-faint">{t('subtitle')}</p>
 
             <SocialAuthButtons />
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                 <InputField
                     name="email"
                     label={tFields('email')}
@@ -85,7 +85,7 @@ const SignIn = () => {
                     validation={{ required: tPassword('required'), minLength: 8 }}
                 />
 
-                <div className="flex justify-end">
+                <div className="-mt-2 flex justify-end">
                     <Link href="/forgot-password" className="footer-link text-sm">
                         {t('forgotPassword')}
                     </Link>
@@ -93,7 +93,7 @@ const SignIn = () => {
 
                 <Turnstile ref={human} onToken={setCaptchaToken} />
 
-                <Button type="submit" disabled={isSubmitting || (!!TURNSTILE_SITE_KEY && !captchaToken)} className="yellow-btn w-full mt-5">
+                <Button type="submit" disabled={isSubmitting || (!!TURNSTILE_SITE_KEY && !captchaToken)} className="yellow-btn w-full rounded-full">
                     {isSubmitting ? t('submitting') : t('submit')}
                 </Button>
 

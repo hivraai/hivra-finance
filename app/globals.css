@@ -710,6 +710,15 @@
         @apply h-12 cursor-pointer rounded-[11px] bg-brand text-on-brand font-bold text-base disabled:opacity-50 hover:bg-brand-ink active:scale-[0.97] transition-[background-color,transform] duration-150;
         box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.35), 0 6px 18px oklch(0.64 0.16 262 / 0.16);
     }
+    .auth-shell {
+        @apply min-h-dvh bg-page flex items-start justify-center px-4 py-10 sm:items-center;
+    }
+    .auth-column {
+        @apply w-full max-w-[400px] flex flex-col;
+    }
+    .auth-card {
+        @apply rounded-2xl border border-line bg-side p-6 sm:p-8;
+    }
     .auth-layout {
         @apply flex flex-col justify-between lg:flex-row h-dvh bg-page relative overflow-hidden;
     }
@@ -732,7 +741,7 @@
         @apply left-0 hidden w-[1024px] max-w-none lg:block pointer-events-none select-none;
     }
     .form-title {
-        @apply text-3xl font-bold tracking-[-0.04em] text-foreground mb-8;
+        @apply text-2xl font-bold tracking-[-0.03em] text-foreground mb-8;
     }
     .form-label {
         @apply text-[12px] font-bold uppercase tracking-[0.06em] text-faint;

@@ -54,6 +54,7 @@ const Turnstile = forwardRef<TurnstileHandle, { onToken: (token: string | null) 
                 sitekey: TURNSTILE_SITE_KEY,
                 theme: 'dark',
                 size: 'flexible',
+                appearance: 'interaction-only',
                 callback: (t: string) => cb.current(t),
                 'expired-callback': () => cb.current(null),
                 'error-callback': () => cb.current(null),

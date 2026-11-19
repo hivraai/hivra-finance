@@ -55,7 +55,7 @@ const SocialAuthButtons = () => {
     if (providers.length === 0) return null;
 
     return (
-        <div className="space-y-5 mb-5">
+        <div className="mb-5 space-y-5">
             <div className={providers.length > 1 ? 'grid grid-cols-2 gap-3' : 'grid gap-3'}>
                 {providers.map(({ id, label, icon }) => (
                     <Button
@@ -64,17 +64,17 @@ const SocialAuthButtons = () => {
                         variant="outline"
                         disabled={pending !== null}
                         onClick={() => onClick(id)}
-                        className="h-12 border-gray-600 text-gray-400 text-base rounded-lg cursor-pointer"
+                        className="h-11 w-full cursor-pointer rounded-full border-line bg-transparent text-[14px] font-semibold text-foreground hover:bg-hover"
                     >
                         {icon}
                         {pending === id ? t('redirecting') : label}
                     </Button>
                 ))}
             </div>
-            <div className="flex items-center gap-3 text-sm text-gray-500">
-                <span className="h-px flex-1 bg-gray-600" />
+            <div className="flex items-center gap-3 text-[12px] text-faint">
+                <span className="h-px flex-1 bg-line" />
                 {t('or')}
-                <span className="h-px flex-1 bg-gray-600" />
+                <span className="h-px flex-1 bg-line" />
             </div>
         </div>
     );

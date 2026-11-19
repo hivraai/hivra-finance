@@ -6,9 +6,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import HtmlLang from "@/components/HtmlLang";
 import {getSession} from "@/lib/better-auth/auth";
-import ProductPreview from "@/components/landing/ProductPreview";
 import { SocialProvidersProvider } from "@/components/forms/SocialAuthButtons";
 
+// One centred column, like hivra.ai's own sign-in: logo, the form, small print. Nothing else.
 const Layout = async ({ children }: { children : React.ReactNode }) => {
 
     const session = await getSession();
@@ -26,24 +26,18 @@ const Layout = async ({ children }: { children : React.ReactNode }) => {
     return (
         <NextIntlClientProvider>
         <HtmlLang locale={locale} />
-        <main className="auth-layout">
-            <section className="auth-left-section scrollbar-hide-default">
-                <Link href="/" className="auth-logo flex items-center gap-2">
+        <main className="auth-shell">
+            <div className="auth-column">
+                <Link href="/" className="mx-auto mb-8 flex items-center" aria-label={t('home')}>
                     <Wordmark />
                 </Link>
-
-                <div className="pb-6 lg:pb-8 flex-1">
+                <div className="auth-card">
                     <SocialProvidersProvider enabled={socialProviders}>{children}</SocialProvidersProvider>
                 </div>
-            </section>
-            <section className="auth-right-section">
-                <div className="relative flex-1" aria-hidden>
-                    <div className="auth-dashboard-preview absolute top-0">
-                        <ProductPreview />
-                    </div>
-                </div>
-            </section>
-
+                <p className="mt-6 text-center text-[12px] text-faint">
+                    {t('legal')} <Link href="/terms" className="underline underline-offset-2 hover:text-muted-foreground">{t('terms')}</Link>
+                </p>
+            </div>
         </main>
         </NextIntlClientProvider>
     )

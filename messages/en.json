@@ -150,7 +150,11 @@
       "action": "Actions"
     }
   },
-  "AuthLayout": {},
+  "AuthLayout": {
+    "home": "HIVRA Finance home",
+    "legal": "By continuing you agree to the",
+    "terms": "Terms and Privacy"
+  },
   "AuthFields": {
     "email": "Email",
     "emailRequired": "Email is required",
