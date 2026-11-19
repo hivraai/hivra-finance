@@ -7,8 +7,8 @@ export const LANDING_COPY = {
     en: {
         nav: { product: 'Product', plans: 'Plans', data: 'Data', signIn: 'Sign in', start: 'Get started' },
         hero: {
-            title: ['Options research,', 'with an AI analyst.'],
-            sub: 'Build option strategies, backtest them on years of real exchange data and get a written read from the AI before you put money on the line.',
+            title: ['Stock & options research,', 'with an AI analyst.'],
+            sub: 'Read any chart in seconds, build option strategies and test your ideas on years of market history. Then get a plain-language read from the AI before you put money on the line.',
             primary: 'Start free',
             secondary: 'See the plans',
         },
@@ -53,8 +53,8 @@ export const LANDING_COPY = {
     es: {
         nav: { product: 'Producto', plans: 'Planes', data: 'Datos', signIn: 'Entrar', start: 'Empezar' },
         hero: {
-            title: ['Análisis de opciones,', 'con un analista de IA.'],
-            sub: 'Arma estrategias de opciones, pruébalas sobre años de datos reales de la bolsa y recibe la lectura de la IA antes de poner tu dinero.',
+            title: ['Análisis de acciones y opciones,', 'con un analista de IA.'],
+            sub: 'Lee cualquier gráfica en segundos, arma estrategias de opciones y prueba tus ideas sobre años de historia del mercado. Luego recibe la lectura de la IA, en palabras simples, antes de poner tu dinero.',
             primary: 'Empieza gratis',
             secondary: 'Ver planes',
         },
