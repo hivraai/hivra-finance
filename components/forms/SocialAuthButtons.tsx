@@ -67,7 +67,7 @@ const SocialAuthButtons = () => {
                         className="h-11 w-full cursor-pointer rounded-full border-line bg-transparent text-[14px] font-semibold text-foreground hover:bg-hover"
                     >
                         {icon}
-                        {pending === id ? t('redirecting') : label}
+                        {pending === id ? t('redirecting') : t('continueWith', { provider: label })}
                     </Button>
                 ))}
             </div>

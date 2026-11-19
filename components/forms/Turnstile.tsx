@@ -68,7 +68,7 @@ const Turnstile = forwardRef<TurnstileHandle, { onToken: (token: string | null) 
     }, []);
 
     if (!TURNSTILE_SITE_KEY) return null;
-    return <div ref={box} className="min-h-[65px]" />;
+    return <div ref={box} className="empty:hidden" />; // interaction-only: takes no room unless Cloudflare asks for a click
 });
 Turnstile.displayName = 'Turnstile';
 export default Turnstile;

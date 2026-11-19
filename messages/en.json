@@ -233,7 +233,8 @@
     "signInFailed": "Sign in failed",
     "connectionError": "Check your connection and try again.",
     "redirecting": "Redirecting",
-    "or": "or"
+    "or": "or",
+    "continueWith": "Continue with {provider}"
   },
   "CountrySelect": {
     "placeholder": "Select your country...",

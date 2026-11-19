@@ -233,7 +233,8 @@
     "signInFailed": "تعذّر تسجيل الدخول",
     "connectionError": "تحقّق من اتصالك وحاول مرة أخرى.",
     "redirecting": "جارٍ التحويل…",
-    "or": "أو"
+    "or": "أو",
+    "continueWith": "المتابعة باستخدام {provider}"
   },
   "CountrySelect": {
     "placeholder": "اختر بلدك…",

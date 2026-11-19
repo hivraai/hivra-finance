@@ -233,7 +233,8 @@
     "signInFailed": "No se pudo iniciar sesión",
     "connectionError": "Revisa tu conexión e inténtalo de nuevo.",
     "redirecting": "Redirigiendo",
-    "or": "o"
+    "or": "o",
+    "continueWith": "Continuar con {provider}"
   },
   "CountrySelect": {
     "placeholder": "Selecciona tu país...",
