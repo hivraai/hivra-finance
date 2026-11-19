@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Activity, Bot, CandlestickChart, FileBarChart, Layers, Sigma } from "lucide-react";
-import { MarketDial, MarketStatus } from "@/components/landing/MarketClock";
+import { MarketStatus } from "@/components/landing/MarketClock";
+import AgentDemo from "@/components/landing/AgentDemo";
 import ProductPreview from "@/components/landing/ProductPreview";
 import SectionHead from "@/components/marketing/SectionHead";
 import IconCard from "@/components/marketing/IconCard";
@@ -16,7 +17,7 @@ export default async function LandingPage() {
 
     return (
         <>
-            <section className="mx-auto grid max-w-[1200px] items-center gap-12 px-5 pt-14 md:pt-20 lg:grid-cols-[minmax(0,1fr)_320px]">
+            <section className="mx-auto grid max-w-[1200px] items-center gap-12 px-5 pt-14 md:pt-20 lg:grid-cols-[minmax(0,1fr)_420px]">
                 <div>
                     <MarketStatus />
                     <h1 className="mt-6 text-[44px] font-bold leading-[1.02] tracking-[-0.05em] md:text-[68px]">
@@ -29,7 +30,7 @@ export default async function LandingPage() {
                     </div>
                 </div>
                 <div className="hatch">
-                    <div className="card px-6 pb-5 pt-6"><MarketDial /></div>
+                    <AgentDemo copy={t.agent} />
                 </div>
             </section>
 

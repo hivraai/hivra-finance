@@ -1,31 +1,14 @@
 import nodemailer from 'nodemailer';
 import { emailConfigured, fromHeader, transportOptions } from '@/lib/nodemailer/config';
 import {
-    WELCOME_EMAIL_TEMPLATE,
     NEWS_SUMMARY_EMAIL_TEMPLATE,
     STOCK_ALERT_UPPER_EMAIL_TEMPLATE,
     STOCK_ALERT_LOWER_EMAIL_TEMPLATE,
 } from "@/lib/nodemailer/templates";
-import { formatPrice, sanitizeEmailIntro } from "@/lib/utils";
+import { escapeHtml, formatPrice, sanitizeEmailIntro } from "@/lib/utils";
 import { escapeAll, fillTemplate, getEmailTranslator } from "@/lib/nodemailer/i18n";
 import { isWorkersRuntime } from "@/database/mongoose";
-import { communityQrEmailUrl, communityUrl } from '@/lib/community';
-
-// The members' WhatsApp group in the welcome email: a button for phones, a QR (served signed) for desktops.
-// Empty when WHATSAPP_GROUP_URL is not set. Only fixed markup and escaped text go in.
-function communityEmailBlock(email: string, cta: string, scan: string): string {
-    const url = communityUrl();
-    const origin = process.env.BETTER_AUTH_URL;
-    if (!url || !origin) return '';
-    const esc = (v: string) => v.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-    const qr = communityQrEmailUrl(email, origin);
-    return `<table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 0 32px 0; width: 100%;"><tr><td align="center">
-<a href="${esc(url)}" style="display: inline-block; background: #25D366; color: #FFFFFF; text-decoration: none; padding: 14px 28px; border-radius: 999px; font-size: 16px; font-weight: 600;">${esc(cta)}</a>
-<p style="margin: 20px 0 8px 0; font-size: 13px; color: #CCDADC;">${esc(scan)}</p>
-<img src="${esc(qr)}" alt="" width="160" height="160" style="display: block; margin: 0 auto; width: 160px; height: 160px; border-radius: 12px; background: #FFFFFF;" />
-</td></tr></table>`;
-}
-
+import { emailLayout, featureRows } from '@/lib/nodemailer/layout';
 
 type EmailSendResult =
     | { status: 'skipped' }
@@ -87,24 +70,20 @@ export const sendWelcomeEmail = async ({ email, name, intro, locale }: WelcomeEm
         }
 
         const { lang, t } = await getEmailTranslator(locale);
-        const htmlTemplate = fillTemplate(WELCOME_EMAIL_TEMPLATE, {
-            ...escapeAll({
-                title: t('welcome.title'),
-                logoAlt: t('common.logoAlt'),
-                dashboardAlt: t('welcome.dashboardAlt'),
-                heading: t('welcome.heading', { name }),
-                featuresLabel: t('welcome.featuresLabel'),
-                featureWatchlist: t('welcome.featureWatchlist'),
-                featureSearch: t('welcome.featureSearch'),
-                featureDashboard: t('welcome.featureDashboard'),
-                closing: t('welcome.closing'),
-                cta: t('welcome.cta'),
-                unsubscribe: t('common.unsubscribe'),
-                visitSite: t('common.visitSite'),
-            }),
+        const site = 'https://finance.hivra.ai';
+        const htmlTemplate = emailLayout({
             lang,
-            intro: sanitizeEmailIntro(intro),
-            communityBlock: communityEmailBlock(email, t('welcome.communityCta'), t('welcome.communityScan')),
+            preheader: t('welcome.preheader'),
+            heading: name?.trim() ? t('welcome.heading', { name: name.trim() }) : t('welcome.title'),
+            body: sanitizeEmailIntro(intro) + featureRows([
+                { title: t('welcome.f1Title'), body: t('welcome.f1Body') },
+                { title: t('welcome.f2Title'), body: t('welcome.f2Body') },
+                { title: t('welcome.f3Title'), body: t('welcome.f3Body') },
+            ]),
+            cta: t('welcome.cta'),
+            href: `${site}/dashboard`,
+            note: t('welcome.note'),
+            footer: `© HIVRA Finance · <a href="${site}" style="color:#71717a;">finance.hivra.ai</a><br>${escapeHtml(t('welcome.disclaimer'))}`,
         });
 
         const mailOptions = {

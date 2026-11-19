@@ -297,5 +297,5 @@ export const sanitizeEmailIntro = (html: string) => {
         .replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
         .trim();
     const safe = escapeHtml(text).replace(/&lt;(\/?)strong&gt;/gi, '<$1strong>');
-    return `<p class="mobile-text" style="margin: 0 0 30px 0; font-size: 16px; line-height: 1.6; color: #CCDADC;">${safe}</p>`;
+    return `<p style="margin: 0; font-size: 15px; line-height: 1.65; color: #d4d4d8;">${safe.replace(/<strong>/g, '<strong style="color:#ffffff;">')}</p>`;
 };
