@@ -311,7 +311,9 @@
       "featureSearch": "Search any stock with ⌘K and open it as a tab",
       "featureDashboard": "Explore the dashboard for trends and the latest market news",
       "closing": "We'll keep you informed with timely updates, insights, and alerts — so you can focus on making the right calls.",
-      "cta": "Go to Dashboard"
+      "cta": "Go to Dashboard",
+      "communityCta": "Join the WhatsApp group",
+      "communityScan": "Or scan this code with your phone"
     },
     "resetPassword": {
       "subject": "Reset your HIVRA Finance password",
@@ -577,5 +579,20 @@
     "retryHint": "“{list}” was created — press the button again to retry adding {symbol}.",
     "retryAdd": "Retry add",
     "createAndAdd": "Create and add"
+  },
+  "Community": {
+    "kicker": "Members' group",
+    "title": "Join the HIVRA Finance WhatsApp group",
+    "body": "Setups, market talk and product news with other members, right in WhatsApp.",
+    "join": "Join the WhatsApp group",
+    "scanHint": "On a computer? Scan the code with your phone's camera.",
+    "qrAlt": "QR code to join the WhatsApp group",
+    "welcomeTitle": "Welcome to HIVRA Finance",
+    "welcomeSub": "Your account is ready. One more step: join the members' group.",
+    "paidTitle": "Payment received, thank you",
+    "paidSub": "Your plan is being switched on. While it does, join the members' group.",
+    "continue": "Go to the dashboard",
+    "emailCta": "Join the WhatsApp group",
+    "emailScan": "Or scan this code with your phone"
   }
 }

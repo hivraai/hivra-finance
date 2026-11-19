@@ -46,7 +46,7 @@ describe('middleware', () => {
     });
 
     it('runs only on the signed-in app, so public pages, prefetches and crawler files never pay for it', () => {
-        expect(config.matcher).toEqual(['/dashboard/:path*', '/watchlist/:path*', '/profile/:path*', '/stocks/:path*']);
+        expect(config.matcher).toEqual(['/dashboard/:path*', '/watchlist/:path*', '/profile/:path*', '/stocks/:path*', '/welcome', '/checkout/:path*']);
     });
 });
 

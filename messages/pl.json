@@ -311,7 +311,9 @@
       "featureSearch": "Wyszukaj dowolną akcję za pomocą ⌘K i otwórz ją w nowej karcie",
       "featureDashboard": "Zajrzyj na pulpit, żeby zobaczyć trendy i najnowsze wiadomości z rynku",
       "closing": "Będziemy informować cię o nowościach, spostrzeżeniach i alertach — a ty skup się na podejmowaniu dobrych decyzji.",
-      "cta": "Przejdź do pulpitu"
+      "cta": "Przejdź do pulpitu",
+      "communityCta": "Dołącz do grupy WhatsApp",
+      "communityScan": "Albo zeskanuj ten kod telefonem"
     },
     "resetPassword": {
       "subject": "Zresetuj hasło do HIVRA Finance",
@@ -577,5 +579,20 @@
     "retryHint": "Lista „{list}” została utworzona — kliknij przycisk jeszcze raz, żeby ponowić dodanie {symbol}.",
     "retryAdd": "Ponów dodanie",
     "createAndAdd": "Utwórz i dodaj"
+  },
+  "Community": {
+    "kicker": "Grupa członków",
+    "title": "Dołącz do grupy WhatsApp HIVRA Finance",
+    "body": "Pomysły, rozmowy o rynku i nowości produktu z innymi członkami, prosto w WhatsApp.",
+    "join": "Dołącz do grupy WhatsApp",
+    "scanHint": "Na komputerze? Zeskanuj kod aparatem telefonu.",
+    "qrAlt": "Kod QR do grupy WhatsApp",
+    "welcomeTitle": "Witaj w HIVRA Finance",
+    "welcomeSub": "Twoje konto jest gotowe. Jeszcze jeden krok: dołącz do grupy członków.",
+    "paidTitle": "Płatność otrzymana, dziękujemy",
+    "paidSub": "Włączamy Twój plan. W międzyczasie dołącz do grupy członków.",
+    "continue": "Przejdź do panelu",
+    "emailCta": "Dołącz do grupy WhatsApp",
+    "emailScan": "Albo zeskanuj ten kod telefonem"
   }
 }

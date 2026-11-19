@@ -137,6 +137,8 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
                                 {{closing}}
                             </p>
 
+                            {{communityBlock}}
+
                             <!-- CTA Button -->
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 0 40px 0; width: 100%;">
                                 <tr>

@@ -8,6 +8,23 @@ import {
 import { formatPrice, sanitizeEmailIntro } from "@/lib/utils";
 import { escapeAll, fillTemplate, getEmailTranslator } from "@/lib/nodemailer/i18n";
 import { isWorkersRuntime } from "@/database/mongoose";
+import { communityQrEmailUrl, communityUrl } from '@/lib/community';
+
+// The members' WhatsApp group in the welcome email: a button for phones, a QR (served signed) for desktops.
+// Empty when WHATSAPP_GROUP_URL is not set. Only fixed markup and escaped text go in.
+function communityEmailBlock(email: string, cta: string, scan: string): string {
+    const url = communityUrl();
+    const origin = process.env.BETTER_AUTH_URL;
+    if (!url || !origin) return '';
+    const esc = (v: string) => v.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const qr = communityQrEmailUrl(email, origin);
+    return `<table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 0 32px 0; width: 100%;"><tr><td align="center">
+<a href="${esc(url)}" style="display: inline-block; background: #25D366; color: #FFFFFF; text-decoration: none; padding: 14px 28px; border-radius: 999px; font-size: 16px; font-weight: 600;">${esc(cta)}</a>
+<p style="margin: 20px 0 8px 0; font-size: 13px; color: #CCDADC;">${esc(scan)}</p>
+<img src="${esc(qr)}" alt="" width="160" height="160" style="display: block; margin: 0 auto; width: 160px; height: 160px; border-radius: 12px; background: #FFFFFF;" />
+</td></tr></table>`;
+}
+
 
 type EmailSendResult =
     | { status: 'skipped' }
@@ -93,6 +110,7 @@ export const sendWelcomeEmail = async ({ email, name, intro, locale }: WelcomeEm
             }),
             lang,
             intro: sanitizeEmailIntro(intro),
+            communityBlock: communityEmailBlock(email, t('welcome.communityCta'), t('welcome.communityScan')),
         });
 
         const mailOptions = {
