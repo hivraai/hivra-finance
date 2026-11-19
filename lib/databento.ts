@@ -42,7 +42,7 @@ async function call(path: string, params: Record<string, string>, timeoutMs = 25
 // Full ISO timestamp (OPRA's end is intraday); slice(0, 10) where a date is wanted.
 const datasetEndTs = unstable_cache(async (dataset: string): Promise<string> => {
     try {
-        const j = JSON.parse(await call('metadata.get_dataset_range', { dataset }, 12_000)) as { end?: string };
+        const j = JSON.parse(await call('metadata.get_dataset_range', { dataset }, 5_000)) as { end?: string };
         if (j.end) return j.end;
     } catch (e) {
         console.warn('[databento] dataset range', dataset, e instanceof Error ? e.message : e);
