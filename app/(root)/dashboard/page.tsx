@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import type { Messages } from "next-intl";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import Panel from "@/components/Panel";
+import ConnectAiCard from "@/components/connect/ConnectAiCard";
 import TopStories, { TopStoriesSkeleton } from "@/components/news/TopStories";
 import IndexPulse, { PulseSkeleton } from "@/components/IndexPulse";
 import { LocalizedDataFreshness } from "@/components/DataFreshness";
@@ -53,6 +54,8 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
                     <p className="page-sub">{t('sub', { market: name, status: open ? 'open' : 'closed', feed })}</p>
                 </div>
             </header>
+
+            <ConnectAiCard />
 
             <MarketSwitcher active={market.id} openIds={MARKETS.filter((m) => isMarketOpen(m)).map((m) => m.id)} />
 

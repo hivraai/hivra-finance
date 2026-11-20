@@ -448,7 +448,8 @@
       "apiDocs": "API docs",
       "about": "About",
       "terms": "Terms",
-      "billing": "Plan & billing"
+      "billing": "Plan & billing",
+      "connectAi": "Connect your AI"
     },
     "support": "Support HIVRA Finance",
     "sponsor": "Sponsor",
@@ -1090,5 +1091,52 @@
     },
     "tooMany": "You looked up many tickers in the last hour. Try again in a little while.",
     "quick": "Quick picks"
+  },
+  "Connect": {
+    "title": "Connect your AI",
+    "sub": "Use HIVRA Finance from Claude or ChatGPT, by text or by voice.",
+    "cardTitle": "Connect your AI",
+    "cardBody": "Ask Claude or ChatGPT about any ticker, option chain or whale trade, by text or by voice. They read your HIVRA Finance data.",
+    "cardCta": "Connect",
+    "urlTitle": "Your connector URL",
+    "copy": "Copy",
+    "copied": "Copied",
+    "urlHint": "Paste it in Claude or ChatGPT as a custom connector. You approve the connection here, with your HIVRA Finance login.",
+    "claude": {
+      "title": "Claude",
+      "step1": "In Claude, open Settings → Connectors → Add custom connector.",
+      "step2": "Name it HIVRA Finance and paste the URL above.",
+      "step3": "Press Connect, sign in here and press Approve."
+    },
+    "chatgpt": {
+      "title": "ChatGPT",
+      "step1": "In ChatGPT, open Settings → Apps & Connectors → Advanced settings and turn on Developer mode.",
+      "step2": "Create a connector: name HIVRA Finance, paste the URL above, authentication OAuth.",
+      "step3": "Sign in here and press Approve, then pick HIVRA Finance in a new chat."
+    },
+    "voiceTitle": "Talk to it",
+    "voiceBody": "Once connected, ask out loud in the Claude or ChatGPT app wherever it lets connectors work in voice mode, for example \"what are the biggest whale trades on NVDA today?\".",
+    "toolsTitle": "What your AI can use",
+    "tools": {
+      "technicals": "Technicals: RSI, MACD, moving averages, support and resistance",
+      "chain": "Option chains with IV and Greeks (last close)",
+      "strategy": "Strategy maths: max profit, max loss, breakevens, Greeks",
+      "backtests": "Stock and options backtests since 2018",
+      "signals": "Market signals (Pro and Elite): whales, flow, GEX, IV rank, dark pool, earnings, short interest, ETF flow, Congress, insiders, FDA, macro"
+    },
+    "safety": "Read-only: it cannot trade, move money or see your billing. Not financial advice. Options trading involves substantial risk of loss.",
+    "connectedTitle": "Connected apps",
+    "none": "Nothing connected yet.",
+    "connectedOn": "Connected {date}",
+    "lastUsed": "last used {date}",
+    "disconnect": "Disconnect",
+    "approveTitle": "{app} wants to use your HIVRA Finance account",
+    "approveBody": "Signed in as {email}.",
+    "approveCan": "It can read your research tools: technicals, option chains, strategies, backtests and, on Pro and Elite, market signals.",
+    "approveCannot": "It cannot trade, move money, change your plan or see your billing.",
+    "approve": "Approve",
+    "deny": "Cancel",
+    "approveHint": "You can disconnect it any time from Connect your AI.",
+    "badRequest": "This connection request is not valid any more. Start again from Claude or ChatGPT."
   }
 }
