@@ -91,7 +91,21 @@
     "lockedTitle": "The strategy builder is on Pro",
     "lockedBody": "On Free you can read the chain. Pro adds the builder: pick legs, see the payoff, max profit and loss, breakevens and Greeks.",
     "lockedCta": "See plans",
-    "noChainFree": "The free plan covers the most traded tickers (SPY, QQQ, AAPL, NVDA, TSLA and more). Upgrade to Pro to open the chain for {symbol}."
+    "noChainFree": "The free plan covers the most traded tickers (SPY, QQQ, AAPL, NVDA, TSLA and more). Upgrade to Pro to open the chain for {symbol}.",
+    "whatIf": {
+      "title": "What if…",
+      "price": "Stock price",
+      "atExpiry": "At expiry ({date})",
+      "onDate": "On {date} ({days} days from now)",
+      "dateHint": "Drag left to see the value before expiry.",
+      "result": "If the stock is at {price}:",
+      "onRisk": "on the money at risk",
+      "move": "Move",
+      "stock": "Stock",
+      "pl": "Profit / loss",
+      "return": "Return",
+      "note": "Click a row to use that price. Before expiry, options are re-priced with today's implied volatility; real prices will differ. Not financial advice."
+    }
   },
   "Password": {
     "rules": {

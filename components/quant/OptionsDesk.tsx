@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Sparkles, Trash2 } from 'lucide-react';
 import LineChart from '@/components/quant/LineChart';
-import { analyze, netPremium, positionGreeks, preset, type Leg, type PresetName } from '@/lib/quant/strategy';
+import { analyze, netPremium, payoffNow, positionGreeks, preset, type Leg, type PresetName } from '@/lib/quant/strategy';
 import type { ChainRow, ExpirySummary } from '@/lib/quant/chain';
 import { cn } from '@/lib/utils';
 
@@ -205,9 +205,77 @@ export default function OptionsDesk({ symbol, spot, asOf, rows, expiries, defaul
                             <p className="text-[11.5px] text-faint">{t('pricingNote')}</p>
                         </div>
                     )}
+                    {a && <WhatIf key={legs.map((l) => (l.kind === 'option' ? `${l.right}${l.strike}${l.qty}` : `s${l.qty}`)).join('|')} legs={legs} spot={spot} maxLoss={a.maxLoss} net={net} />}
                 </div>
                 )}
             </div>
+        </div>
+    );
+}
+
+// "What if": profit or loss if the stock is at a chosen price on a chosen day (expiry by default).
+// Before expiry each option is re-priced with Black-Scholes at its own IV and the time left.
+function WhatIf({ legs, spot, maxLoss, net }: { legs: Leg[]; spot: number; maxLoss: number | null; net: number }) {
+    const t = useTranslations('Options');
+    const dte = Math.max(0, ...legs.map((l) => (l.kind === 'option' && l.years ? Math.round(l.years * 365) : 0)));
+    const [target, setTarget] = useState(+spot.toFixed(2));
+    const [days, setDays] = useState(dte); // days from today; dte = at expiry
+    const plAt = (price: number) => payoffNow(legs.map((l) => (l.kind === 'option' && l.years ? { ...l, years: Math.max(l.years - days / 365, 0) } : l)), price);
+    // Return on the money at risk: max loss when it is limited, else the debit paid.
+    const risk = maxLoss != null && maxLoss > 0 ? maxLoss : net < 0 ? -net : null;
+    const pct = (pl: number) => (risk ? `${pl >= 0 ? '+' : ''}${((pl / risk) * 100).toFixed(0)}%` : '—');
+    const sign = (v: number) => (v >= 0 ? '+' : '');
+    const pl = plAt(target);
+    const move = ((target - spot) / spot) * 100;
+    const lo = +(spot * 0.5).toFixed(2), hi = +(spot * 1.5).toFixed(2);
+    const date = new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10);
+    const rows = [-20, -10, -5, 0, 5, 10, 20].map((m) => ({ m, price: spot * (1 + m / 100) }));
+    return (
+        <div className="card flex flex-col gap-3 p-4">
+            <p className="text-[14px] font-semibold">{t('whatIf.title')}</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+                <label className="flex flex-col gap-1 text-[12.5px] text-muted-foreground">
+                    {t('whatIf.price')}
+                    <div className="flex items-center gap-2">
+                        <input type="number" step="0.5" min={0} value={target} onChange={(e) => setTarget(Math.max(0, +e.target.value || 0))}
+                            className="num h-9 w-28 rounded-lg border border-line bg-canvas px-2 text-[14px] text-foreground" />
+                        <span className={cn('num text-[12.5px]', move >= 0 ? 'text-up' : 'text-down')}>{sign(move)}{move.toFixed(1)}%</span>
+                    </div>
+                    <input type="range" min={lo} max={hi} step={(hi - lo) / 200} value={Math.min(Math.max(target, lo), hi)} onChange={(e) => setTarget(+(+e.target.value).toFixed(2))} />
+                </label>
+                <label className="flex flex-col gap-1 text-[12.5px] text-muted-foreground">
+                    {days >= dte ? t('whatIf.atExpiry', { date }) : t('whatIf.onDate', { date, days })}
+                    <input type="range" min={0} max={dte} step={1} value={days} onChange={(e) => setDays(+e.target.value)} disabled={dte === 0} />
+                    <span className="text-[11.5px] text-faint">{t('whatIf.dateHint')}</span>
+                </label>
+            </div>
+            <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
+                <span className="text-[13px] text-muted-foreground">{t('whatIf.result', { price: px(target) })}</span>
+                <span className={cn('num text-2xl font-bold', pl >= 0 ? 'text-up' : 'text-down')}>{sign(pl)}{money(pl)}</span>
+                <span className={cn('num text-[13px] font-semibold', pl >= 0 ? 'text-up' : 'text-down')}>{pct(pl)} {t('whatIf.onRisk')}</span>
+            </div>
+            <div className="overflow-x-auto">
+                <table className="w-full text-[13px]">
+                    <thead><tr className="text-left text-[11.5px] text-muted-foreground">
+                        <th className="py-1 font-medium">{t('whatIf.move')}</th><th className="py-1 font-medium">{t('whatIf.stock')}</th>
+                        <th className="py-1 text-right font-medium">{t('whatIf.pl')}</th><th className="py-1 text-right font-medium">{t('whatIf.return')}</th>
+                    </tr></thead>
+                    <tbody>
+                        {rows.map(({ m, price }) => {
+                            const v = plAt(price);
+                            return (
+                                <tr key={m} className={cn('cursor-pointer border-t border-line hover:bg-black/5', m === 0 && 'font-semibold')} onClick={() => setTarget(+price.toFixed(2))}>
+                                    <td className="num py-1.5">{sign(m)}{m}%</td>
+                                    <td className="num py-1.5">{px(price)}</td>
+                                    <td className={cn('num py-1.5 text-right', v >= 0 ? 'text-up' : 'text-down')}>{sign(v)}{money(v)}</td>
+                                    <td className={cn('num py-1.5 text-right', v >= 0 ? 'text-up' : 'text-down')}>{pct(v)}</td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+            <p className="text-[11.5px] text-faint">{t('whatIf.note')}</p>
         </div>
     );
 }

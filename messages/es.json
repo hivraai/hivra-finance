@@ -91,7 +91,21 @@
     "lockedTitle": "El constructor de estrategias es de Pro",
     "lockedBody": "En Gratis puedes leer la cadena. Pro agrega el constructor: elige patas y ve el resultado, ganancia y pérdida máximas, puntos de equilibrio y griegas.",
     "lockedCta": "Ver planes",
-    "noChainFree": "El plan gratis incluye las acciones más negociadas (SPY, QQQ, AAPL, NVDA, TSLA y más). Pasa a Pro para abrir la cadena de {symbol}."
+    "noChainFree": "El plan gratis incluye las acciones más negociadas (SPY, QQQ, AAPL, NVDA, TSLA y más). Pasa a Pro para abrir la cadena de {symbol}.",
+    "whatIf": {
+      "title": "¿Y si…?",
+      "price": "Precio de la acción",
+      "atExpiry": "Al vencimiento ({date})",
+      "onDate": "El {date} (en {days} días)",
+      "dateHint": "Arrastra a la izquierda para ver el valor antes del vencimiento.",
+      "result": "Si la acción está en {price}:",
+      "onRisk": "sobre el dinero en riesgo",
+      "move": "Movimiento",
+      "stock": "Acción",
+      "pl": "Ganancia / pérdida",
+      "return": "Retorno",
+      "note": "Haz clic en una fila para usar ese precio. Antes del vencimiento, las opciones se valoran con la volatilidad implícita de hoy; los precios reales serán distintos. No es asesoría financiera."
+    }
   },
   "Password": {
     "rules": {

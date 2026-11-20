@@ -4,7 +4,7 @@ import 'server-only';
 import { getChain, getFullBars, getRecentBars, isDatabentoSymbol } from '@/lib/databento';
 import { summarize } from '@/lib/quant/indicators';
 import { aroundAtm, defaultExpiry, enrich, expiries, yearsTo, type ChainRow } from '@/lib/quant/chain';
-import { analyze, netPremium, positionGreeks, type Leg } from '@/lib/quant/strategy';
+import { analyze, netPremium, payoffNow, positionGreeks, type Leg } from '@/lib/quant/strategy';
 import { backtestOptions, backtestStock, type OptionStrategy, type StockStrategy } from '@/lib/quant/backtest';
 import { OPTION_PARAMS, STOCK_PARAMS, cleanParams } from '@/lib/quant/backtest-presets';
 import { SIGNAL_TOOL_DEFS, runSignalTool } from '@/lib/signals/tools';
@@ -45,7 +45,7 @@ export const TOOL_DEFS = [
     },
     {
         name: 'analyze_option_strategy',
-        description: 'Price a multi-leg option position at last-close mids and return net premium (positive = credit), max profit, max loss (null = unlimited), breakevens and position Greeks (per position, theta per day). Legs use contracts of one expiry. Use get_option_chain first to pick real strikes.',
+        description: 'Price a multi-leg option position at last-close mids and return net premium (positive = credit), max profit, max loss (null = unlimited), breakevens and position Greeks (per position, theta per day). Legs use contracts of one expiry. Use get_option_chain first to pick real strikes. Also answers "what if": profit/loss and return on the money at risk if the stock is at given prices (target_prices; default -20% to +20%) at expiry or on an earlier date (on_date, options re-priced with Black-Scholes at their IV).',
         input_schema: {
             type: 'object',
             properties: {
@@ -53,6 +53,8 @@ export const TOOL_DEFS = [
                 expiry: { type: 'string', description: 'YYYY-MM-DD' },
                 legs: { type: 'array', items: { type: 'object', properties: { right: { type: 'string', enum: ['call', 'put'] }, strike: { type: 'number' }, qty: { type: 'integer', description: 'contracts, negative = sell' } }, required: ['right', 'strike', 'qty'] } },
                 stock_shares: { type: 'integer', description: 'shares of the stock in the position, negative = short (e.g. 100 for a covered call)' },
+                target_prices: { type: 'array', items: { type: 'number' }, description: 'stock prices to evaluate ("what if it is at 150"); default spot -20/-10/-5/0/+5/+10/+20%' },
+                on_date: { type: 'string', description: 'YYYY-MM-DD to value the position before expiry; default = at expiry' },
             },
             required: ['symbol', 'expiry', 'legs'],
         },
@@ -119,11 +121,25 @@ export async function runTool(name: string, input: Json, { paid = false }: { pai
             if (shares) legs.push({ kind: 'stock', qty: shares, price: spot });
             if (!legs.length) throw new Error('No legs');
             const a = analyze(legs, spot), g = positionGreeks(legs, spot);
+            const net = netPremium(legs);
+            // "What if": P/L if the stock is at each price on on_date (default expiry).
+            const full = yearsTo(expiry, chain.asOf);
+            const onDate = typeof input.on_date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(input.on_date) && input.on_date < expiry ? input.on_date : expiry;
+            const left = onDate === expiry ? 0 : Math.max(yearsTo(expiry, onDate), 0);
+            const shifted: Leg[] = legs.map((l) => (l.kind === 'option' ? { ...l, years: Math.min(left, full) } : l));
+            const risk = a.maxLoss != null && a.maxLoss > 0 ? a.maxLoss : net < 0 ? -net : null;
+            const asked = Array.isArray(input.target_prices) ? (input.target_prices as unknown[]).map(Number).filter((n) => n > 0).slice(0, 15) : [];
+            const prices = asked.length ? asked : [-20, -10, -5, 0, 5, 10, 20].map((m) => spot * (1 + m / 100));
+            const whatIf = {
+                valuedOn: onDate, atExpiry: onDate === expiry,
+                rows: prices.map((p) => { const pl = payoffNow(shifted, p); return { stockPrice: r2(p), movePct: r2(((p - spot) / spot) * 100, 1), profitLoss: r2(pl), returnOnRiskPct: risk ? r2((pl / risk) * 100, 0) : null }; }),
+            };
             return {
                 symbol, spot, expiry, legs: legsIn, netPremium: r2(netPremium(legs)),
                 maxProfit: r2(a.maxProfit), maxLoss: r2(a.maxLoss), breakevens: a.breakevens,
                 greeks: { delta: r2(g.delta, 1), gamma: r2(g.gamma, 3), thetaPerDay: r2(g.theta), vegaPerVolPoint: r2(g.vega), rho: r2(g.rho) },
-                note: 'Priced at last-close mids; real fills land between bid and ask. Max profit null = unlimited, max loss null = unlimited.',
+                whatIf,
+                note: 'Priced at last-close mids; real fills land between bid and ask. Max profit null = unlimited, max loss null = unlimited. whatIf before expiry uses today\'s implied volatility; real prices will differ. Not financial advice.',
             };
         }
         case 'backtest_stock': {
