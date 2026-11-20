@@ -19,7 +19,7 @@ const TITLES: Record<string, string> = {
     backtest_stock: 'Backtest a stock rule', backtest_options: 'Backtest an options strategy', get_market_signals: 'Market signals',
 };
 
-const INSTRUCTIONS = `HIVRA Finance: research tools for US stocks, ETFs and options. Prices and option chains are end-of-day (say the data date). Market signals (whale orders, flow, GEX, IV rank, dark pool, earnings, short interest, ETF flow, congress and insider trades, FDA catalysts, macro calendar) need a Pro or Elite plan and cover recorded large orders, not the full tape. These tools never place trades. Present findings as research, not personal financial advice: options trading involves substantial risk of loss and past flow signals do not guarantee future results.`;
+const INSTRUCTIONS = `HIVRA Finance: research tools for US stocks, ETFs and options. Prices and option chains are end-of-day (say the data date). Market signals (whale orders, flow, GEX, IV rank, dark pool, earnings, short interest, ETF flow, congress and insider trades, FDA catalysts, macro calendar) need a Pro or Elite plan and cover recorded large orders, not the full tape. Crypto perpetuals (funding, open interest) come live from Hyperliquid's public data; trading happens on Hyperliquid itself. These tools never place trades. Present findings as research, not personal financial advice: options trading involves substantial risk of loss and past flow signals do not guarantee future results.`;
 
 type Rpc = { jsonrpc: '2.0'; id?: string | number | null; method: string; params?: Record<string, unknown> };
 

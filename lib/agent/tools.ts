@@ -8,6 +8,7 @@ import { analyze, netPremium, payoffNow, positionGreeks, type Leg } from '@/lib/
 import { backtestOptions, backtestStock, type OptionStrategy, type StockStrategy } from '@/lib/quant/backtest';
 import { OPTION_PARAMS, STOCK_PARAMS, cleanParams } from '@/lib/quant/backtest-presets';
 import { SIGNAL_TOOL_DEFS, runSignalTool } from '@/lib/signals/tools';
+import { findPerp, getFundingHistory, getPerps, tradeUrl, type Perp } from '@/lib/hyperliquid';
 
 type Json = Record<string, unknown>;
 const r2 = (n: number | null | undefined, d = 2) => (n == null || !Number.isFinite(n) ? null : Math.round(n * 10 ** d) / 10 ** d);
@@ -69,8 +70,18 @@ export const TOOL_DEFS = [
         description: 'MODELLED options backtest on real daily stock prices since 2018: each cycle opens on a close at Black-Scholes prices (vol = 20-day historical vol × 1.1), holds to expiry and repeats. Not historical option quotes; say so. Strategies: covered_call, cash_secured_put, long_call, long_put {otmPct, days}; iron_condor {wingPct, widthPct, days}.',
         input_schema: { type: 'object', properties: { symbol: { type: 'string' }, strategy: { type: 'string', enum: ['covered_call', 'cash_secured_put', 'long_call', 'long_put', 'iron_condor'] }, params: { type: 'object' }, start: { type: 'string' } }, required: ['symbol', 'strategy'] },
     },
+    {
+        name: 'get_crypto_perps',
+        description: 'Live crypto perpetual futures from Hyperliquid (public market data): mark price, 24h change, funding rate (hourly and annualised), open interest and 24h volume in USD, max leverage. With coin (e.g. BTC, ETH, SOL): that perp plus its last 7 days of hourly funding. Without coin: the top perps sorted by volume, open interest, or most positive / most negative funding. Read-only; the user trades on Hyperliquid itself (trade_url), never through HIVRA.',
+        input_schema: { type: 'object', properties: { coin: { type: 'string', description: 'BTC, ETH, SOL …; omit for a ranking' }, sort: { type: 'string', enum: ['volume', 'open_interest', 'funding_high', 'funding_low'] }, limit: { type: 'number', description: '1-30, default 10' } } },
+    },
     ...SIGNAL_TOOL_DEFS,
 ] as const;
+
+const perpOut = (p: Perp) => ({
+    coin: p.coin, mark: p.mark, change24hPct: r2(p.changePct), fundingHourlyPct: r2(p.fundingHourly * 100, 5), fundingAprPct: r2(p.fundingAprPct, 1),
+    openInterestUsd: Math.round(p.openInterestUsd), volume24hUsd: Math.round(p.volume24hUsd), maxLeverage: p.maxLeverage, trade_url: tradeUrl(p.coin),
+});
 
 function reportOut(rep: ReturnType<typeof backtestStock>) {
     const m = (x: typeof rep.metrics) => ({
@@ -162,6 +173,21 @@ export async function runTool(name: string, input: Json, { paid = false }: { pai
         }
         case 'get_market_signals':
             return runSignalTool(name, input, { paid });
+        case 'get_crypto_perps': {
+            const note = 'Source: Hyperliquid, live. Positive funding = longs pay shorts. Perpetuals are leveraged; not financial advice.';
+            if (typeof input.coin === 'string' && input.coin.trim()) {
+                const p = await findPerp(input.coin);
+                if (!p) throw new Error(`Hyperliquid has no perpetual for ${input.coin}`);
+                const hist = await getFundingHistory(p.coin).catch(() => []);
+                const avg = hist.length ? hist.reduce((a, h) => a + h.fundingHourly, 0) / hist.length : null;
+                return { ...perpOut(p), funding7d: { samples: hist.length, avgAprPct: avg == null ? null : r2(avg * 24 * 365 * 100, 1), last24: hist.slice(-24).map((h) => ({ t: h.time.slice(5, 16), aprPct: r2(h.fundingHourly * 24 * 365 * 100, 1) })) }, note };
+            }
+            const key = { volume: (p: Perp) => -p.volume24hUsd, open_interest: (p: Perp) => -p.openInterestUsd, funding_high: (p: Perp) => -p.fundingHourly, funding_low: (p: Perp) => p.fundingHourly }[String(input.sort)] ?? ((p: Perp) => -p.volume24hUsd);
+            const limit = Math.min(Math.max(Math.trunc(Number(input.limit)) || 10, 1), 30);
+            // Funding rankings skip thin markets, where a tiny book can post an extreme rate.
+            const perps = (await getPerps()).filter((p) => !String(input.sort).startsWith('funding') || p.volume24hUsd >= 1_000_000);
+            return { sort: input.sort ?? 'volume', perps: perps.sort((a, b) => key(a) - key(b)).slice(0, limit).map(perpOut), note };
+        }
         default:
             throw new Error(`Unknown tool ${name}`);
     }

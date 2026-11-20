@@ -327,7 +327,9 @@
     "quotesTitle": "الأسعار",
     "quotesSub": "{market} · القادة حسب المجموعة",
     "storiesTitle": "أهم الأخبار",
-    "storiesSub": "مالية فقط · الأحدث أولًا · كل 5 دقائق"
+    "storiesSub": "مالية فقط · الأحدث أولًا · كل 5 دقائق",
+    "perpsTitle": "العقود الآجلة الدائمة",
+    "perpsSub": "الأكثر تداولاً على Hyperliquid: التمويل والفائدة المفتوحة"
   },
   "MarketSwitcher": {
     "label": "السوق",
@@ -1152,5 +1154,21 @@
     "deny": "إلغاء",
     "approveHint": "يمكنك فصله في أي وقت من صفحة اربط ذكاءك الاصطناعي.",
     "badRequest": "طلب الربط هذا لم يعد صالحًا. ابدأ من جديد من Claude أو ChatGPT."
+  },
+  "Hyperliquid": {
+    "coin": "العملة",
+    "mark": "سعر العلامة",
+    "change24h": "24 ساعة",
+    "fundingApr": "التمويل (سنوي)",
+    "openInterest": "الفائدة المفتوحة",
+    "volume24h": "حجم 24 ساعة",
+    "maxLev": "حتى {x}x",
+    "trade": "تداول",
+    "tradeOn": "تداول {coin} على Hyperliquid",
+    "panelTitle": "عقد {coin} الدائم",
+    "panelSub": "مباشر من Hyperliquid",
+    "source": "المصدر: Hyperliquid.",
+    "disclaimer": "يتم التداول على Hyperliquid وليس على HIVRA. تستخدم العقود الدائمة الرافعة المالية وقد تخسر أكثر مما تتوقع. ليست نصيحة استثمارية.",
+    "unavailable": "بيانات Hyperliquid غير متاحة الآن."
   }
 }

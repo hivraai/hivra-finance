@@ -327,7 +327,9 @@
     "quotesTitle": "Cotizaciones",
     "quotesSub": "Líderes de {market} por grupo",
     "storiesTitle": "Noticias principales",
-    "storiesSub": "Solo finanzas · lo más reciente primero · cada 5 min"
+    "storiesSub": "Solo finanzas · lo más reciente primero · cada 5 min",
+    "perpsTitle": "Futuros perpetuos",
+    "perpsSub": "Los más negociados en Hyperliquid: funding e interés abierto"
   },
   "MarketSwitcher": {
     "label": "Mercados",
@@ -1152,5 +1154,21 @@
     "deny": "Cancelar",
     "approveHint": "Puedes desconectarla cuando quieras desde Conecta tu IA.",
     "badRequest": "Esta solicitud de conexión ya no es válida. Empieza de nuevo desde Claude o ChatGPT."
+  },
+  "Hyperliquid": {
+    "coin": "Moneda",
+    "mark": "Precio mark",
+    "change24h": "24h",
+    "fundingApr": "Funding (anual)",
+    "openInterest": "Interés abierto",
+    "volume24h": "Volumen 24h",
+    "maxLev": "hasta {x}x",
+    "trade": "Operar",
+    "tradeOn": "Operar {coin} en Hyperliquid",
+    "panelTitle": "Perpetuo de {coin}",
+    "panelSub": "En vivo desde Hyperliquid",
+    "source": "Fuente: Hyperliquid.",
+    "disclaimer": "Las operaciones se hacen en Hyperliquid, no en HIVRA. Los perpetuos usan apalancamiento y puedes perder más de lo que esperas. No es asesoría de inversión.",
+    "unavailable": "Los datos de Hyperliquid no están disponibles ahora."
   }
 }
