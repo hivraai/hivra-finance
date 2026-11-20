@@ -7,7 +7,7 @@ export const LANDING_COPY = {
     en: {
         nav: { product: 'Product', plans: 'Plans', data: 'Data', signIn: 'Sign in', start: 'Get started' },
         hero: {
-            title: ['Stock & options research,', 'with an AI analyst.'],
+            title: ['Stock & options research,', 'powered by AI agents.'],
             sub: 'Read any chart in seconds, build option strategies and test your ideas on years of market history. Then get a plain-language read from the AI before you put money on the line.',
             primary: 'Start free',
             secondary: 'See the plans',
@@ -115,12 +115,12 @@ export const LANDING_COPY = {
             note: 'Market analytics software. Not investment advice and not a broker: no trades are placed on your behalf.',
         },
         cta: { title: 'Your next trade deserves a second opinion.', button: 'Start free' },
-        footer: { tagline: 'Options research and backtesting with an AI analyst.', terms: 'Terms', privacy: 'Privacy', help: 'Help', rights: 'HIVRA Finance', source: 'Source code (AGPL-3.0)' },
+        footer: { tagline: 'Stock and options research, market signals and backtests, powered by AI agents.', community: 'Members get a private WhatsApp community to trade ideas with other traders.', product: 'Product', resources: 'Resources', legal: 'Legal', plans: 'Pricing', options: 'Options desk', signals: 'Market signals', agent: 'AI agents', backtest: 'Backtests', terms: 'Terms', privacy: 'Privacy', help: 'Help', signIn: 'Sign in', rights: 'HIVRA Finance', source: 'Source code (AGPL-3.0)', risk: 'Not financial advice. Options trading involves substantial risk of loss. Past flow signals do not guarantee future results.' },
     },
     es: {
         nav: { product: 'Producto', plans: 'Planes', data: 'Datos', signIn: 'Entrar', start: 'Empezar' },
         hero: {
-            title: ['Análisis de acciones y opciones,', 'con un analista de IA.'],
+            title: ['Análisis de acciones y opciones,', 'impulsado por agentes de IA.'],
             sub: 'Lee cualquier gráfica en segundos, arma estrategias de opciones y prueba tus ideas sobre años de historia del mercado. Luego recibe la lectura de la IA, en palabras simples, antes de poner tu dinero.',
             primary: 'Empieza gratis',
             secondary: 'Ver planes',
@@ -228,7 +228,7 @@ export const LANDING_COPY = {
             note: 'Software de análisis de mercado. No es asesoría de inversión ni un bróker: no se ejecutan operaciones a tu nombre.',
         },
         cta: { title: 'Tu próxima operación merece una segunda opinión.', button: 'Empieza gratis' },
-        footer: { tagline: 'Análisis de opciones y backtests con un analista de IA.', terms: 'Términos', privacy: 'Privacidad', help: 'Ayuda', rights: 'HIVRA Finance', source: 'Código fuente (AGPL-3.0)' },
+        footer: { tagline: 'Análisis de acciones y opciones, señales de mercado y backtests, impulsado por agentes de IA.', community: 'Los miembros tienen una comunidad privada en WhatsApp para compartir ideas con otros traders.', product: 'Producto', resources: 'Recursos', legal: 'Legal', plans: 'Precios', options: 'Mesa de opciones', signals: 'Señales de mercado', agent: 'Agentes de IA', backtest: 'Backtests', terms: 'Términos', privacy: 'Privacidad', help: 'Ayuda', signIn: 'Iniciar sesión', rights: 'HIVRA Finance', source: 'Código fuente (AGPL-3.0)', risk: 'No es asesoría financiera. Operar opciones implica un riesgo sustancial de pérdida. Las señales de flujo pasadas no garantizan resultados futuros.' },
     },
 } as const;
 

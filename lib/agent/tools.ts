@@ -7,6 +7,7 @@ import { aroundAtm, defaultExpiry, enrich, expiries, yearsTo, type ChainRow } fr
 import { analyze, netPremium, positionGreeks, type Leg } from '@/lib/quant/strategy';
 import { backtestOptions, backtestStock, type OptionStrategy, type StockStrategy } from '@/lib/quant/backtest';
 import { OPTION_PARAMS, STOCK_PARAMS, cleanParams } from '@/lib/quant/backtest-presets';
+import { SIGNAL_TOOL_DEFS, runSignalTool } from '@/lib/signals/tools';
 
 type Json = Record<string, unknown>;
 const r2 = (n: number | null | undefined, d = 2) => (n == null || !Number.isFinite(n) ? null : Math.round(n * 10 ** d) / 10 ** d);
@@ -66,6 +67,7 @@ export const TOOL_DEFS = [
         description: 'MODELLED options backtest on real daily stock prices since 2018: each cycle opens on a close at Black-Scholes prices (vol = 20-day historical vol × 1.1), holds to expiry and repeats. Not historical option quotes; say so. Strategies: covered_call, cash_secured_put, long_call, long_put {otmPct, days}; iron_condor {wingPct, widthPct, days}.',
         input_schema: { type: 'object', properties: { symbol: { type: 'string' }, strategy: { type: 'string', enum: ['covered_call', 'cash_secured_put', 'long_call', 'long_put', 'iron_condor'] }, params: { type: 'object' }, start: { type: 'string' } }, required: ['symbol', 'strategy'] },
     },
+    ...SIGNAL_TOOL_DEFS,
 ] as const;
 
 function reportOut(rep: ReturnType<typeof backtestStock>) {
@@ -142,6 +144,8 @@ export async function runTool(name: string, input: Json, { paid = false }: { pai
             const strat = { name: name_, ...cleanParams(OPTION_PARAMS[name_], input.params) } as OptionStrategy;
             return { symbol, ...reportOut(backtestOptions(bars, strat)) };
         }
+        case 'get_market_signals':
+            return runSignalTool(name, input, { paid });
         default:
             throw new Error(`Unknown tool ${name}`);
     }

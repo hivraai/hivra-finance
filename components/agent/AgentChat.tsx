@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 type Item = { role: 'user' | 'assistant'; text: string; tools?: string[] };
 type ThreadRow = { id: string; title: string; symbol?: string; updatedAt: string };
 
-const TOOL_KEYS = ['get_technicals', 'get_option_chain', 'analyze_option_strategy', 'backtest_stock', 'backtest_options', 'web_search'] as const;
+const TOOL_KEYS = ['get_technicals', 'get_option_chain', 'analyze_option_strategy', 'backtest_stock', 'backtest_options', 'get_market_signals', 'web_search'] as const;
 const SUGGEST_ICONS = [CandlestickChart, Sigma, FlaskConical];
 
 const kfmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}K` : String(n));

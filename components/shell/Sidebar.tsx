@@ -4,7 +4,7 @@ import Wordmark from "@/components/marketing/Wordmark";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { BookOpen, CreditCard, FlaskConical, LayoutDashboard, LifeBuoy, LogOut, Search, Sigma, Sparkles, Star } from "lucide-react";
+import { Activity, BookOpen, ChevronRight, CreditCard, FlaskConical, LayoutDashboard, LifeBuoy, LogOut, Radar, Search, Sigma, Sparkles, Star } from "lucide-react";
 import { openSearch } from "@/components/SearchCommand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { signOut } from "@/lib/actions/auth.actions";
@@ -20,6 +20,36 @@ const RESOURCES = [
     { href: '/help', label: 'help', icon: LifeBuoy },
     { href: '/terms', label: 'terms', icon: BookOpen },
 ] as const;
+
+// PRO screens (lib/signals/views.ts). The group holding the current page opens by itself.
+const SIGNAL_GROUPS = [
+    { key: 'optionsFlow', icon: Activity, views: ['map', 'whales', 'gex', 'volatility', 'oi', 'strategies'] },
+    { key: 'marketSignals', icon: Radar, views: ['darkpool', 'earnings', 'short-interest', 'etf-flow', 'congress', 'insiders', 'fda', 'macro'] },
+] as const;
+
+function SignalGroups({ pathname }: { pathname: string }) {
+    const t = useTranslations('Signals');
+    return (
+        <>
+            {SIGNAL_GROUPS.map(({ key, icon: Icon, views }) => (
+                <details key={key} className="group/sig" open={views.some((v) => pathname === `/signals/${v}`)}>
+                    <summary className="side-item cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <Icon /> <span className="flex-1">{t(`groups.${key}`)}</span>
+                        <ChevronRight className="!size-3.5 transition-transform group-open/sig:rotate-90" />
+                    </summary>
+                    <div className="flex flex-col gap-0.5 ps-6">
+                        {views.map((v) => (
+                            <Link key={v} href={`/signals/${v}`} className={cn('side-item h-8 text-[13px]', pathname === `/signals/${v}` && 'is-active')}>
+                                <span className="flex-1 truncate">{t(`views.${v}.title`)}</span>
+                                <span className="pill is-brand h-[18px] px-1.5 text-[10px]">PRO</span>
+                            </Link>
+                        ))}
+                    </div>
+                </details>
+            ))}
+        </>
+    );
+}
 
 const Sidebar = ({ user, watchlist }: SidebarProps) => {
     const t = useTranslations('Sidebar');
@@ -60,6 +90,7 @@ const Sidebar = ({ user, watchlist }: SidebarProps) => {
                 <Link href="/backtest" className={cn('side-item', pathname === '/backtest' && 'is-active')}>
                     <FlaskConical /> {t('backtest')}
                 </Link>
+                <SignalGroups pathname={pathname} />
             </nav>
 
             <div className="flex min-h-0 flex-col gap-1">

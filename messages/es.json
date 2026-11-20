@@ -720,7 +720,8 @@
       "analyze_option_strategy": "Cálculo de la estrategia",
       "backtest_stock": "Backtest de acción",
       "backtest_options": "Backtest de opciones",
-      "web_search": "Búsqueda web"
+      "web_search": "Búsqueda web",
+      "get_market_signals": "Señales de mercado"
     },
     "agentName": "Analista HIVRA",
     "done": "Listo",
@@ -886,5 +887,204 @@
     "useLink": "Enviarme un enlace",
     "expired": "Ese enlace venció o ya se usó. Pide uno nuevo.",
     "noPassword": "Sin contraseña: te enviamos un enlace por correo."
+  },
+  "Signals": {
+    "title": "Señales de mercado",
+    "groups": {
+      "optionsFlow": "Flujo de opciones",
+      "marketSignals": "Señales de mercado"
+    },
+    "search": "Buscar",
+    "all": "Todos",
+    "clear": "Quitar filtros",
+    "count": "{shown} de {total} filas",
+    "empty": "Nada coincide con estos filtros.",
+    "loading": "Cargando señales…",
+    "unavailable": "Estos datos no están disponibles ahora. Inténtalo en unos minutos.",
+    "asOf": "Datos al {date} UTC",
+    "lockedTitle": "Función Pro",
+    "lockedBody": "El flujo de opciones, dark pool, GEX, resultados, operaciones de insiders y del Congreso y el calendario macro vienen con Pro (US$99/mes) y Elite (US$199/mes). El analista de IA también los lee.",
+    "upgrade": "Ver planes",
+    "source": "El flujo cubre las órdenes grandes registradas, no toda la cinta. Las operaciones de dark pool tienen 15 minutos de retraso; las del Congreso se declaran hasta 45 días después.",
+    "disclaimer": "No es asesoría financiera. Operar opciones implica un riesgo sustancial de pérdida. Las señales de flujo pasadas no garantizan resultados futuros.",
+    "views": {
+      "map": {
+        "title": "Mapa del mercado",
+        "sub": "Hacia dónde se inclina hoy el dinero grande en opciones, por ticker"
+      },
+      "whales": {
+        "title": "Ballenas",
+        "sub": "Las apuestas individuales en opciones más grandes de hoy"
+      },
+      "gex": {
+        "title": "GEX",
+        "sub": "Dónde la cobertura de los dealers frena o empuja el precio"
+      },
+      "volatility": {
+        "title": "Volatilidad",
+        "sub": "Si las opciones están baratas o caras y la IV por vencimiento"
+      },
+      "oi": {
+        "title": "Movimientos de OI",
+        "sub": "Dónde se abrieron o cerraron más posiciones desde ayer"
+      },
+      "strategies": {
+        "title": "Estrategias",
+        "sub": "Apuestas de varias patas detectadas en el flujo de hoy"
+      },
+      "darkpool": {
+        "title": "Dark Pool",
+        "sub": "Operaciones grandes de acciones fuera de bolsa (15 min de retraso)"
+      },
+      "earnings": {
+        "title": "Resultados",
+        "sub": "Próximos resultados y cómo se posicionan los operadores de opciones"
+      },
+      "short-interest": {
+        "title": "Interés en corto",
+        "sub": "Cuántas acciones están vendidas en corto y días para cubrir"
+      },
+      "etf-flow": {
+        "title": "Flujo de ETF",
+        "sub": "Dinero en opciones que entra y sale de los ETF principales"
+      },
+      "congress": {
+        "title": "Congreso",
+        "sub": "Operaciones de acciones declaradas por miembros del Congreso de EE. UU."
+      },
+      "insiders": {
+        "title": "Insiders",
+        "sub": "Directivos y consejeros comprando o vendiendo acciones de su empresa"
+      },
+      "macro": {
+        "title": "Macro",
+        "sub": "Los eventos económicos que mueven todo el mercado esta semana"
+      },
+      "fda": {
+        "title": "FDA",
+        "sub": "Próximos resultados de ensayos y fechas de la FDA para acciones biotech y farmacéuticas"
+      }
+    },
+    "col": {
+      "ticker": "Ticker",
+      "bias": "Sesgo",
+      "score": "Puntuación",
+      "netNotional": "Nocional neto",
+      "imbalance": "Desbalance",
+      "orders": "Órdenes grandes",
+      "atmIv": "IV ATM",
+      "price": "Precio",
+      "time": "Hora (ET)",
+      "contract": "Contrato",
+      "right": "Call/Put",
+      "orderType": "Tipo",
+      "side": "Lado",
+      "confidence": "Confianza",
+      "contracts": "Contratos",
+      "premium": "Prima",
+      "iv": "IV",
+      "strike": "Strike",
+      "callGex": "GEX calls",
+      "putGex": "GEX puts",
+      "netGex": "GEX neto",
+      "callOi": "OI calls",
+      "putOi": "OI puts",
+      "dte": "Días al vencimiento",
+      "list": "Lista",
+      "totalOi": "Interés abierto",
+      "change": "Cambio",
+      "callChange": "Cambio calls",
+      "putChange": "Cambio puts",
+      "pctChange": "Cambio %",
+      "volume": "Volumen",
+      "structure": "Estructura",
+      "legs": "Patas",
+      "premiumType": "Débito/Crédito",
+      "netPremium": "Prima neta",
+      "notional": "Nocional",
+      "size": "Acciones",
+      "quote": "Vs cotización",
+      "pctAdv": "% del volumen medio",
+      "optionsRead": "Lectura de opciones",
+      "venue": "Mercado",
+      "date": "Fecha",
+      "company": "Empresa",
+      "hour": "Cuándo",
+      "intent": "Intención",
+      "epsEstimate": "BPA estimado",
+      "shortInterest": "Interés en corto",
+      "avgVolume": "Volumen diario medio",
+      "daysToCover": "Días para cubrir",
+      "premium5d": "Prima neta 5d",
+      "disclosed": "Declarado",
+      "traded": "Operado",
+      "member": "Miembro",
+      "chamber": "Cámara",
+      "amount": "Monto",
+      "source": "Fuente",
+      "filed": "Presentado",
+      "insider": "Insider",
+      "role": "Cargo",
+      "kind": "Operación",
+      "shares": "Acciones",
+      "value": "Valor",
+      "sharesAfter": "Acciones después",
+      "event": "Evento",
+      "category": "Categoría",
+      "impact": "Impacto",
+      "actual": "Real",
+      "consensus": "Consenso",
+      "previous": "Anterior",
+      "bullishTickers": "Tickers alcistas",
+      "bearishTickers": "Tickers bajistas",
+      "largeOrders": "Órdenes grandes",
+      "spot": "Precio",
+      "callWall": "Muro de calls",
+      "gammaFlip": "Cambio de gamma",
+      "putWall": "Muro de puts",
+      "maxPain": "Max pain",
+      "ivRank": "Rango de IV",
+      "ivPercentile": "Percentil de IV",
+      "ivMean": "IV promedio",
+      "zscore": "Z-score",
+      "offExchangePct": "Parte fuera de bolsa",
+      "offExchangeNotional": "$ fuera de bolsa",
+      "topTicker": "Ticker principal",
+      "earningsCount": "Empresas",
+      "events": "Eventos",
+      "critical": "Críticos",
+      "nextCritical": "Próximo crítico",
+      "dateType": "Fecha",
+      "sponsor": "Patrocinador",
+      "phase": "Fase",
+      "condition": "Condición",
+      "trial": "Ensayo",
+      "status": "Estado"
+    },
+    "val": {
+      "bullish": "Alcista",
+      "bearish": "Bajista",
+      "call": "Call",
+      "put": "Put",
+      "gainers": "Suben",
+      "losers": "Bajan",
+      "buy": "Compra",
+      "sell": "Venta",
+      "grant": "Otorgamiento",
+      "exercise": "Ejercicio",
+      "tax": "Retención fiscal",
+      "gift": "Donación",
+      "high": "Alto",
+      "medium": "Medio",
+      "low": "Bajo",
+      "critical": "Crítico",
+      "house": "Cámara",
+      "senate": "Senado",
+      "bmo": "Antes de la apertura",
+      "amc": "Tras el cierre",
+      "estimated": "Estimada",
+      "actual": "Confirmada"
+    },
+    "tooMany": "Consultaste muchos tickers en la última hora. Inténtalo de nuevo en un rato."
   }
 }

@@ -720,7 +720,8 @@
       "analyze_option_strategy": "Strategy maths",
       "backtest_stock": "Stock backtest",
       "backtest_options": "Options backtest",
-      "web_search": "Web search"
+      "web_search": "Web search",
+      "get_market_signals": "Market signals"
     },
     "agentName": "HIVRA Analyst",
     "done": "Done",
@@ -886,5 +887,204 @@
     "useLink": "Email me a link instead",
     "expired": "That sign-in link has expired or was already used. Send a new one.",
     "noPassword": "No password needed: we email you a link."
+  },
+  "Signals": {
+    "title": "Market signals",
+    "groups": {
+      "optionsFlow": "Options flow",
+      "marketSignals": "Market signals"
+    },
+    "search": "Search",
+    "all": "All",
+    "clear": "Clear filters",
+    "count": "{shown} of {total} rows",
+    "empty": "Nothing matches these filters.",
+    "loading": "Loading signals…",
+    "unavailable": "This data is unavailable right now. Try again in a few minutes.",
+    "asOf": "Data as of {date} UTC",
+    "lockedTitle": "A Pro feature",
+    "lockedBody": "Options flow, dark pool, GEX, earnings, insider and congressional trades and the macro calendar come with Pro ($99/month) and Elite ($199/month). The AI analyst reads them too.",
+    "upgrade": "See plans",
+    "source": "Flow covers recorded large orders, not the full tape. Dark pool prints are 15 minutes delayed; congressional trades are disclosed up to 45 days late.",
+    "disclaimer": "Not financial advice. Options trading involves substantial risk of loss. Past flow signals do not guarantee future results.",
+    "views": {
+      "map": {
+        "title": "Market Map",
+        "sub": "Which tickers big options money leans bullish or bearish on today"
+      },
+      "whales": {
+        "title": "Whales",
+        "sub": "The biggest single option bets today"
+      },
+      "gex": {
+        "title": "GEX",
+        "sub": "Where dealer hedging pins or pushes the price"
+      },
+      "volatility": {
+        "title": "Volatility",
+        "sub": "Are options cheap or expensive, and how IV changes by expiry"
+      },
+      "oi": {
+        "title": "OI Movers",
+        "sub": "Where the most option positions opened or closed since yesterday"
+      },
+      "strategies": {
+        "title": "Strategies",
+        "sub": "Multi-leg bets detected in today's flow"
+      },
+      "darkpool": {
+        "title": "Dark Pool",
+        "sub": "Large stock trades done off the exchanges (15 min delayed)"
+      },
+      "earnings": {
+        "title": "Earnings",
+        "sub": "Upcoming earnings and how options traders are positioned"
+      },
+      "short-interest": {
+        "title": "Short Interest",
+        "sub": "How many shares are sold short and how long to cover"
+      },
+      "etf-flow": {
+        "title": "ETF Flow",
+        "sub": "Options money moving in and out of the major ETFs"
+      },
+      "congress": {
+        "title": "Congress",
+        "sub": "Stock trades disclosed by members of the US Congress"
+      },
+      "insiders": {
+        "title": "Insiders",
+        "sub": "Executives and directors buying or selling their own stock"
+      },
+      "macro": {
+        "title": "Macro",
+        "sub": "The economic events that move the whole market this week"
+      },
+      "fda": {
+        "title": "FDA",
+        "sub": "Upcoming drug trial readouts and FDA dates for biotech and pharma stocks"
+      }
+    },
+    "col": {
+      "ticker": "Ticker",
+      "bias": "Bias",
+      "score": "Score",
+      "netNotional": "Net notional",
+      "imbalance": "Imbalance",
+      "orders": "Large orders",
+      "atmIv": "ATM IV",
+      "price": "Price",
+      "time": "Time (ET)",
+      "contract": "Contract",
+      "right": "Call/Put",
+      "orderType": "Type",
+      "side": "Side",
+      "confidence": "Confidence",
+      "contracts": "Contracts",
+      "premium": "Premium",
+      "iv": "IV",
+      "strike": "Strike",
+      "callGex": "Call GEX",
+      "putGex": "Put GEX",
+      "netGex": "Net GEX",
+      "callOi": "Call OI",
+      "putOi": "Put OI",
+      "dte": "Days to expiry",
+      "list": "List",
+      "totalOi": "Open interest",
+      "change": "Change",
+      "callChange": "Call change",
+      "putChange": "Put change",
+      "pctChange": "Change %",
+      "volume": "Volume",
+      "structure": "Structure",
+      "legs": "Legs",
+      "premiumType": "Debit/Credit",
+      "netPremium": "Net premium",
+      "notional": "Notional",
+      "size": "Shares",
+      "quote": "Vs quote",
+      "pctAdv": "% of avg volume",
+      "optionsRead": "Options read",
+      "venue": "Venue",
+      "date": "Date",
+      "company": "Company",
+      "hour": "When",
+      "intent": "Intent",
+      "epsEstimate": "EPS estimate",
+      "shortInterest": "Short interest",
+      "avgVolume": "Avg daily volume",
+      "daysToCover": "Days to cover",
+      "premium5d": "Net premium 5d",
+      "disclosed": "Disclosed",
+      "traded": "Traded",
+      "member": "Member",
+      "chamber": "Chamber",
+      "amount": "Amount",
+      "source": "Source",
+      "filed": "Filed",
+      "insider": "Insider",
+      "role": "Role",
+      "kind": "Transaction",
+      "shares": "Shares",
+      "value": "Value",
+      "sharesAfter": "Shares after",
+      "event": "Event",
+      "category": "Category",
+      "impact": "Impact",
+      "actual": "Actual",
+      "consensus": "Consensus",
+      "previous": "Previous",
+      "bullishTickers": "Bullish tickers",
+      "bearishTickers": "Bearish tickers",
+      "largeOrders": "Large orders",
+      "spot": "Spot",
+      "callWall": "Call wall",
+      "gammaFlip": "Gamma flip",
+      "putWall": "Put wall",
+      "maxPain": "Max pain",
+      "ivRank": "IV rank",
+      "ivPercentile": "IV percentile",
+      "ivMean": "IV average",
+      "zscore": "Z-score",
+      "offExchangePct": "Off-exchange share",
+      "offExchangeNotional": "Off-exchange $",
+      "topTicker": "Top ticker",
+      "earningsCount": "Companies",
+      "events": "Events",
+      "critical": "Critical",
+      "nextCritical": "Next critical",
+      "dateType": "Date is",
+      "sponsor": "Sponsor",
+      "phase": "Phase",
+      "condition": "Condition",
+      "trial": "Trial",
+      "status": "Status"
+    },
+    "val": {
+      "bullish": "Bullish",
+      "bearish": "Bearish",
+      "call": "Call",
+      "put": "Put",
+      "gainers": "Gainers",
+      "losers": "Losers",
+      "buy": "Buy",
+      "sell": "Sell",
+      "grant": "Grant",
+      "exercise": "Exercise",
+      "tax": "Tax withholding",
+      "gift": "Gift",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "critical": "Critical",
+      "house": "House",
+      "senate": "Senate",
+      "bmo": "Before open",
+      "amc": "After close",
+      "estimated": "Estimated",
+      "actual": "Confirmed"
+    },
+    "tooMany": "You looked up many tickers in the last hour. Try again in a little while."
   }
 }
