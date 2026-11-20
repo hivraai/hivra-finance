@@ -10,7 +10,6 @@ import IndexPulse, { PulseSkeleton } from "@/components/IndexPulse";
 import { LocalizedDataFreshness } from "@/components/DataFreshness";
 import MarketSwitcher from "@/components/MarketSwitcher";
 import YahooQuotesTable, { YahooMovers } from "@/components/YahooQuotes";
-import { HyperliquidPerpsTable } from "@/components/crypto/HyperliquidPerps";
 import {
     CRYPTO_HEATMAP_CONFIG,
     STOCK_HEATMAP_CONFIG,
@@ -97,12 +96,6 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
                         </Panel>
                     )}
                 </div>
-
-                {market.id === 'crypto' && (
-                    <Panel title={t('perpsTitle')} sub={t('perpsSub')}>
-                        <Suspense fallback={<p className="search-list-indicator">…</p>}><HyperliquidPerpsTable /></Suspense>
-                    </Panel>
-                )}
 
                 <div className="grid gap-3 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
                     {heatmap && (

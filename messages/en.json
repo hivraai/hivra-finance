@@ -327,9 +327,7 @@
     "quotesTitle": "Quotes",
     "quotesSub": "{market} leaders by group",
     "storiesTitle": "Top stories",
-    "storiesSub": "Finance only · newest first · updated every 5 min",
-    "perpsTitle": "Perpetual futures",
-    "perpsSub": "Most traded on Hyperliquid: funding and open interest"
+    "storiesSub": "Finance only · newest first · updated every 5 min"
   },
   "MarketSwitcher": {
     "label": "Markets",
@@ -1154,21 +1152,5 @@
     "deny": "Cancel",
     "approveHint": "You can disconnect it any time from Connect your AI.",
     "badRequest": "This connection request is not valid any more. Start again from Claude or ChatGPT."
-  },
-  "Hyperliquid": {
-    "coin": "Coin",
-    "mark": "Mark price",
-    "change24h": "24h",
-    "fundingApr": "Funding (APR)",
-    "openInterest": "Open interest",
-    "volume24h": "24h volume",
-    "maxLev": "up to {x}x",
-    "trade": "Trade",
-    "tradeOn": "Trade {coin} on Hyperliquid",
-    "panelTitle": "{coin} perpetual",
-    "panelSub": "Live from Hyperliquid",
-    "source": "Source: Hyperliquid.",
-    "disclaimer": "Trading happens on Hyperliquid, not on HIVRA. Perpetuals use leverage and can lose more than you expect. Not investment advice.",
-    "unavailable": "Hyperliquid data is unavailable right now."
   }
 }

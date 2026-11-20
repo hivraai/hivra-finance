@@ -8,7 +8,6 @@ import StockChart from "@/components/stocks/StockChart";
 import Panel from "@/components/Panel";
 import TechnicalsPanel from "@/components/stocks/TechnicalsPanel";
 import AgentChat from "@/components/agent/AgentChat";
-import { HyperliquidPanel } from "@/components/crypto/HyperliquidPerps";
 import {
     COMPANY_PROFILE_WIDGET_CONFIG,
     COMPANY_FINANCIALS_WIDGET_CONFIG,
@@ -79,8 +78,6 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
     const { symbol: rawSymbol } = await params;
     const symbol = decodeURIComponent(rawSymbol).toUpperCase();
     const tvSymbol = formatSymbolForTradingView(symbol);
-    // Only exchange-prefixed crypto pairs: a bare BTC is the Grayscale trust, not the coin.
-    const crypto = /^(BINANCE|COINBASE|KRAKEN|BITSTAMP|BYBIT|OKX|CRYPTO):/i.test(symbol);
     const [t, locale] = await Promise.all([getTranslations('StockPage'), getLocale()]);
 
     return (
@@ -114,11 +111,6 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                 </div>
 
                 <div className="flex min-w-0 flex-col gap-3">
-                    {crypto && (
-                        <Suspense fallback={null}>
-                            <HyperliquidPanel symbol={symbol} />
-                        </Suspense>
-                    )}
                     <Panel title={t('aiTitle')} sub={t('aiSub')}>
                         <AgentChat symbol={symbol} compact />
                     </Panel>
