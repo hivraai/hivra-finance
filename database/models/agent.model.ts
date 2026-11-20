@@ -33,6 +33,7 @@ export interface IAiUsage {
     inputTokens: number;
     outputTokens: number;
     backtests: number;
+    inFlightUntil?: Date | null;
 }
 
 const AiUsageSchema = new Schema<IAiUsage>({
@@ -44,6 +45,8 @@ const AiUsageSchema = new Schema<IAiUsage>({
     inputTokens: { type: Number, default: 0 },
     outputTokens: { type: Number, default: 0 },
     backtests: { type: Number, default: 0 },
+    // One AI run per user at a time (lib/agent/meter.ts beginRun).
+    inFlightUntil: { type: Date, default: null },
 }, { timestamps: true });
 AiUsageSchema.index({ userId: 1, month: 1 }, { unique: true });
 

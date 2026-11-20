@@ -4,6 +4,7 @@ import 'server-only';
 import { connectToDatabase } from '@/database/mongoose';
 import { aiUsageModel } from '@/database/models/agent.model';
 import { billingModel } from '@/database/models/billing.model';
+import { Types } from 'mongoose';
 
 export const MARKUP = 5;
 export const CREDITS_PER_USD = 1000;
@@ -48,20 +49,37 @@ export const BACKTESTS: Record<Plan, number> = {
     unlimited: Number.POSITIVE_INFINITY,
 };
 
-const isTeam = (email: string | null | undefined) => {
-    const team = (process.env.AGENT_UNLIMITED_EMAILS ?? '').toLowerCase().split(',').map((s) => s.trim()).filter(Boolean);
-    return Boolean(email && team.includes(email.toLowerCase()));
-};
+const envList = (name: string) => (process.env[name] ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+
+// The team is unlimited. Security audit 2026-11-19: this trusted the account's
+// email alone, and sign-up does not verify emails, so anyone could register a
+// team address nobody had claimed yet and get unlimited AI. Now an email only
+// counts once VERIFIED (magic link or reset), read from the user row, never
+// from the caller; AGENT_UNLIMITED_USER_IDS names accounts outright.
+async function isTeam(db: Awaited<ReturnType<typeof connectToDatabase>>, userId: string, email: string | null | undefined): Promise<boolean> {
+    if (envList('AGENT_UNLIMITED_USER_IDS').includes(userId)) return true;
+    const team = envList('AGENT_UNLIMITED_EMAILS').map((s) => s.toLowerCase());
+    if (!email || !team.includes(email.toLowerCase())) return false;
+    try {
+        const mdb = db.connection?.db;
+        if (!mdb) return false;
+        const _id = Types.ObjectId.isValid(userId) ? new Types.ObjectId(userId) : userId;
+        const row = await mdb.collection('user').findOne({ _id } as Record<string, unknown>) as { email?: string; emailVerified?: boolean } | null;
+        return Boolean(row?.emailVerified === true && row.email?.toLowerCase() === email.toLowerCase());
+    } catch {
+        return false;
+    }
+}
 
 export type Account = { plan: Plan; bonus: number; status?: string; periodEnd?: string; cancelAtPeriodEnd?: boolean; customer: boolean };
 
 // The user's plan (set only by the Stripe webhook) and bought credits. The team is unlimited.
 export async function getAccount(userId: string, email: string | null | undefined): Promise<Account> {
     const db = await connectToDatabase();
-    const row = await billingModel(db).findOne({ userId }).lean();
+    const [row, team] = await Promise.all([billingModel(db).findOne({ userId }).lean(), isTeam(db, userId, email)]);
     const paid = row?.plan === 'pro' || row?.plan === 'elite' ? row.plan : 'free';
     return {
-        plan: isTeam(email) ? 'unlimited' : paid,
+        plan: team ? 'unlimited' : paid,
         bonus: Math.max(0, row?.bonusCredits ?? 0),
         status: row?.status,
         periodEnd: row?.currentPeriodEnd ? new Date(row.currentPeriodEnd).toISOString() : undefined,
@@ -108,4 +126,31 @@ export async function takeBacktest(userId: string, plan: Plan): Promise<boolean>
     const filter = Number.isFinite(limit) ? { userId, month: monthKey(), backtests: { $not: { $gte: limit } } } : { userId, month: monthKey() };
     const r = await Usage.updateOne(filter, { $inc: { backtests: 1 } });
     return r.modifiedCount === 1;
+}
+
+// ── One AI run per user at a time (security audit 2026-11-19) ────────────
+// The credit check ran before the model call and the cost was recorded after,
+// so ten questions sent at once all passed the check and spent ten runs past
+// the allowance. A run now holds a lock on the month's usage row; a second
+// request waits for it to finish. The lock expires on its own (a crashed run
+// cannot block the user), set just past the route's maxDuration.
+export const RUN_LOCK_MS = 330_000;
+
+export async function beginRun(userId: string, now = Date.now()): Promise<boolean> {
+    const db = await connectToDatabase();
+    const Usage = aiUsageModel(db);
+    const month = monthKey(new Date(now));
+    try {
+        await Usage.updateOne({ userId, month }, { $setOnInsert: { credits: 0 } }, { upsert: true });
+    } catch { /* a parallel upsert won the unique index; the row exists */ }
+    const r = await Usage.updateOne(
+        { userId, month, $or: [{ inFlightUntil: null }, { inFlightUntil: { $lt: new Date(now) } }] },
+        { $set: { inFlightUntil: new Date(now + RUN_LOCK_MS) } },
+    );
+    return r.modifiedCount === 1;
+}
+
+export async function endRun(userId: string): Promise<void> {
+    const db = await connectToDatabase();
+    await aiUsageModel(db).updateOne({ userId, month: monthKey() }, { $set: { inFlightUntil: null } }).catch(() => {});
 }

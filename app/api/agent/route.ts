@@ -8,7 +8,7 @@ import { Types } from 'mongoose';
 import { getSession } from '@/lib/better-auth/auth';
 import { connectToDatabase } from '@/database/mongoose';
 import { agentThreadModel } from '@/database/models/agent.model';
-import { ALLOWANCE, creditsUsed, getAccount, record, spendable } from '@/lib/agent/meter';
+import { ALLOWANCE, beginRun, creditsUsed, endRun, getAccount, record, spendable } from '@/lib/agent/meter';
 import { TOOL_DEFS, runTool } from '@/lib/agent/tools';
 import { isRateLimited } from '@/lib/rate-limit';
 import { displayItems } from '@/lib/agent/display';
@@ -74,6 +74,13 @@ export async function POST(req: Request) {
 
     if (await isRateLimited(`agent:${userId}`, 20, 600)) return Response.json({ error: 'Too many questions in a short time. Try again in a few minutes.' }, { status: 429 });
 
+    // One run per user at a time, taken BEFORE reading usage, so the balance read below
+    // cannot be stale against a run still spending (security audit 2026-11-19).
+    if (!(await beginRun(userId))) {
+        return Response.json({ error: 'Your previous question is still running. Wait for it to finish.' }, { status: 429 });
+    }
+    let handedOff = false;
+    try {
     const [account, usedBefore] = await Promise.all([getAccount(userId, session.user.email), creditsUsed(userId)]);
     const monthly = ALLOWANCE[account.plan];
     const allowance = spendable(account);
@@ -104,6 +111,11 @@ export async function POST(req: Request) {
                 await thread.save();
                 send({ type: 'thread', id: String(thread._id) });
                 for (let step = 0; step < MAX_STEPS; step++) {
+                    // Stop between steps once the budget is spent: one step is the most a run can go over.
+                    if (step > 0 && usedBefore + credits >= allowance) {
+                        send({ type: 'text', text: '\n\n(You have used this month’s AI credits. Upgrade or buy credits on the Billing page.)' });
+                        break;
+                    }
                     const s = client.messages.stream({
                         model: MODEL,
                         max_tokens: 16000,
@@ -145,9 +157,15 @@ export async function POST(req: Request) {
                 console.error('[agent]', e);
                 send({ type: 'error', message: 'The AI hit an error. Try again.' });
             } finally {
+                await endRun(userId);
                 controller.close();
             }
         },
     });
+    handedOff = true;
     return new Response(stream, { headers: { 'Content-Type': 'application/x-ndjson; charset=utf-8', 'Cache-Control': 'no-store' } });
+    } finally {
+        // A 402, or anything that threw before the stream took over, must not hold the lock.
+        if (!handedOff) await endRun(userId);
+    }
 }
