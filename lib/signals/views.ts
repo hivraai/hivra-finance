@@ -3,6 +3,8 @@
 // a screen, the agent and the MCP always describe the same numbers.
 import 'server-only';
 import { ow, parseOcc } from './optionwhales';
+import { getChain, getRecentBars } from '@/lib/databento';
+import { enrich, expiries } from '@/lib/quant/chain';
 
 export type ColType = 'text' | 'ticker' | 'num' | 'money' | 'pct' | 'date' | 'side' | 'link';
 export type Col = { key: string; type: ColType; filter?: boolean };
@@ -15,6 +17,7 @@ export type ViewId = 'map' | 'whales' | 'gex' | 'volatility' | 'oi' | 'strategie
 
 export type ViewDef = {
     id: ViewId;
+    chart?: { x: string; y: string }; // bar chart above the table
     group: 'options' | 'signals';
     symbol?: string; // default ticker when the screen is per ticker
     sort: { key: string; dir: 'asc' | 'desc' };
@@ -84,14 +87,32 @@ export const VIEWS: ViewDef[] = [
         },
     },
     {
-        id: 'volatility', group: 'options', symbol: 'SPY', sort: { key: 'dte', dir: 'asc' },
-        cols: [{ key: 'dte', type: 'num' }, { key: 'atmIv', type: 'pct' }],
+        id: 'volatility', group: 'options', symbol: 'SPY', sort: { key: 'dte', dir: 'asc' }, chart: { x: 'expiry', y: 'atmIv' },
+        cols: [{ key: 'expiry', type: 'date' }, { key: 'dte', type: 'num' }, { key: 'atmIv', type: 'pct' }, { key: 'expectedMove', type: 'money' }, { key: 'movePct', type: 'pct' }],
         async load(sym) {
-            const [rank, stats, term] = await Promise.all([ow<J>(`volatility/${sym}/iv-rank`, {}, 1800), ow<J>(`volatility/${sym}/stats`, {}, 1800), ow<J>(`volatility/${sym}/term-structure`, {}, 1800)]);
+            // IV rank/stats from the signals feed (fast). The term structure and expected moves come from
+            // our own Databento chain (stored, stale-while-revalidate): the feed takes ~20 s for it.
+            const [rank, stats, chain, bars] = await Promise.all([
+                ow<J>(`volatility/${sym}/iv-rank`, {}, 1800), ow<J>(`volatility/${sym}/stats`, {}, 1800),
+                getChain(sym).catch(() => null), getRecentBars(sym).catch(() => []),
+            ]);
+            let rows: Row[] = [];
+            let asOf = s(rank.to);
+            if (chain && bars.length) {
+                const day = chain.asOf.slice(0, 10);
+                const spot = (bars.find((b) => b.date === day) ?? bars.at(-1)!).close;
+                asOf = chain.asOf;
+                rows = expiries(enrich(chain.quotes, spot, chain.asOf), spot).filter((e) => e.days >= 0 && e.days <= 400 && e.atmIv != null).map((e) => ({
+                    expiry: e.expiry, dte: e.days, atmIv: r2(e.atmIv! * 100, 1), expectedMove: r2(e.expectedMove, 2), movePct: e.expectedMove != null ? r2((e.expectedMove / spot) * 100, 1) : null,
+                }));
+            } else {
+                const term = await ow<J>(`volatility/${sym}/term-structure`, {}, 1800);
+                rows = (term.term_structure ?? []).map((x: J) => ({ expiry: null, dte: n(x.dte), atmIv: r2(n(x.atm_iv)! * 100, 1), expectedMove: null, movePct: null }));
+            }
             return {
-                asOf: s(term.ts) ?? s(rank.to),
+                asOf,
                 tiles: [{ key: 'iv', value: r2(n(rank.current)! * 100, 1), type: 'pct' }, { key: 'ivRank', value: r2(n(rank.iv_rank)! * 100, 0), type: 'pct' }, { key: 'ivPercentile', value: r2(n(rank.iv_percentile)! * 100, 0), type: 'pct' }, { key: 'ivMean', value: r2(n(stats.mean)! * 100, 1), type: 'pct' }, { key: 'zscore', value: r2(stats.zscore), type: 'num' }],
-                rows: (term.term_structure ?? []).map((x: J) => ({ dte: n(x.dte), atmIv: r2(n(x.atm_iv)! * 100, 1) })),
+                rows,
             };
         },
     },
@@ -178,12 +199,12 @@ export const VIEWS: ViewDef[] = [
     },
     {
         id: 'insiders', group: 'signals', symbol: 'AAPL', sort: { key: 'filed', dir: 'desc' },
-        cols: [{ key: 'filed', type: 'date' }, { key: 'traded', type: 'date' }, { key: 'insider', type: 'text', filter: true }, { key: 'role', type: 'text' }, { key: 'kind', type: 'text', filter: true }, { key: 'shares', type: 'num' }, { key: 'price', type: 'money' }, { key: 'value', type: 'money' }, { key: 'sharesAfter', type: 'num' }],
+        cols: [{ key: 'filed', type: 'date' }, { key: 'ticker', type: 'ticker' }, { key: 'traded', type: 'date' }, { key: 'insider', type: 'text', filter: true }, { key: 'role', type: 'text' }, { key: 'kind', type: 'text', filter: true }, { key: 'shares', type: 'num' }, { key: 'price', type: 'money' }, { key: 'value', type: 'money' }, { key: 'sharesAfter', type: 'num' }],
         async load(sym) {
             const d = await ow<J>(`insider/${sym}`, { limit: 100 }, 1800);
             return {
                 asOf: null, tiles: [],
-                rows: (d.transactions ?? []).map((x: J) => ({ filed: s(x.filing_date), traded: s(x.transaction_date), insider: s(x.owner), role: s(x.officer_title) ?? (x.is_officer ? 'Officer' : 'Director / owner'), kind: INSIDER_CODES[x.transaction_code] ?? s(x.transaction_code), shares: n(x.shares), price: r2(x.price), value: r2(x.value, 0), sharesAfter: n(x.shares_after) })),
+                rows: (d.transactions ?? []).map((x: J) => ({ filed: s(x.filing_date), ticker: sym, traded: s(x.transaction_date), insider: s(x.owner), role: s(x.officer_title) ?? (x.is_officer ? 'Officer' : 'Director / owner'), kind: INSIDER_CODES[x.transaction_code] ?? s(x.transaction_code), shares: n(x.shares), price: r2(x.price), value: r2(x.value, 0), sharesAfter: n(x.shares_after) })),
             };
         },
     },

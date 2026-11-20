@@ -1059,7 +1059,10 @@
       "phase": "Phase",
       "condition": "Condition",
       "trial": "Trial",
-      "status": "Status"
+      "status": "Status",
+      "expiry": "Expiry",
+      "expectedMove": "Expected move",
+      "movePct": "Move %"
     },
     "val": {
       "bullish": "Bullish",
@@ -1085,6 +1088,7 @@
       "estimated": "Estimated",
       "actual": "Confirmed"
     },
-    "tooMany": "You looked up many tickers in the last hour. Try again in a little while."
+    "tooMany": "You looked up many tickers in the last hour. Try again in a little while.",
+    "quick": "Quick picks"
   }
 }

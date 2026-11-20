@@ -1059,7 +1059,10 @@
       "phase": "Fase",
       "condition": "Condición",
       "trial": "Ensayo",
-      "status": "Estado"
+      "status": "Estado",
+      "expiry": "Vencimiento",
+      "expectedMove": "Movimiento esperado",
+      "movePct": "Movimiento %"
     },
     "val": {
       "bullish": "Alcista",
@@ -1085,6 +1088,7 @@
       "estimated": "Estimada",
       "actual": "Confirmada"
     },
-    "tooMany": "Consultaste muchos tickers en la última hora. Inténtalo de nuevo en un rato."
+    "tooMany": "Consultaste muchos tickers en la última hora. Inténtalo de nuevo en un rato.",
+    "quick": "Accesos rápidos"
   }
 }

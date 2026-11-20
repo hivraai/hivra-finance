@@ -73,7 +73,9 @@ const Sidebar = ({ user, watchlist }: SidebarProps) => {
                 <kbd className="kbd bg-on-brand/10">⌘K</kbd>
             </button>
 
-            <nav className="flex flex-col gap-0.5">
+            {/* Menu + watchlist scroll together, so a tall menu (both signal groups open) never runs under the footer links. */}
+            <div className="scrollbar-hide-default -mx-1 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-1">
+            <nav className="flex shrink-0 flex-col gap-0.5">
                 <Link href="/dashboard" className={cn('side-item', pathname === '/dashboard' && 'is-active')}>
                     <LayoutDashboard /> {t('overview')}
                 </Link>
@@ -93,7 +95,7 @@ const Sidebar = ({ user, watchlist }: SidebarProps) => {
                 <SignalGroups pathname={pathname} />
             </nav>
 
-            <div className="flex min-h-0 flex-col gap-1">
+            <div className="flex shrink-0 flex-col gap-1">
                 <p className="side-label shrink-0">{t('watching')}</p>
                 {watchlist.length === 0 ? (
                     <p className="px-2.5 text-[12.5px] text-faint">{t('watchingEmpty')}</p>
@@ -115,7 +117,9 @@ const Sidebar = ({ user, watchlist }: SidebarProps) => {
                 )}
             </div>
 
-            <div className="mt-auto flex flex-col gap-0.5">
+            </div>
+
+            <div className="mt-auto flex shrink-0 flex-col gap-0.5">
                 {RESOURCES.map(({ href, label, icon: Icon }) => (
                     <Link key={href} href={href} className={cn('side-item h-8', pathname === href && 'is-active')}>
                         <Icon /> {t(`resources.${label}`)}
